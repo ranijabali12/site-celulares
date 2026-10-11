@@ -6,6 +6,9 @@
 <title>Rota Reparo</title>
 <meta name="description" content="Conserto de celular delivery em São Paulo: buscamos, consertamos e devolvemos, ou fazemos o reparo no carro, na sua porta. Orçamento pelo WhatsApp.">
 <meta name="theme-color" content="#0A0E0D">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js"}}</script>
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
@@ -58,7 +61,7 @@ p { margin: 0; }
 ul.clean { list-style: none; margin: 0; padding: 0; }
 
 /* grão fino sobre tudo */
-.grain { position: fixed; inset: -50%; z-index: 90; pointer-events: none; opacity: .05; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); animation: grain 1.2s steps(4) infinite; }
+.grain { position: fixed; inset: -50%; z-index: 90; pointer-events: none; opacity: .05; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
 @keyframes grain { 25% { transform: translate(-2%, 3%); } 50% { transform: translate(3%, -1%); } 75% { transform: translate(-1%, -3%); } }
 
 .wrap { width: 100%; max-width: var(--wrap); margin-inline: auto; padding-inline: var(--s3); }
@@ -95,26 +98,26 @@ ul.clean { list-style: none; margin: 0; padding: 0; }
 
 /* ---------- abertura ---------- */
 .intro { position: fixed; inset: 0; z-index: 100; pointer-events: none; }
-.intro-half { position: absolute; left: 0; right: 0; height: 50.5%; background: var(--bg); animation: halfOut 900ms var(--ease-cine) 2300ms forwards; }
+.intro-half { position: absolute; left: 0; right: 0; height: 50.5%; background: var(--bg); animation: halfOut 800ms var(--ease-cine) 1250ms forwards; }
 .intro-half.a { top: 0; border-bottom: 1px solid transparent; }
 .intro-half.b { bottom: 0; animation-name: halfOutB; }
 @keyframes halfOut { to { transform: translateY(-100%); } }
 @keyframes halfOutB { to { transform: translateY(100%); } }
-.intro-seam { position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: linear-gradient(90deg, transparent, var(--accent), transparent); transform: scaleX(0); box-shadow: 0 0 24px rgba(var(--accent-rgb), .9); animation: seam 700ms var(--ease-cine) 1800ms forwards, fadeOut 400ms var(--ease) 2400ms forwards; }
+.intro-seam { position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: linear-gradient(90deg, transparent, var(--accent), transparent); transform: scaleX(0); box-shadow: 0 0 24px rgba(var(--accent-rgb), .9); animation: seam 450ms var(--ease-cine) 950ms forwards, fadeOut 300ms var(--ease) 1350ms forwards; }
 @keyframes seam { to { transform: scaleX(1); } }
 @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
-.intro-grid { position: absolute; inset: 0; background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px); background-size: 64px 64px; background-position: center; -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 0%, transparent 60%); mask-image: radial-gradient(circle at 50% 50%, #000 0%, transparent 60%); opacity: 0; animation: gridIn 1200ms var(--ease) 100ms forwards, fadeOut 300ms var(--ease) 2000ms forwards; }
+.intro-grid { position: absolute; inset: 0; background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px); background-size: 64px 64px; background-position: center; -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 0%, transparent 60%); mask-image: radial-gradient(circle at 50% 50%, #000 0%, transparent 60%); opacity: 0; animation: gridIn 800ms var(--ease) 0ms forwards, fadeOut 300ms var(--ease) 1100ms forwards; }
 @keyframes gridIn { from { opacity: 0; transform: scale(1.15); } to { opacity: 1; transform: scale(1); } }
-.intro-inner { position: absolute; inset: 0; display: grid; place-items: center; animation: introContent 400ms var(--ease) 1900ms forwards; }
-@keyframes introContent { to { opacity: 0; transform: scale(.96); filter: blur(6px); } }
+.intro-inner { position: absolute; inset: 0; display: grid; place-items: center; animation: introContent 300ms var(--ease) 1050ms forwards; }
+@keyframes introContent { to { opacity: 0; transform: scale(.96); } }
 .intro-core { display: grid; justify-items: center; gap: var(--s3); }
-.intro-mark { width: 80px; height: 80px; color: var(--ink); filter: drop-shadow(0 0 16px rgba(var(--accent-rgb), .35)); }
-.intro-mark .draw { stroke-dasharray: 170; stroke-dashoffset: 170; animation: draw 1200ms var(--ease-cine) 200ms forwards; }
-.intro-mark .dot { opacity: 0; transform-origin: center; transform-box: fill-box; animation: pop 300ms var(--ease) 1250ms forwards; }
+.intro-mark { width: 80px; height: 80px; color: var(--ink); }
+.intro-mark .draw { stroke-dasharray: 170; stroke-dashoffset: 170; animation: draw 750ms var(--ease-cine) 80ms forwards; }
+.intro-mark .dot { opacity: 0; transform-origin: center; transform-box: fill-box; animation: pop 250ms var(--ease) 750ms forwards; }
 .intro-name { font: 600 var(--t-2xl)/1 var(--font-display); letter-spacing: -.02em; overflow: hidden; display: flex; padding-bottom: 4px; }
-.intro-name span { display: inline-block; transform: translateY(115%); animation: up 700ms var(--ease-cine) forwards; animation-delay: calc(450ms + var(--i) * 45ms); }
+.intro-name span { display: inline-block; transform: translateY(115%); animation: up 700ms var(--ease-cine) forwards; animation-delay: calc(220ms + var(--i) * 35ms); }
 .intro-bar { width: 224px; height: 1px; background: var(--line-2); overflow: hidden; }
-.intro-bar i { display: block; height: 100%; background: var(--accent); box-shadow: 0 0 8px var(--accent); transform-origin: left; transform: scaleX(0); animation: fill 1500ms var(--ease-cine) 250ms forwards; }
+.intro-bar i { display: block; height: 100%; background: var(--accent); box-shadow: 0 0 8px var(--accent); transform-origin: left; transform: scaleX(0); animation: fill 850ms var(--ease-cine) 120ms forwards; }
 .intro-meta { display: flex; justify-content: space-between; width: 224px; color: var(--muted); }
 @keyframes draw { to { stroke-dashoffset: 0; } }
 @keyframes pop { from { opacity: 0; transform: scale(.3); } to { opacity: 1; transform: scale(1); } }
@@ -123,10 +126,10 @@ ul.clean { list-style: none; margin: 0; padding: 0; }
 .intro-done .intro { display: none; }
 
 /* entradas do herói */
-.enter { animation: enter 1000ms var(--ease-cine) both; animation-delay: calc(2500ms + var(--d-in, 0ms)); }
-@keyframes enter { from { opacity: 0; transform: translateY(28px); filter: blur(8px); } }
+.enter { animation: enter 1000ms var(--ease-cine) both; animation-delay: calc(1350ms + var(--d-in, 0ms)); }
+@keyframes enter { from { opacity: 0; transform: translateY(28px); } }
 .words .w { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: .1em; margin-bottom: -.1em; }
-.words .w > span { display: inline-block; transform: translateY(110%) rotate(4deg); transform-origin: left bottom; animation: wordUp 1100ms var(--ease-cine) forwards; animation-delay: calc(2450ms + var(--i) * 70ms); }
+.words .w > span { display: inline-block; transform: translateY(110%) rotate(4deg); transform-origin: left bottom; animation: wordUp 1100ms var(--ease-cine) forwards; animation-delay: calc(1300ms + var(--i) * 60ms); }
 @keyframes wordUp { to { transform: translateY(0) rotate(0); } }
 
 /* ---------- topo ---------- */
@@ -145,7 +148,7 @@ ul.clean { list-style: none; margin: 0; padding: 0; }
 
 /* ---------- herói ---------- */
 .hero { position: relative; min-height: 760px; padding-block: 128px var(--s10); overflow: hidden; isolation: isolate; }
-#waves { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -2; opacity: 0; animation: fadeIn 2000ms var(--ease) 2400ms forwards; }
+#waves { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -2; opacity: 0; animation: fadeIn 1600ms var(--ease) 1300ms forwards; }
 @keyframes fadeIn { to { opacity: 1; } }
 .hero::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(800px 500px at 72% 42%, rgba(var(--accent-rgb), .10), transparent 65%), radial-gradient(600px 400px at 10% 10%, rgba(232,162,78,.05), transparent 60%); }
 .hero::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 160px; z-index: -1; background: linear-gradient(transparent, var(--bg)); pointer-events: none; }
@@ -171,11 +174,13 @@ ul.clean { list-style: none; margin: 0; padding: 0; }
 
 /* ---------- palco do aparelho ---------- */
 .stage { position: relative; height: 640px; display: grid; place-items: center; perspective: 1600px; }
-.stage-scale { transform: scale(var(--scale, 1.08)); transform-style: preserve-3d; }
-@media (max-width: 920px) { .stage { height: 540px; --scale: .86; } }
-@media (max-width: 480px) { .stage { height: 440px; --scale: .7; } }
+#phone3d { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2; opacity: 0; transform: scale(.94); transition: opacity 700ms var(--ease), transform 900ms var(--ease-cine); }
+#phone3d.ready { opacity: 1; transform: none; }
+.no-gl .floor { display: none; }
+@media (max-width: 920px) { .stage { height: 560px; } }
+@media (max-width: 480px) { .stage { height: 470px; } }
 
-.halo { position: absolute; left: 50%; top: 50%; width: 420px; height: 420px; margin: -210px 0 0 -210px; border-radius: 50%; background: radial-gradient(closest-side, rgba(var(--accent-rgb), .28), rgba(var(--accent-rgb), .06) 55%, transparent); filter: blur(24px); animation: halo 6s var(--ease) infinite; }
+.halo { position: absolute; left: 50%; top: 50%; width: 420px; height: 420px; margin: -210px 0 0 -210px; border-radius: 50%; background: radial-gradient(closest-side, rgba(var(--accent-rgb), .24), rgba(var(--accent-rgb), .06) 55%, transparent); animation: halo 6s var(--ease) infinite; }
 @keyframes halo { 50% { transform: scale(1.15); opacity: .7; } }
 .brackets { position: absolute; inset: 6% 10%; pointer-events: none; }
 .brackets i { position: absolute; width: 24px; height: 24px; border: 1px solid rgba(var(--accent-rgb), .55); animation: brk 4s var(--ease) infinite; }
@@ -201,110 +206,14 @@ ul.clean { list-style: none; margin: 0; padding: 0; }
 @keyframes orbit { to { transform: rotate(360deg); } }
 @media (max-width: 480px) { .orbit.o2 { display: none; } .orbit.o1 { width: 340px; height: 340px; } .orbit.o3 { width: 270px; height: 270px; } }
 
-.floor { position: absolute; left: 50%; top: 50%; width: 260px; height: 40px; margin: 300px 0 0 -130px; border-radius: 50%; background: radial-gradient(closest-side, rgba(var(--accent-rgb), .35), rgba(0,0,0,.6) 40%, transparent); filter: blur(10px); animation: floor 7s var(--ease) infinite; }
+.floor { position: absolute; left: 50%; top: 50%; width: 260px; height: 40px; margin: 300px 0 0 -130px; border-radius: 50%; background: radial-gradient(closest-side, rgba(0,0,0,.75), rgba(var(--accent-rgb), .12) 60%, transparent); animation: floor 7s var(--ease) infinite; }
 @keyframes floor { 50% { transform: scale(.72); opacity: .5; } }
 @media (max-width: 920px) { .floor { margin-top: 240px; } }
 @media (max-width: 480px) { .floor { margin-top: 196px; width: 200px; margin-left: -100px; } }
 
-/* suspensão: flutua, oscila e gira sem parar */
-.phone-float { transform-style: preserve-3d; animation: float 7s var(--ease) infinite; }
-@keyframes float { 0%, 100% { transform: translateY(-12px); } 50% { transform: translateY(14px); } }
-.phone-tilt { transform-style: preserve-3d; transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform var(--d-slow) var(--ease); }
-.phone-wobble { transform-style: preserve-3d; animation: wobble 11s var(--ease) infinite; }
-@keyframes wobble { 0%, 100% { transform: rotateX(10deg) rotateZ(-5deg); } 33% { transform: rotateX(4deg) rotateZ(2deg); } 66% { transform: rotateX(14deg) rotateZ(-1deg); } }
-.phone-spin { transform-style: preserve-3d; animation: spin 16s linear infinite; }
-@keyframes spin { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
-
-.phone { --w: 248px; --h: 508px; --r: 44px; --depth: 16px; position: relative; width: var(--w); height: var(--h); transform-style: preserve-3d; }
-.phone > .slice, .phone > .face, .phone > .back-group { position: absolute; inset: 0; border-radius: var(--r); }
-.slice { background: linear-gradient(90deg, var(--frame-c), var(--frame-b) 14%, var(--frame-a) 50%, var(--frame-b) 86%, var(--frame-c)); transform: translateZ(calc((var(--i) - 6.5) * 1.15px)); }
-.face { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
-.front { transform: translateZ(calc(var(--depth) / 2)); background: #050707; padding: 8px; box-shadow: inset 0 0 0 1.5px var(--frame-c), inset 0 0 0 3px #0B0E0D; }
-
-/* botões laterais em relevo */
-.btn3d { position: absolute; top: var(--top); height: var(--bh); width: 0; transform-style: preserve-3d; }
-.btn3d.r { left: var(--w); } .btn3d.l { left: 0; }
-.btn3d i { position: absolute; top: 0; height: 100%; width: 7px; margin-left: -3.5px; border-radius: 3px; background: linear-gradient(180deg, var(--frame-c), var(--frame-a) 30%, var(--frame-b)); }
-.btn3d.r i { transform: translateX(calc(var(--k) * .9px + .4px)) rotateY(90deg); }
-.btn3d.l i { transform: translateX(calc(var(--k) * -.9px - .4px)) rotateY(90deg); }
-
-/* traseira + módulo de câmera em relevo */
-.back-group { transform: rotateY(180deg) translateZ(calc(var(--depth) / 2)); transform-style: preserve-3d; }
-.back { background: radial-gradient(120% 80% at 20% 0%, rgba(255,255,255,.16), transparent 55%), linear-gradient(160deg, #3A4340, #222927 55%, #161B19); box-shadow: inset 0 0 0 1.5px var(--frame-c); overflow: hidden; }
-.back::after { content: ""; position: absolute; inset: 0; background: linear-gradient(105deg, transparent 35%, rgba(255,255,255,.12) 50%, transparent 65%); background-size: 300% 100%; animation: glass 5s var(--ease) infinite; }
-.back-mark { position: absolute; left: 50%; top: 52%; width: 56px; height: 56px; margin: -28px 0 0 -28px; color: rgba(255,255,255,.22); }
-.back-txt { position: absolute; left: 0; right: 0; bottom: 32px; text-align: center; font: 500 9px/1 var(--font-mono); letter-spacing: .2em; color: rgba(255,255,255,.3); text-transform: uppercase; }
-.cam3d { position: absolute; top: 16px; left: 16px; width: 112px; height: 112px; transform-style: preserve-3d; }
-.cam-slice { position: absolute; inset: 0; border-radius: 32px; background: linear-gradient(90deg, #5A6360, #2A302E 40%, #3A423F); transform: translateZ(calc(var(--k) * .8px + .4px)); }
-.cam-top { position: absolute; inset: 0; border-radius: 32px; transform: translateZ(5.4px); background: radial-gradient(100% 80% at 25% 10%, rgba(255,255,255,.2), transparent 60%), linear-gradient(150deg, #4C5552, #252B29); box-shadow: inset 0 0 0 1px rgba(255,255,255,.16), inset 0 -6px 12px rgba(0,0,0,.35); backface-visibility: hidden; }
-.lens3d { position: absolute; width: 44px; height: 44px; transform-style: preserve-3d; }
-.lens3d.l1 { top: 8px; left: 8px; } .lens3d.l2 { bottom: 8px; left: 8px; } .lens3d.l3 { top: 34px; right: 8px; }
-.lens3d i { position: absolute; inset: 0; border-radius: 50%; background: linear-gradient(90deg, #8A928F, #3B4240 45%, #6B7370); transform: translateZ(calc(5.6px + var(--k) * .9px)); }
-.lens3d b { position: absolute; inset: 0; border-radius: 50%; transform: translateZ(9.6px); backface-visibility: hidden; background: radial-gradient(circle at 36% 30%, rgba(255,255,255,.75) 0 4%, transparent 9%), radial-gradient(circle at 50% 50%, #3E6272 0 9%, #0E1A22 20%, #05080A 40%, #121718 56%, #2A302E 58% 66%, #9AA29F 68%, #4A514F 74%); box-shadow: inset 0 0 0 1px rgba(255,255,255,.2); }
-.lens3d b::after { content: ""; position: absolute; inset: 22%; border-radius: 50%; background: conic-gradient(from 200deg, transparent, rgba(110,190,220,.25), transparent 30%, rgba(200,120,220,.18), transparent 60%); animation: iris 6s linear infinite; }
-@keyframes iris { to { transform: rotate(360deg); } }
-.cam-extra { position: absolute; transform: translateZ(5.6px); border-radius: 50%; backface-visibility: hidden; }
-.cam-extra.flash { right: 14px; top: 12px; width: 12px; height: 12px; background: radial-gradient(circle, #FFF6DD, #CFC6AE 60%, #8D8676); animation: flash 6s var(--ease) infinite; }
-.cam-extra.lidar { right: 16px; bottom: 16px; width: 10px; height: 10px; background: radial-gradient(circle, #222, #000); box-shadow: inset 0 0 0 1px rgba(255,255,255,.15); }
-.cam-extra.mic { right: 50px; top: 10px; width: 4px; height: 4px; background: #0A0C0B; }
-@keyframes flash { 0%, 90%, 100% { box-shadow: none; } 93% { box-shadow: 0 0 22px 8px rgba(255,248,230,.85); } }
-
-/* tela desligada e trincada */
-.screen { position: relative; width: 100%; height: 100%; border-radius: 36px; background: radial-gradient(120% 70% at 80% 0%, rgba(255,255,255,.05), transparent 55%), linear-gradient(170deg, #070909, #020303 60%, #050606); color: var(--ink); overflow: hidden; font-family: var(--font-body); }
-.screen::after { content: ""; position: absolute; inset: 0; z-index: 6; pointer-events: none; background: linear-gradient(105deg, transparent 35%, rgba(255,255,255,.13) 50%, transparent 65%); background-size: 300% 100%; animation: glass 5s var(--ease) infinite; }
-@keyframes glass { 0% { background-position: 120% 0; } 60%, 100% { background-position: -40% 0; } }
-.island { position: absolute; top: 10px; left: 50%; width: 76px; height: 22px; margin-left: -38px; background: #000; border-radius: 999px; z-index: 7; box-shadow: inset 0 0 0 1px rgba(255,255,255,.04); }
-.cracks { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 4; pointer-events: none; }
-.cracks .ck { stroke: rgba(225, 235, 232, .62); stroke-width: .9; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 0; filter: drop-shadow(0 0 1px rgba(255,255,255,.35)); transition: stroke-dashoffset 420ms var(--ease) calc(var(--i) * 12ms), stroke 300ms var(--ease); }
-.cracks .ck.thin { stroke-width: .55; stroke: rgba(225, 235, 232, .42); }
-.cracks .shard { fill: rgba(255,255,255,.035); stroke: none; transition: opacity 600ms var(--ease); }
-.cracks .impact { fill: rgba(255,255,255,.75); filter: blur(1.5px); transform-box: fill-box; transform-origin: center; transition: opacity 400ms var(--ease), transform 400ms var(--ease); }
-[data-phase="scan"] .cracks .ck { stroke: rgba(var(--accent-rgb), .95); filter: drop-shadow(0 0 3px rgba(var(--accent-rgb), .9)); }
-[data-phase="repair"] .cracks .ck, [data-phase="boot"] .cracks .ck, [data-phase="on"] .cracks .ck { stroke: var(--accent); stroke-dashoffset: 1; transition: stroke-dashoffset 1300ms var(--ease-cine) calc(var(--i) * 18ms), stroke 300ms var(--ease); }
-[data-phase="repair"] .cracks .shard, [data-phase="boot"] .cracks .shard, [data-phase="on"] .cracks .shard { opacity: 0; }
-[data-phase="repair"] .cracks .impact, [data-phase="boot"] .cracks .impact, [data-phase="on"] .cracks .impact { opacity: 0; transform: scale(3); }
-.hit .cracks .impact { animation: impact 500ms var(--ease); }
-@keyframes impact { 0% { transform: scale(4); fill: #fff; } 100% { transform: scale(1); } }
-
-.scan-grid { position: absolute; inset: 0; z-index: 3; opacity: 0; background-image: radial-gradient(rgba(var(--accent-rgb), .35) .8px, transparent 1px); background-size: 12px 12px; transition: opacity 300ms var(--ease); }
-.laser { position: absolute; left: 0; right: 0; top: 0; height: 2px; z-index: 5; opacity: 0; background: linear-gradient(90deg, transparent, var(--accent), transparent); box-shadow: 0 0 18px 4px rgba(var(--accent-rgb), .55); }
-[data-phase="scan"] .scan-grid { opacity: 1; }
-[data-phase="scan"] .laser { animation: laser 1800ms var(--ease) both; }
-@keyframes laser { 0% { opacity: 0; transform: translateY(20px); } 10% { opacity: 1; } 50% { transform: translateY(470px); } 90% { opacity: 1; } 100% { opacity: 0; transform: translateY(20px); } }
-.scr-label { position: absolute; left: 0; right: 0; top: 44px; z-index: 5; text-align: center; font: 500 9px/1 var(--font-mono); letter-spacing: .2em; text-transform: uppercase; color: var(--accent); opacity: 0; transition: opacity 300ms var(--ease); }
-[data-phase="scan"] .scr-label.s1, [data-phase="repair"] .scr-label.s2 { opacity: 1; }
-.scr-label b { display: block; margin-top: 8px; font: 600 22px/1 var(--font-display); letter-spacing: -.02em; color: var(--ink); font-variant-numeric: tabular-nums; }
-
-.sparks { position: absolute; left: 156px; top: 292px; z-index: 5; }
-.sparks i { position: absolute; width: 3px; height: 3px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 6px 1px var(--accent); opacity: 0; }
-[data-phase="repair"] .sparks i { animation: spark 1100ms var(--ease) both; animation-delay: calc(var(--n) * 70ms); }
-@keyframes spark { 0% { opacity: 1; transform: translate(0, 0) scale(1.4); } 100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(.4); } }
-
-.boot { position: absolute; inset: 0; z-index: 2; display: grid; place-items: center; opacity: 0; transition: opacity 300ms var(--ease); }
-.boot svg { width: 56px; height: 56px; color: var(--ink); filter: drop-shadow(0 0 14px rgba(var(--accent-rgb), .8)); }
-[data-phase="boot"] .boot { opacity: 1; }
-[data-phase="boot"] .boot svg { animation: bootPulse 1000ms var(--ease) both; }
-@keyframes bootPulse { from { transform: scale(.7); opacity: 0; } 60% { transform: scale(1.05); opacity: 1; } to { transform: scale(1); } }
-
-.on-ui { position: absolute; inset: 0; z-index: 1; display: flex; flex-direction: column; align-items: center; padding: 64px 20px 24px; opacity: 0; transform: scale(1.06); transition: opacity 600ms var(--ease), transform 900ms var(--ease-cine);
-  background: radial-gradient(80% 50% at 20% 90%, rgba(var(--accent-rgb), .45), transparent 70%), radial-gradient(70% 45% at 90% 60%, rgba(232,162,78,.35), transparent 70%), radial-gradient(90% 60% at 50% 0%, rgba(70,110,140,.4), transparent 70%), #050808; }
-[data-phase="on"] .on-ui { opacity: 1; transform: scale(1); }
-.on-ui small { font: 500 12px/1 var(--font-body); color: rgba(232,238,235,.8); }
-.on-ui .clock { font: 600 72px/1 var(--font-display); letter-spacing: -.04em; margin-top: 8px; font-variant-numeric: tabular-nums; }
-.on-ui .ok { margin-top: auto; display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 999px; background: rgba(5,8,7,.55); border: 1px solid rgba(var(--accent-rgb), .4); backdrop-filter: blur(8px); font: 500 11px/1 var(--font-body); }
-.on-ui .ok i { width: 14px; height: 14px; border-radius: 50%; background: var(--accent); display: grid; place-items: center; }
-.on-ui .ok i::after { content: ""; width: 5px; height: 3px; border: solid var(--accent-ink); border-width: 0 0 1.5px 1.5px; transform: rotate(-45deg) translate(1px, -1px); }
-.on-ui .meta { margin-top: 12px; font: 500 9px/1 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: rgba(232,238,235,.6); }
-.on-ui .home { margin-top: 16px; width: 96px; height: 4px; border-radius: 4px; background: rgba(232,238,235,.7); }
-
-/* tremida do impacto */
-.phone-shake { transform-style: preserve-3d; }
-.hit .phone-shake { animation: shake 420ms var(--ease); }
-@keyframes shake { 20% { transform: translate3d(-5px, 2px, 0) rotateZ(-1.5deg); } 40% { transform: translate3d(4px, -2px, 0) rotateZ(1deg); } 60% { transform: translate3d(-3px, 1px, 0); } 80% { transform: translate3d(2px, 0, 0); } }
-
 /* ferramentas flutuando */
 .tool { position: absolute; z-index: 3; pointer-events: none; transition: transform 900ms var(--ease-cine), opacity 400ms var(--ease); }
-.tool svg { display: block; filter: drop-shadow(0 12px 18px rgba(0,0,0,.6)); }
+.tool svg { display: block; }
 .tool.driver { top: 16%; right: 12%; width: 120px; transform: translate(0, 0) rotate(-35deg); }
 .tool.driver svg { animation: drift 6s var(--ease) infinite; }
 [data-phase="repair"] .tool.driver { transform: translate(-60px, 120px) rotate(-55deg); }
@@ -319,14 +228,14 @@ ul.clean { list-style: none; margin: 0; padding: 0; }
 @media (max-width: 480px) { .tool.driver { width: 84px; right: 2%; top: 10%; } }
 
 /* etiquetas do palco */
-.tag { position: absolute; z-index: 5; display: grid; gap: 4px; padding: 12px var(--s2); background: rgba(17, 24, 22, .66); border: 1px solid var(--line-2); border-radius: 14px; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); box-shadow: 0 16px 40px -16px rgba(0,0,0,.8); animation: tagIn 800ms var(--ease-cine) both, bob 8s var(--ease) infinite; animation-delay: calc(2900ms + var(--d-in, 0ms)), calc(3700ms + var(--d-in, 0ms)); }
+.tag { position: absolute; z-index: 5; display: grid; gap: 4px; padding: 12px var(--s2); background: rgba(17, 24, 22, .86); border: 1px solid var(--line-2); border-radius: 14px; box-shadow: 0 16px 40px -16px rgba(0,0,0,.8); animation: tagIn 800ms var(--ease-cine) both, bob 8s var(--ease) infinite; animation-delay: calc(1750ms + var(--d-in, 0ms)), calc(2600ms + var(--d-in, 0ms)); }
 .tag::before { content: ""; position: absolute; top: 50%; width: 32px; height: 1px; background: linear-gradient(90deg, rgba(var(--accent-rgb), .7), transparent); }
 .tag.l::before { left: 100%; } .tag.r::before { right: 100%; transform: scaleX(-1); }
 .tag small { color: var(--muted); }
 .tag strong { font: 500 var(--t-sm)/1.2 var(--font-body); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .tag strong b { color: var(--accent); font-weight: 600; }
 .tag.t1 { top: 14%; left: 0; } .tag.t2 { top: 30%; right: 0; } .tag.t3 { bottom: 20%; left: 2%; } .tag.t4 { bottom: 10%; right: 4%; }
-@keyframes tagIn { from { opacity: 0; transform: translateY(16px) scale(.94); filter: blur(6px); } }
+@keyframes tagIn { from { opacity: 0; transform: translateY(16px) scale(.94); } }
 @keyframes bob { 50% { translate: 0 -8px; } }
 @media (max-width: 480px) { .tag.t2, .tag.t3 { display: none; } .tag.t1 { top: 4%; } .tag.t4 { bottom: 6%; right: 0; } .tag::before { display: none; } }
 
@@ -348,8 +257,8 @@ section { scroll-margin-top: 88px; }
 @media (max-width: 600px) { .sec { padding-block: var(--s12) 0; } }
 
 /* revelação por rolagem (aplicada só a quem começa fora da tela) */
-.pre { opacity: 0; transform: translateY(40px); filter: blur(6px); }
-.pre.in { opacity: 1; transform: none; filter: none; transition: opacity 900ms var(--ease-cine), transform 900ms var(--ease-cine), filter 900ms var(--ease-cine); transition-delay: var(--stagger, 0ms); }
+.pre { opacity: 0; transform: translateY(40px); }
+.pre.in { opacity: 1; transform: none; transition: opacity 900ms var(--ease-cine), transform 900ms var(--ease-cine); transition-delay: var(--stagger, 0ms); }
 .tilt-card.pre.in { transform: perspective(1000px) rotateX(var(--tx, 0deg)) rotateY(var(--ty, 0deg)); }
 
 /* painel com luz que segue o cursor */
@@ -506,7 +415,7 @@ details[open] .ans { animation: ans 300ms var(--ease); }
 
 /* chamada final */
 .final { position: relative; margin-top: var(--s16); padding-block: var(--s16); border-top: 1px solid var(--line); overflow: hidden; isolation: isolate; }
-.final::before { content: ""; position: absolute; left: 50%; bottom: -320px; width: 900px; height: 520px; margin-left: -450px; z-index: -1; border-radius: 50%; background: radial-gradient(closest-side, rgba(var(--accent-rgb), .22), transparent); filter: blur(20px); animation: halo 8s var(--ease) infinite; }
+.final::before { content: ""; position: absolute; left: 50%; bottom: -320px; width: 900px; height: 520px; margin-left: -450px; z-index: -1; border-radius: 50%; background: radial-gradient(closest-side, rgba(var(--accent-rgb), .2), transparent); animation: halo 8s var(--ease) infinite; }
 .final::after { content: ""; position: absolute; inset: 0; z-index: -1; background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px); background-size: 64px 64px; -webkit-mask-image: radial-gradient(ellipse 60% 70% at 50% 100%, #000, transparent 70%); mask-image: radial-gradient(ellipse 60% 70% at 50% 100%, #000, transparent 70%); animation: gridDrift 20s linear infinite; }
 @keyframes gridDrift { to { background-position: 0 64px, 64px 0; } }
 .final .wrap { display: grid; justify-items: center; text-align: center; gap: var(--s4); }
@@ -515,7 +424,7 @@ footer { padding-block: var(--s4) var(--s6); border-top: 1px solid var(--line); 
 footer .wrap { display: flex; justify-content: space-between; gap: var(--s2); flex-wrap: wrap; align-items: center; }
 
 /* botão flutuante */
-.fab { position: fixed; right: var(--s3); bottom: calc(var(--s3) + env(safe-area-inset-bottom, 0px)); z-index: 60; height: 56px; padding: 0 var(--s3) 0 var(--s2); border: 0; border-radius: 999px; display: inline-flex; align-items: center; gap: var(--s1); background: var(--accent); color: var(--accent-ink); font: 600 var(--t-md)/1 var(--font-body); cursor: pointer; box-shadow: 0 12px 40px -8px rgba(var(--accent-rgb), .8); transition: transform var(--d) var(--ease), box-shadow var(--d) var(--ease); animation: enter 800ms var(--ease-cine) 3300ms both; }
+.fab { position: fixed; right: var(--s3); bottom: calc(var(--s3) + env(safe-area-inset-bottom, 0px)); z-index: 60; height: 56px; padding: 0 var(--s3) 0 var(--s2); border: 0; border-radius: 999px; display: inline-flex; align-items: center; gap: var(--s1); background: var(--accent); color: var(--accent-ink); font: 600 var(--t-md)/1 var(--font-body); cursor: pointer; box-shadow: 0 12px 40px -8px rgba(var(--accent-rgb), .8); transition: transform var(--d) var(--ease), box-shadow var(--d) var(--ease); animation: enter 800ms var(--ease-cine) 2000ms both; }
 .fab svg { width: 24px; height: 24px; }
 .fab:hover { transform: translateY(-3px); box-shadow: 0 18px 48px -8px rgba(var(--accent-rgb), .95); }
 .fab::after { content: ""; position: absolute; inset: 0; border-radius: inherit; border: 1px solid var(--accent); animation: ring 2.4s var(--ease) infinite; pointer-events: none; }
@@ -574,7 +483,6 @@ body.lock-d { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) {
   .intro, .grain, .scanline, .laser, .sparks { display: none; }
   *, *::before, *::after { animation-duration: 1ms !important; animation-delay: 0ms !important; animation-iteration-count: 1 !important; transition-duration: 1ms !important; scroll-behavior: auto !important; }
-  .phone-spin { transform: rotateY(-24deg); }
   .pre { opacity: 1; transform: none; filter: none; }
 }
 </style>
@@ -672,49 +580,9 @@ body.lock-d { overflow: hidden; }
         <div class="tool screw s1" aria-hidden="true"><svg viewBox="0 0 14 14"><circle cx="7" cy="7" r="6" fill="#9AA29F"/><circle cx="7" cy="7" r="6" fill="none" stroke="#5C6863"/><path d="M7 3.5v7M3.5 7h7" stroke="#2A302E" stroke-width="1.6" stroke-linecap="round"/></svg></div>
         <div class="tool screw s2" aria-hidden="true"><svg viewBox="0 0 14 14"><circle cx="7" cy="7" r="6" fill="#9AA29F"/><path d="M7 3.5v7M3.5 7h7" stroke="#2A302E" stroke-width="1.6" stroke-linecap="round"/></svg></div>
         <div class="tool screw s3" aria-hidden="true"><svg viewBox="0 0 14 14"><circle cx="7" cy="7" r="6" fill="#B9C2BE"/><path d="M4 7h6" stroke="#2A302E" stroke-width="1.6" stroke-linecap="round"/></svg></div>
-        <div class="scanline"></div>
+        
 
-        <div class="stage-scale">
-          <div class="phone-float">
-            <div class="phone-tilt" id="tilt">
-              <div class="phone-wobble">
-                <div class="phone-spin">
-                  <div class="phone-shake"><div class="phone">
-                    <div class="slice" style="--i:0"></div><div class="slice" style="--i:1"></div><div class="slice" style="--i:2"></div><div class="slice" style="--i:3"></div><div class="slice" style="--i:4"></div><div class="slice" style="--i:5"></div><div class="slice" style="--i:6"></div><div class="slice" style="--i:7"></div><div class="slice" style="--i:8"></div><div class="slice" style="--i:9"></div><div class="slice" style="--i:10"></div><div class="slice" style="--i:11"></div><div class="slice" style="--i:12"></div><div class="slice" style="--i:13"></div>
-                    <div class="btn3d r" style="--top:150px;--bh:72px"><i style="--k:0"></i><i style="--k:1"></i><i style="--k:2"></i></div><div class="btn3d l" style="--top:96px;--bh:28px"><i style="--k:0"></i><i style="--k:1"></i><i style="--k:2"></i></div><div class="btn3d l" style="--top:146px;--bh:48px"><i style="--k:0"></i><i style="--k:1"></i><i style="--k:2"></i></div><div class="btn3d l" style="--top:206px;--bh:48px"><i style="--k:0"></i><i style="--k:1"></i><i style="--k:2"></i></div>
-
-                    <div class="face front">
-                      <div class="screen">
-                        <span class="island"></span>
-                        <div class="on-ui"><small id="scrDate">sábado, 11 de outubro</small><div class="clock" id="scrClock">9:41</div><span class="ok"><i></i>Tela nova instalada</span><span class="meta">Garantia ativa · 90 dias</span><span class="home"></span></div>
-                        <div class="boot"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="11" y="5" width="11" height="22" rx="3.2"/><path d="M3.5 18.5A12.5 12.5 0 0 1 25 7.5"/></svg></div>
-                        <div class="scan-grid"></div>
-                        <svg class="cracks" viewBox="0 0 232 492" fill="none" aria-hidden="true"><polygon class="shard" points="156,292 196.0,291.1 189.2,303.8"/><polygon class="shard" points="156,292 182.7,326.0 164.3,321.9"/><polygon class="shard" points="156,292 136.0,340.2 132.0,317.2"/><polygon class="shard" points="156,292 116.5,314.0 112.9,278.4"/><polygon class="shard" points="156,292 118.1,270.4 141.7,247.6"/><polygon class="shard" points="156,292 151.7,247.2 177.3,244.6"/><polygon class="shard" points="156,292 201.0,259.5 196.0,291.1"/><path class="ck" style="--i:0" d="M156.0 292.0 L171.8 289.9 L196.0 291.1 L219.2 289.0 L234.0 277.6" pathLength="1"/><path class="ck" style="--i:1" d="M156.0 292.0 L171.7 296.3 L189.2 303.8 L204.8 310.4 L228.2 316.8 L234.0 314.2" pathLength="1"/><path class="ck thin" style="--i:2" d="M189.2 303.8 L200.2 318.9 L206.1 332.8 L216.4 344.2" pathLength="1"/><path class="ck" style="--i:3" d="M156.0 292.0 L166.4 308.5 L182.7 326.0 L200.4 340.1 L206.8 360.1 L209.4 383.2 L215.7 397.1 L218.8 425.5 L232.5 440.4 L230.3 465.7 L234.0 470.8" pathLength="1"/><path class="ck thin" style="--i:4" d="M200.4 340.1 L219.1 347.8 L232.9 355.2 L243.5 363.9" pathLength="1"/><path class="ck" style="--i:5" d="M156.0 292.0 L159.1 306.6 L164.3 321.9 L165.3 342.4 L168.8 357.3 L165.1 380.9 L157.7 408.4 L160.7 426.8 L147.2 446.4 L160.9 475.9" pathLength="1"/><path class="ck thin" style="--i:6" d="M165.3 342.4 L174.2 354.4 L187.7 367.5 L198.2 381.5 L211.2 397.3" pathLength="1"/><path class="ck" style="--i:7" d="M156.0 292.0 L144.1 318.7 L136.0 340.2 L128.5 359.0 L127.2 380.3 L119.6 409.1 L111.7 423.1 L104.4 437.1 L79.3 451.1 L88.0 480.6 L88.2 494.0" pathLength="1"/><path class="ck thin" style="--i:8" d="M104.4 437.1 L86.2 450.8 L71.7 458.3" pathLength="1"/><path class="ck" style="--i:9" d="M156.0 292.0 L142.0 303.7 L132.0 317.2 L111.5 338.0 L99.5 349.2 L88.9 359.0 L60.6 372.0 L47.1 394.5 L42.3 417.6 L23.4 436.1 L12.3 461.6" pathLength="1"/><path class="ck thin" style="--i:10" d="M88.9 359.0 L87.4 373.4 L86.0 397.2 L82.8 411.3 L79.2 432.4" pathLength="1"/><path class="ck" style="--i:11" d="M156.0 292.0 L130.1 306.2 L116.5 314.0 L99.7 323.7 L72.6 336.1 L55.6 333.0 L36.0 336.3 L15.8 358.8 L-2.0 359.4" pathLength="1"/><path class="ck thin" style="--i:12" d="M99.7 323.7 L87.3 316.5 L71.1 308.3 L57.6 302.6" pathLength="1"/><path class="ck" style="--i:13" d="M156.0 292.0 L135.4 286.0 L112.9 278.4 L94.7 265.4 L80.0 257.9 L70.0 245.8 L42.3 244.2 L13.9 246.3 L-2.0 249.8" pathLength="1"/><path class="ck" style="--i:14" d="M156.0 292.0 L141.2 282.8 L118.1 270.4 L101.1 254.7 L91.5 242.5 L71.7 221.9 L51.2 204.2 L40.4 175.7" pathLength="1"/><path class="ck thin" style="--i:15" d="M101.1 254.7 L82.2 258.7 L69.2 265.0" pathLength="1"/><path class="ck" style="--i:16" d="M156.0 292.0 L146.8 268.9 L141.7 247.6 L125.6 223.7 L109.7 212.7 L100.8 199.9 L103.5 182.1 L91.9 171.1 L81.8 143.0" pathLength="1"/><path class="ck thin" style="--i:17" d="M109.7 212.7 L113.6 198.1 L118.6 175.6 L127.4 162.2" pathLength="1"/><path class="ck" style="--i:18" d="M156.0 292.0 L154.4 271.8 L151.7 247.2 L147.1 230.2 L150.0 213.9 L151.5 184.7 L143.2 165.4 L140.4 149.4 L121.3 126.2 L100.0 102.5 L79.1 83.5 L98.4 51.2" pathLength="1"/><path class="ck thin" style="--i:19" d="M121.3 126.2 L110.0 115.9 L100.9 105.5" pathLength="1"/><path class="ck" style="--i:20" d="M156.0 292.0 L163.7 271.2 L177.3 244.6 L182.1 214.8 L177.4 194.6 L176.2 167.4 L176.2 151.1 L193.1 125.2 L181.4 104.7 L188.9 76.8 L168.9 49.4 L181.3 35.4 L154.8 13.4 L164.6 -2.0" pathLength="1"/><path class="ck" style="--i:21" d="M156.0 292.0 L178.6 276.0 L201.0 259.5 L217.3 248.9 L234.0 227.7" pathLength="1"/><path class="ck thin" style="--i:22" d="M201.0 259.5 L204.4 245.6 L207.5 224.9 L209.5 210.9" pathLength="1"/><path class="ck thin" style="--i:23" d="M164.3 321.9 L154.5 318.4 L144.1 318.7" pathLength="1"/><path class="ck thin" style="--i:24" d="M144.1 318.7 L145.7 308.8 L142.0 303.7" pathLength="1"/><path class="ck thin" style="--i:25" d="M142.0 303.7 L135.6 304.9 L130.1 306.2" pathLength="1"/><path class="ck thin" style="--i:26" d="M130.1 306.2 L132.1 296.2 L135.4 286.0" pathLength="1"/><path class="ck thin" style="--i:27" d="M135.4 286.0 L141.2 283.5 L141.2 282.8" pathLength="1"/><path class="ck thin" style="--i:28" d="M141.2 282.8 L145.3 276.6 L146.8 268.9" pathLength="1"/><path class="ck thin" style="--i:29" d="M146.8 268.9 L149.7 267.6 L154.4 271.8" pathLength="1"/><path class="ck thin" style="--i:30" d="M178.6 276.0 L185.9 281.5 L196.0 291.1" pathLength="1"/><path class="ck thin" style="--i:31" d="M189.2 303.8 L188.2 315.9 L182.7 326.0" pathLength="1"/><path class="ck thin" style="--i:32" d="M132.0 317.2 L122.2 315.3 L116.5 314.0" pathLength="1"/><path class="ck thin" style="--i:33" d="M112.9 278.4 L118.3 274.7 L118.1 270.4" pathLength="1"/><path class="ck thin" style="--i:34" d="M141.7 247.6 L145.5 246.5 L151.7 247.2" pathLength="1"/><path class="ck thin" style="--i:35" d="M177.3 244.6 L189.0 252.1 L201.0 259.5" pathLength="1"/><path class="ck thin" style="--i:36" d="M219.2 289.0 L220.7 301.5 L228.2 316.8" pathLength="1"/><path class="ck thin" style="--i:37" d="M200.4 340.1 L181.8 345.8 L168.8 357.3" pathLength="1"/><path class="ck thin" style="--i:38" d="M111.5 338.0 L105.8 332.4 L99.7 323.7" pathLength="1"/><path class="ck thin" style="--i:39" d="M99.7 323.7 L98.5 296.8 L94.7 265.4" pathLength="1"/><path class="ck thin" style="--i:40" d="M94.7 265.4 L96.9 262.9 L101.1 254.7" pathLength="1"/><path class="ck thin" style="--i:41" d="M125.6 223.7 L137.2 224.2 L147.1 230.2" pathLength="1"/><path class="ck thin" style="--i:42" d="M147.1 230.2 L167.0 223.3 L182.1 214.8" pathLength="1"/><path class="ck thin" style="--i:43" d="M182.1 214.8 L201.6 229.7 L217.3 248.9" pathLength="1"/><path class="ck thin" style="--i:44" d="M217.3 248.9 L218.3 271.0 L219.2 289.0" pathLength="1"/><circle class="impact" cx="156" cy="292" r="5"/></svg>
-                        <div class="laser"></div>
-                        <div class="scr-label s1">Diagnóstico<b id="scanPct">0%</b></div>
-                        <div class="scr-label s2">Trocando a tela<b>Display OLED</b></div>
-                        <div class="sparks"><i style="--n:0;--dx:40px;--dy:0px"></i><i style="--n:1;--dx:34px;--dy:29px"></i><i style="--n:2;--dx:8px;--dy:49px"></i><i style="--n:3;--dx:-28px;--dy:47px"></i><i style="--n:0;--dx:-57px;--dy:20px"></i><i style="--n:1;--dx:-61px;--dy:-23px"></i><i style="--n:2;--dx:-34px;--dy:-61px"></i><i style="--n:3;--dx:14px;--dy:-74px"></i><i style="--n:0;--dx:62px;--dy:-51px"></i><i style="--n:1;--dx:85px;--dy:1px"></i><i style="--n:2;--dx:68px;--dy:59px"></i><i style="--n:3;--dx:15px;--dy:94px"></i></div>
-                      </div>
-                    </div>
-
-                    <div class="back-group">
-                      <div class="face back">
-                        <svg class="back-mark" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="11" y="5" width="11" height="22" rx="3.2"/><path d="M3.5 18.5A12.5 12.5 0 0 1 25 7.5"/></svg>
-                        <span class="back-txt">Reparado na rota</span>
-                      </div>
-                      <div class="cam3d">
-                        <div class="cam-slice" style="--k:0"></div><div class="cam-slice" style="--k:1"></div><div class="cam-slice" style="--k:2"></div><div class="cam-slice" style="--k:3"></div><div class="cam-slice" style="--k:4"></div><div class="cam-slice" style="--k:5"></div><div class="cam-slice" style="--k:6"></div>
-                        <div class="cam-top"></div>
-                        <div class="lens3d l1"><i style="--k:0"></i><i style="--k:1"></i><i style="--k:2"></i><i style="--k:3"></i><i style="--k:4"></i><b></b></div><div class="lens3d l2"><i style="--k:0"></i><i style="--k:1"></i><i style="--k:2"></i><i style="--k:3"></i><i style="--k:4"></i><b></b></div><div class="lens3d l3"><i style="--k:0"></i><i style="--k:1"></i><i style="--k:2"></i><i style="--k:3"></i><i style="--k:4"></i><b></b></div>
-                        <span class="cam-extra flash"></span><span class="cam-extra lidar"></span><span class="cam-extra mic"></span>
-                      </div>
-                    </div>
-                  </div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <canvas id="phone3d" aria-hidden="true"></canvas>
 
         <div class="tag t1 l" style="--d-in:0ms"><small class="mono" data-scramble>Tela OLED 6,1″</small><strong>Troca em <b>~40 min</b></strong></div>
         <div class="tag t2 r" style="--d-in:150ms"><small class="mono" data-scramble>Bateria</small><strong>Saúde <b>100%</b> após a troca</strong></div>
@@ -1058,20 +926,20 @@ body.lock-d { overflow: hidden; }
   });
 
   /* ---- abertura ---- */
-  var introMs = reduce ? 0 : 3200;
+  var introMs = reduce ? 0 : 2100;
   var count = document.getElementById("introCount"), label = document.getElementById("introLabel");
   if (count && !reduce) {
     var labels = ["Calibrando bancada", "Carregando peças", "Pronto"];
     var t0 = performance.now();
     (function tick(now) {
-      var p = Math.min(1, Math.max(0, (now - t0 - 250) / 1500));
+      var p = Math.min(1, Math.max(0, (now - t0 - 120) / 850));
       var v = Math.round(easeIO(p) * 100);
       count.textContent = String(v).padStart(3, "0");
       label.textContent = labels[v >= 100 ? 2 : v > 55 ? 1 : 0];
       if (p < 1) requestAnimationFrame(tick);
     })(t0);
   }
-  setTimeout(function () { document.body.classList.remove("lock"); }, reduce ? 0 : 2500);
+  setTimeout(function () { document.body.classList.remove("lock"); }, reduce ? 0 : 1300);
   setTimeout(function () { document.documentElement.classList.add("intro-done"); }, introMs);
 
   /* ---- texto embaralhado ---- */
@@ -1186,13 +1054,15 @@ body.lock-d { overflow: hidden; }
   /* ---- malha de ondas do herói ---- */
   var cv = document.getElementById("waves");
   if (cv && cv.getContext && !reduce) {
-    var ctx = cv.getContext("2d"), W = 0, H = 0, dpr = Math.min(2, window.devicePixelRatio || 1), running = true, mx = 0;
+    var ctx = cv.getContext("2d"), W = 0, H = 0, dpr = 1, running = true, mx = 0;
     var resize = function () { W = cv.clientWidth; H = cv.clientHeight; cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); };
     resize(); window.addEventListener("resize", resize);
     window.addEventListener("pointermove", function (e) { mx = (e.clientX / window.innerWidth - .5); }, { passive: true });
-    var COLS = W < 600 ? 34 : 60, ROWS = 26;
+    var COLS = W < 600 ? 28 : 46, ROWS = 20, lastDraw = 0;
     var draw = function (t) {
       if (!running) return;
+      if (t - lastDraw < 33) { requestAnimationFrame(draw); return; }
+      lastDraw = t;
       t *= .00045;
       ctx.clearRect(0, 0, W, H);
       var horizon = H * .52, f = H * .9;
@@ -1230,13 +1100,7 @@ body.lock-d { overflow: hidden; }
   if (reduce) setStep(4); else setInterval(function () { step = (step + 1) % 5; setStep(step); }, 1800);
 
   /* ---- ciclo de conserto do aparelho ---- */
-  var stageEl = document.getElementById("stage"), phaseText = document.getElementById("phaseText"), scanPct = document.getElementById("scanPct");
-  var clock = document.getElementById("scrClock"), date = document.getElementById("scrDate");
-  try {
-    var now = new Date();
-    clock.textContent = now.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
-    date.textContent = now.toLocaleDateString("pt-BR", { weekday: "long", day: "numeric", month: "long" });
-  } catch (err) {}
+  var stageEl = document.getElementById("stage"), phaseText = document.getElementById("phaseText");
   var PH = [
     ["broken", 3600, "Tela <b>trincada</b>"],
     ["scan", 1800, "Diagnóstico <b>em curso</b>"],
@@ -1249,14 +1113,9 @@ body.lock-d { overflow: hidden; }
     var ph = PH[phaseIdx];
     stageEl.setAttribute("data-phase", ph[0]);
     phaseText.innerHTML = ph[2];
-    if (ph[0] === "broken") { stageEl.classList.remove("hit"); void stageEl.offsetWidth; stageEl.classList.add("hit"); }
-    if (ph[0] === "scan") {
-      var st = performance.now();
-      (function pct(t) { var q = Math.min(1, (t - st) / 1700); scanPct.textContent = Math.round(easeIO(q) * 100) + "%"; if (q < 1) requestAnimationFrame(pct); })(st);
-    }
     setTimeout(function () { phaseIdx = (phaseIdx + 1) % PH.length; runPhase(); }, ph[1]);
   };
-  if (!reduce) setTimeout(runPhase, introMs + 400);
+  if (!reduce) setTimeout(function () { phaseIdx = 1; runPhase(); }, introMs + 3000);
 
   /* ---- orçamento → WhatsApp ---- */
   var form = document.getElementById("quoteForm"), bubble = document.getElementById("bubble"), send = document.getElementById("sendWa");
@@ -1325,6 +1184,405 @@ body.lock-d { overflow: hidden; }
 
   document.getElementById("year").textContent = new Date().getFullYear();
 })();
+</script>
+<script type="module">
+import * as THREE from "three";
+
+function main() {
+  const canvas = document.getElementById("phone3d");
+  const stage = document.getElementById("stage");
+  const hero = document.getElementById("hero");
+  if (!canvas || !stage) return;
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const small = innerWidth < 700;
+
+  let renderer;
+  try {
+    renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: "high-performance" });
+  } catch (err) { stage.classList.add("no-gl"); return; }
+  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, small ? 1.5 : 1.75));
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.05;
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(24, 1, 10, 3000);
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  // estúdio escuro com softboxes: reflexos de foto de produto
+  const env = new THREE.Scene();
+  env.add(new THREE.Mesh(new THREE.BoxGeometry(120, 120, 120), new THREE.MeshBasicMaterial({ color: 0x0c0f0e, side: THREE.BackSide })));
+  const panel = (w, h, x, y, z, k, col) => {
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: new THREE.Color(col).multiplyScalar(k), side: THREE.DoubleSide }));
+    m.position.set(x, y, z); m.lookAt(0, 0, 0); env.add(m);
+  };
+  panel(70, 12, 0, 52, 12, 4.2, 0xffffff);
+  panel(14, 80, -52, 4, 18, 2.6, 0xffffff);
+  panel(10, 80, 52, -4, -14, 1.8, 0xe4f6ee);
+  panel(46, 22, 14, -18, 54, 0.55, 0xffffff);
+  panel(30, 30, -6, 6, -56, 0.7, 0x5ed3ae);
+  panel(30, 8, -20, -50, -10, 1.4, 0xe8a24e);
+  scene.environment = pmrem.fromScene(env, 0.02).texture;
+  pmrem.dispose();
+
+  const key = new THREE.DirectionalLight(0xffffff, 1.4); key.position.set(-220, 320, 420); scene.add(key);
+  const rim = new THREE.DirectionalLight(0x5ed3ae, 2.2); rim.position.set(320, 80, -300); scene.add(rim);
+  const warm = new THREE.DirectionalLight(0xe8a24e, 0.9); warm.position.set(-320, -220, -120); scene.add(warm);
+
+  /* ---------- medidas (mm) ---------- */
+  const W = 70.6, H = 146.6, D = 8.25, R = 11.2;
+
+  const rr = (w, h, r) => {
+    const s = new THREE.Shape(), x = -w / 2, y = -h / 2;
+    s.moveTo(x + r, y); s.lineTo(x + w - r, y); s.absarc(x + w - r, y + r, r, -Math.PI / 2, 0);
+    s.lineTo(x + w, y + h - r); s.absarc(x + w - r, y + h - r, r, 0, Math.PI / 2);
+    s.lineTo(x + r, y + h); s.absarc(x + r, y + h - r, r, Math.PI / 2, Math.PI);
+    s.lineTo(x, y + r); s.absarc(x + r, y + r, r, Math.PI, Math.PI * 1.5);
+    return s;
+  };
+  const slab = (w, h, r, depth, bevel, segs) => {
+    const g = new THREE.ExtrudeGeometry(rr(w - 2 * bevel, h - 2 * bevel, r - bevel), { depth, bevelEnabled: true, bevelThickness: bevel, bevelSize: bevel, bevelSegments: segs, curveSegments: 40 });
+    g.center();
+    return g;
+  };
+  const remapUV = (g) => {
+    g.computeBoundingBox();
+    const b = g.boundingBox, p = g.attributes.position, uv = g.attributes.uv;
+    const bw = b.max.x - b.min.x, bh = b.max.y - b.min.y;
+    for (let i = 0; i < p.count; i++) uv.setXY(i, (p.getX(i) - b.min.x) / bw, (p.getY(i) - b.min.y) / bh);
+    uv.needsUpdate = true;
+    return g;
+  };
+  const tex = (c, srgb = true) => { const t = new THREE.CanvasTexture(c); if (srgb) t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; return t; };
+
+  /* ---------- materiais ---------- */
+  const titanium = new THREE.MeshPhysicalMaterial({ color: 0x8f8b84, metalness: 1, roughness: 0.34, clearcoat: 0.25, clearcoatRoughness: 0.3, anisotropy: 0.6, anisotropyRotation: Math.PI / 2 });
+  const polished = new THREE.MeshPhysicalMaterial({ color: 0x9a968f, metalness: 1, roughness: 0.16 });
+  const ringMat = polished.clone(); ringMat.side = THREE.DoubleSide;
+  const darkPart = new THREE.MeshStandardMaterial({ color: 0x0b0b0b, roughness: 0.7 });
+  const antenna = new THREE.MeshStandardMaterial({ color: 0x55534f, roughness: 0.55, metalness: 0.2 });
+
+  // traseira: vidro fosco com logotipo brilhante (mapa de rugosidade)
+  const bw = 512, bh = Math.round(512 * (H - 1.7) / (W - 1.7));
+  const backC = document.createElement("canvas"); backC.width = bw; backC.height = bh;
+  {
+    const g = backC.getContext("2d");
+    const img = g.createImageData(bw, bh);
+    for (let i = 0; i < img.data.length; i += 4) { const v = 150 + (Math.random() * 18 - 9); img.data[i] = img.data[i + 1] = img.data[i + 2] = v; img.data[i + 3] = 255; }
+    g.putImageData(img, 0, 0);
+    // a traseira é vista espelhada: desenha o logotipo invertido na horizontal
+    g.save(); g.translate(bw / 2, bh * 0.44); g.scale(-1, 1);
+    const k = bw / 68.9 * 0.62;
+    g.strokeStyle = "rgb(24,24,24)"; g.lineWidth = 1.8 * k; g.lineCap = "round";
+    g.beginPath(); g.roundRect(-5.5 * k * 0.9, -11 * k * 0.9, 11 * k * 0.9, 22 * k * 0.9, 3.2 * k * 0.9); g.stroke();
+    g.beginPath(); g.arc(1 * k, 4 * k, 12.5 * k, Math.PI * 1.02, Math.PI * 1.72); g.stroke();
+    g.fillStyle = "rgb(24,24,24)"; g.beginPath(); g.arc(10.5 * k, -9.5 * k, 2.3 * k, 0, Math.PI * 2); g.fill();
+    g.restore();
+  }
+  const backRough = tex(backC, false);
+  const backGlass = new THREE.MeshPhysicalMaterial({ color: 0x8b877f, metalness: 0.05, roughness: 1, roughnessMap: backRough, clearcoat: 0.0 });
+  const plateauGlass = new THREE.MeshPhysicalMaterial({ color: 0x86827b, metalness: 0.1, roughness: 0.08, clearcoat: 1, clearcoatRoughness: 0.04 });
+
+  // frente: vidro preto com camadas de trinca (difusa + relevo) e conteúdo luminoso
+  const CW = 600, CH = Math.round(600 * (H - 1.7) / (W - 1.7)), PX = CW / (W - 1.7);
+  const diffC = document.createElement("canvas"); diffC.width = CW; diffC.height = CH;
+  const emC = document.createElement("canvas"); emC.width = CW; emC.height = CH;
+  const dctx = diffC.getContext("2d"), ectx = emC.getContext("2d");
+  const diffT = tex(diffC), emT = tex(emC), bumpT = tex(diffC, false);
+  const screenGlass = new THREE.MeshPhysicalMaterial({
+    color: 0xffffff, map: diffT, bumpMap: bumpT, bumpScale: 0.5,
+    emissive: 0xffffff, emissiveMap: emT, emissiveIntensity: 1.2,
+    metalness: 0, roughness: 0.04, clearcoat: 1, clearcoatRoughness: 0.02, envMapIntensity: 1
+  });
+
+  /* ---------- montagem ---------- */
+  const phone = new THREE.Group();
+  const body = new THREE.Mesh(slab(W, H, R, D - 2.2, 1.1, 10), titanium); phone.add(body);
+
+  const frontG = remapUV(slab(W - 2.4 + 0.7, H - 2.4 + 0.7, R - 0.85, 0.15, 0.35, 5));
+  const front = new THREE.Mesh(frontG, screenGlass); front.position.z = D / 2 - 0.12; phone.add(front);
+
+  const backG = remapUV(slab(W - 2.4 + 0.5, H - 2.4 + 0.5, R - 0.95, 0.1, 0.25, 4));
+  const back = new THREE.Mesh(backG, backGlass); back.position.z = -D / 2 + 0.08; phone.add(back);
+
+  // auto-falante superior
+  const ear = new THREE.Mesh(new THREE.CapsuleGeometry(0.32, 9, 4, 12), darkPart);
+  ear.rotation.z = Math.PI / 2; ear.position.set(0, H / 2 - 0.5, D / 2 - 0.3); phone.add(ear);
+
+  // módulo de câmera
+  const cam = new THREE.Group();
+  const pcx = 12.6, pcy = 50.6, backTop = -D / 2 - 0.27;
+  const plateau = new THREE.Mesh(slab(37.5, 37.5, 9.2, 0.5, 0.65, 6), plateauGlass);
+  const pTop = backTop - 1.8; plateau.position.set(pcx, pcy, backTop - 0.9); cam.add(plateau);
+
+  const lensC = document.createElement("canvas"); lensC.width = lensC.height = 256;
+  {
+    const g = lensC.getContext("2d"), c = 128;
+    const rad = g.createRadialGradient(c, c, 0, c, c, 128);
+    rad.addColorStop(0, "#000"); rad.addColorStop(0.14, "#020305"); rad.addColorStop(0.18, "#2c3f52"); rad.addColorStop(0.3, "#16263a"); rad.addColorStop(0.44, "#0b1320");
+    rad.addColorStop(0.56, "#30283f"); rad.addColorStop(0.64, "#06080b"); rad.addColorStop(0.78, "#23282b"); rad.addColorStop(0.86, "#08090a"); rad.addColorStop(1, "#33383b");
+    g.fillStyle = rad; g.fillRect(0, 0, 256, 256);
+    g.strokeStyle = "rgba(150,170,195,.45)"; g.lineWidth = 2;
+    [30, 44, 58, 70, 84, 96, 110].forEach((r) => { g.beginPath(); g.arc(c, c, r, 0, Math.PI * 2); g.stroke(); });
+  }
+  const lensMat = new THREE.MeshPhysicalMaterial({ map: tex(lensC), metalness: 0.4, roughness: 0.12, clearcoat: 1, clearcoatRoughness: 0, iridescence: 1, iridescenceIOR: 1.8, iridescenceThicknessRange: [180, 520] });
+  const coverMat = new THREE.MeshPhysicalMaterial({ color: 0x000000, metalness: 0, roughness: 0, clearcoat: 1, transparent: true, opacity: 0.12, envMapIntensity: 2.4, depthWrite: false });
+  const domeG = new THREE.SphereGeometry(17, 64, 12, 0, Math.PI * 2, 0, 0.38);
+  const domeMat = new THREE.MeshPhysicalMaterial({ color: 0x0c1220, metalness: 0, roughness: 0.04, clearcoat: 1, iridescence: 1, iridescenceIOR: 2.0, iridescenceThicknessRange: [260, 680], transparent: true, opacity: 0.62, envMapIntensity: 2.6, depthWrite: false });
+
+  const addLens = (x, y) => {
+    const ring = new THREE.Mesh(new THREE.CylinderGeometry(7.5, 7.75, 2.4, 72, 1, true), ringMat);
+    ring.rotation.x = Math.PI / 2; ring.position.set(x, y, pTop - 0.6); cam.add(ring);
+    const lip = new THREE.Mesh(new THREE.TorusGeometry(6.95, 0.55, 16, 72), polished);
+    lip.position.set(x, y, pTop - 1.95); cam.add(lip);
+    const inner = new THREE.Mesh(new THREE.CircleGeometry(6.6, 72), lensMat);
+    inner.rotation.y = Math.PI; inner.position.set(x, y, pTop - 0.25); cam.add(inner);
+    const dome = new THREE.Mesh(domeG, domeMat);
+    dome.rotation.x = -Math.PI / 2; dome.position.set(x, y, pTop - 0.45 + 17 * Math.cos(0.38)); dome.renderOrder = 1; cam.add(dome);
+    const cover = new THREE.Mesh(new THREE.CircleGeometry(6.7, 72), coverMat);
+    cover.rotation.y = Math.PI; cover.position.set(x, y, pTop - 1.85); cover.renderOrder = 2; cam.add(cover);
+  };
+  addLens(pcx + 8.7, pcy + 8.7); addLens(pcx + 8.7, pcy - 8.7); addLens(pcx - 8.4, pcy);
+
+  const flashMat = new THREE.MeshStandardMaterial({ color: 0xefe6cc, roughness: 0.3, emissive: 0xfff3d6, emissiveIntensity: 0 });
+  const flash = new THREE.Mesh(new THREE.CylinderGeometry(2.7, 2.7, 0.6, 40), flashMat);
+  flash.rotation.x = Math.PI / 2; flash.position.set(pcx - 8.4, pcy + 12.5, pTop - 0.2); cam.add(flash);
+  const lidar = new THREE.Mesh(new THREE.CylinderGeometry(2.7, 2.7, 0.6, 40), new THREE.MeshPhysicalMaterial({ color: 0x050505, roughness: 0.05, clearcoat: 1 }));
+  lidar.rotation.x = Math.PI / 2; lidar.position.set(pcx - 8.4, pcy - 12.5, pTop - 0.2); cam.add(lidar);
+  const mic = new THREE.Mesh(new THREE.CircleGeometry(0.6, 20), darkPart);
+  mic.rotation.y = Math.PI; mic.position.set(pcx - 1.2, pcy + 15.5, pTop - 0.02); cam.add(mic);
+  phone.add(cam);
+
+  // botões laterais
+  const button = (x, y, len) => {
+    const b = new THREE.Mesh(new THREE.CapsuleGeometry(1.45, len, 6, 20), polished);
+    b.scale.set(0.5, 1, 1); b.position.set(x, y, 0); phone.add(b);
+  };
+  button(-W / 2 - 0.15, 42, 4.5); button(-W / 2 - 0.15, 29, 9); button(-W / 2 - 0.15, 16, 9); button(W / 2 + 0.15, 22, 15);
+
+  // faixas de antena
+  [[W / 2, 52], [W / 2, -50], [-W / 2, -46], [-W / 2, 56]].forEach(([x, y]) => {
+    const a = new THREE.Mesh(new THREE.BoxGeometry(0.5, 1.1, D - 2.6), antenna);
+    a.position.set(x - Math.sign(x) * 0.18, y, 0); phone.add(a);
+  });
+  [[-18, H / 2], [18, -H / 2]].forEach(([x, y]) => {
+    const a = new THREE.Mesh(new THREE.BoxGeometry(1.1, 0.5, D - 2.6), antenna);
+    a.position.set(x, y - Math.sign(y) * 0.18, 0); phone.add(a);
+  });
+
+  // porta USB-C e furos de alto-falante
+  const port = new THREE.Mesh(new THREE.CapsuleGeometry(1.3, 6.2, 6, 16), darkPart);
+  port.rotation.z = Math.PI / 2; port.position.set(0, -H / 2 + 1.15, 0); phone.add(port);
+  const holeG = new THREE.CylinderGeometry(0.42, 0.42, 1, 12);
+  for (let i = 0; i < 6; i++) {
+    [1, -1].forEach((sd) => { const h = new THREE.Mesh(holeG, darkPart); h.position.set(sd * (9 + i * 1.7), -H / 2 + 0.35, 0); phone.add(h); });
+  }
+
+  const pivot = new THREE.Group(); pivot.add(phone); scene.add(pivot);
+
+  /* ---------- trincas ---------- */
+  let seed = 7; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+  const ix = CW * 0.68, iy = CH * 0.58;
+  const cracks = [];
+  const mkPath = (pts, w, a, delay) => {
+    const lens = [0]; for (let i = 1; i < pts.length; i++) lens.push(lens[i - 1] + Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]));
+    cracks.push({ pts, lens, total: lens[lens.length - 1], w, a, delay });
+  };
+  const radials = [];
+  for (let n = 0; n < 15; n++) {
+    let ang = n * (Math.PI * 2 / 15) + (rnd() - .5) * .4, r = 0;
+    const L = 220 + rnd() * 700, pts = [[ix, iy]];
+    while (r < L) {
+      r += 22 + rnd() * 38; ang += (rnd() - .5) * .24;
+      let x = ix + Math.cos(ang) * r, y = iy + Math.sin(ang) * r;
+      const out = x < 0 || x > CW || y < 0 || y > CH;
+      pts.push([Math.min(Math.max(x, 0), CW), Math.min(Math.max(y, 0), CH)]);
+      if (out) break;
+    }
+    radials.push(pts); mkPath(pts, 1.6 + rnd() * .8, .8, n * .012);
+    if (pts.length > 4 && rnd() < .85) {
+      const k = 2 + Math.floor(rnd() * (pts.length - 3)); let [bx, by] = pts[k]; let ba = ang + (rnd() < .5 ? -1 : 1) * (.5 + rnd() * .5);
+      const bp = [[bx, by]]; const m = 2 + Math.floor(rnd() * 4);
+      for (let j = 0; j < m; j++) { bx += Math.cos(ba) * (18 + rnd() * 30); by += Math.sin(ba) * (18 + rnd() * 30); ba += (rnd() - .5) * .4; bp.push([bx, by]); }
+      mkPath(bp, .9, .55, .1 + rnd() * .1);
+    }
+  }
+  [22, 48, 84, 130].forEach((rr0, ri) => {
+    for (let n = 0; n < radials.length; n++) {
+      if (rnd() < .3 + ri * .1) continue;
+      const at = (p) => { for (const q of p) if (Math.hypot(q[0] - ix, q[1] - iy) >= rr0) return q; return p[p.length - 1]; };
+      const a1 = at(radials[n]), a2 = at(radials[(n + 1) % radials.length]);
+      mkPath([a1, [(a1[0] + a2[0]) / 2 + (rnd() - .5) * 6, (a1[1] + a2[1]) / 2 + (rnd() - .5) * 6], a2], .8, .5, .15 + ri * .05);
+    }
+  });
+
+  const strokeCrack = (ctx, c, prog) => {
+    const len = c.total * prog; if (len <= 0) return;
+    ctx.beginPath(); ctx.moveTo(c.pts[0][0], c.pts[0][1]);
+    for (let i = 1; i < c.pts.length; i++) {
+      if (c.lens[i] <= len) ctx.lineTo(c.pts[i][0], c.pts[i][1]);
+      else { const f = (len - c.lens[i - 1]) / (c.lens[i] - c.lens[i - 1]); ctx.lineTo(c.pts[i - 1][0] + (c.pts[i][0] - c.pts[i - 1][0]) * f, c.pts[i - 1][1] + (c.pts[i][1] - c.pts[i - 1][1]) * f); break; }
+    }
+    ctx.stroke();
+  };
+  const crackProg = (c, p) => Math.max(0, Math.min(1, (p - c.delay) / (1 - Math.min(.5, c.delay))));
+
+  const drawDiffuse = (p) => {
+    dctx.fillStyle = "#000"; dctx.fillRect(0, 0, CW, CH);
+    if (p <= 0) return;
+    dctx.lineCap = "round"; dctx.lineJoin = "round";
+    // estilhaços: leve névoa clara perto do impacto
+    const fog = dctx.createRadialGradient(ix, iy, 0, ix, iy, 120 * p);
+    fog.addColorStop(0, `rgba(255,255,255,${.12 * p})`); fog.addColorStop(1, "rgba(255,255,255,0)");
+    dctx.fillStyle = fog; dctx.beginPath(); dctx.arc(ix, iy, 120, 0, Math.PI * 2); dctx.fill();
+    for (const c of cracks) {
+      const cp = crackProg(c, p); if (cp <= 0) continue;
+      dctx.strokeStyle = `rgba(255,255,255,${c.a * .1})`; dctx.lineWidth = c.w * 2.6; strokeCrack(dctx, c, cp);
+      dctx.strokeStyle = `rgba(225,232,230,${c.a * .78})`; dctx.lineWidth = c.w * .7; strokeCrack(dctx, c, cp);
+    }
+  };
+
+  // área do display (com borda preta)
+  const bez = 2.0 * PX, dr = 8.6 * PX;
+  const displayPath = (ctx) => { ctx.beginPath(); ctx.roundRect(bez, bez, CW - 2 * bez, CH - 2 * bez, dr); };
+  const island = (ctx) => { ctx.fillStyle = "#000"; ctx.beginPath(); ctx.roundRect(CW / 2 - 9.5 * PX, bez + 2.2 * PX, 19 * PX, 5.6 * PX, 2.8 * PX); ctx.fill(); };
+
+  const wall = document.createElement("canvas"); wall.width = CW; wall.height = CH;
+  {
+    const g = wall.getContext("2d");
+    g.fillStyle = "#04070a"; g.fillRect(0, 0, CW, CH);
+    const blob = (x, y, r, col) => { const gr = g.createRadialGradient(x, y, 0, x, y, r); gr.addColorStop(0, col); gr.addColorStop(1, "rgba(0,0,0,0)"); g.fillStyle = gr; g.fillRect(0, 0, CW, CH); };
+    blob(CW * .15, CH * .92, CW * 1.0, "rgba(46,170,135,.85)");
+    blob(CW * .95, CH * .62, CW * .8, "rgba(214,140,60,.6)");
+    blob(CW * .45, CH * .05, CW * .9, "rgba(40,80,120,.7)");
+    blob(CW * .6, CH * .4, CW * .5, "rgba(10,20,30,.6)");
+  }
+  const fmtTime = () => new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+  const fmtDate = () => { const s = new Date().toLocaleDateString("pt-BR", { weekday: "long", day: "numeric", month: "long" }); return s.charAt(0).toUpperCase() + s.slice(1); };
+  const ACC = "94,211,174";
+
+  const drawEmissive = (phase, t) => {
+    ectx.fillStyle = "#000"; ectx.fillRect(0, 0, CW, CH);
+    if (phase === "scan") {
+      ectx.save(); displayPath(ectx); ectx.clip();
+      ectx.fillStyle = `rgba(${ACC},.10)`;
+      for (let y = bez + 20; y < CH - bez; y += 26) for (let x = bez + 20; x < CW - bez; x += 26) ectx.fillRect(x, y, 2, 2);
+      ectx.lineCap = "round"; ectx.lineJoin = "round";
+      for (const c of cracks) { ectx.strokeStyle = `rgba(${ACC},${.55 + .35 * Math.sin(t * 12 + c.delay * 40)})`; ectx.lineWidth = c.w * 1.4; strokeCrack(ectx, c, 1); }
+      const ly = bez + (CH - 2 * bez) * (t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
+      const lg = ectx.createLinearGradient(0, ly - 60, 0, ly + 4); lg.addColorStop(0, `rgba(${ACC},0)`); lg.addColorStop(1, `rgba(${ACC},.45)`);
+      ectx.fillStyle = lg; ectx.fillRect(0, ly - 60, CW, 64);
+      ectx.fillStyle = "rgba(220,255,240,.95)"; ectx.fillRect(0, ly, CW, 3);
+      ectx.textAlign = "center"; ectx.fillStyle = `rgba(${ACC},1)`; ectx.font = '500 22px "Geist Mono", monospace';
+      ectx.fillText("DIAGNÓSTICO", CW / 2, 200);
+      ectx.fillStyle = "#e8eeeb"; ectx.font = '600 76px "Bricolage Grotesque", sans-serif';
+      ectx.fillText(Math.round(t * 100) + "%", CW / 2, 286);
+      ectx.restore();
+    } else if (phase === "repair") {
+      ectx.save(); displayPath(ectx); ectx.clip();
+      ectx.lineCap = "round"; ectx.lineJoin = "round";
+      const p = 1 - t;
+      for (const c of cracks) { ectx.strokeStyle = `rgba(${ACC},.9)`; ectx.lineWidth = c.w * 1.6; strokeCrack(ectx, c, crackProg(c, p)); }
+      for (let i = 0; i < 22; i++) {
+        const a = i * 2.4 + 1, d = 30 + t * (120 + (i % 5) * 60), al = Math.max(0, 1 - t * 1.2);
+        ectx.fillStyle = `rgba(200,255,235,${al})`; ectx.beginPath(); ectx.arc(ix + Math.cos(a) * d, iy + Math.sin(a) * d, 3.5 - t * 2, 0, Math.PI * 2); ectx.fill();
+      }
+      const halo = ectx.createRadialGradient(ix, iy, 0, ix, iy, 200); halo.addColorStop(0, `rgba(${ACC},${.5 * (1 - t)})`); halo.addColorStop(1, `rgba(${ACC},0)`);
+      ectx.fillStyle = halo; ectx.fillRect(0, 0, CW, CH);
+      ectx.textAlign = "center"; ectx.fillStyle = `rgba(${ACC},1)`; ectx.font = '500 22px "Geist Mono", monospace'; ectx.fillText("TROCANDO A TELA", CW / 2, 200);
+      ectx.restore();
+    } else if (phase === "boot") {
+      const a = Math.sin(Math.min(1, t) * Math.PI);
+      ectx.save(); ectx.translate(CW / 2, CH / 2); ectx.scale(.85 + .15 * t, .85 + .15 * t);
+      ectx.strokeStyle = `rgba(240,245,243,${a})`; ectx.lineWidth = 9; ectx.lineCap = "round";
+      ectx.shadowColor = `rgba(${ACC},${a})`; ectx.shadowBlur = 40;
+      ectx.beginPath(); ectx.roundRect(-30, -60, 60, 120, 17); ectx.stroke();
+      ectx.beginPath(); ectx.arc(5, 22, 68, Math.PI * 1.02, Math.PI * 1.72); ectx.stroke();
+      ectx.restore();
+    } else if (phase === "on") {
+      const a = Math.min(1, t * 3);
+      ectx.save(); ectx.globalAlpha = a; displayPath(ectx); ectx.clip();
+      ectx.drawImage(wall, 0, 0);
+      ectx.textAlign = "center"; ectx.fillStyle = "rgba(240,244,242,.88)";
+      ectx.font = '500 30px "Geist", sans-serif'; ectx.fillText(fmtDate(), CW / 2, 170);
+      ectx.fillStyle = "#f4f7f5"; ectx.font = '600 196px "Bricolage Grotesque", sans-serif'; ectx.fillText(fmtTime(), CW / 2, 350);
+      const py = CH - 300, pw = 360;
+      ectx.fillStyle = "rgba(5,10,8,.55)"; ectx.beginPath(); ectx.roundRect(CW / 2 - pw / 2, py, pw, 64, 32); ectx.fill();
+      ectx.strokeStyle = `rgba(${ACC},.6)`; ectx.lineWidth = 2; ectx.stroke();
+      ectx.fillStyle = `rgb(${ACC})`; ectx.beginPath(); ectx.arc(CW / 2 - pw / 2 + 38, py + 32, 13, 0, Math.PI * 2); ectx.fill();
+      ectx.strokeStyle = "#04120d"; ectx.lineWidth = 3.5; ectx.beginPath(); ectx.moveTo(CW / 2 - pw / 2 + 32, py + 32); ectx.lineTo(CW / 2 - pw / 2 + 37, py + 37); ectx.lineTo(CW / 2 - pw / 2 + 45, py + 27); ectx.stroke();
+      ectx.fillStyle = "#eef3f1"; ectx.font = '500 26px "Geist", sans-serif'; ectx.textAlign = "left"; ectx.fillText("Tela nova instalada", CW / 2 - pw / 2 + 64, py + 41);
+      ectx.textAlign = "center"; ectx.fillStyle = "rgba(232,238,235,.65)"; ectx.font = '500 18px "Geist Mono", monospace'; ectx.fillText("GARANTIA ATIVA · 90 DIAS", CW / 2, py + 112);
+      ectx.fillStyle = "rgba(240,244,242,.8)"; ectx.beginPath(); ectx.roundRect(CW / 2 - 70, CH - bez - 36, 140, 9, 5); ectx.fill();
+      island(ectx);
+      ectx.restore();
+    }
+    emT.needsUpdate = true;
+  };
+
+  /* ---------- fases (lidas do atributo data-phase) ---------- */
+  let phase = stage.getAttribute("data-phase") || "broken", phaseStart = performance.now();
+  const DUR = { broken: 450, scan: 1700, repair: 1450, boot: 900, on: 600 };
+  new MutationObserver(() => { phase = stage.getAttribute("data-phase"); phaseStart = performance.now(); dirty = true; }).observe(stage, { attributes: true, attributeFilter: ["data-phase"] });
+  let dirty = true, lastMinute = "", diffP = -1;
+  const setDiffuse = (p) => { if (Math.abs(p - diffP) < 0.002) return; diffP = p; drawDiffuse(p); diffT.needsUpdate = bumpT.needsUpdate = true; };
+  const updateScreen = (now) => {
+    const t = Math.min(1, (now - phaseStart) / DUR[phase]);
+    if (!dirty && t >= 1 && !(phase === "on" && fmtTime() !== lastMinute)) return;
+    if (phase === "broken") { setDiffuse(reduce ? 1 : t); drawEmissive("off", t); }
+    else if (phase === "scan") { setDiffuse(1); drawEmissive("scan", t); }
+    else if (phase === "repair") { setDiffuse(1 - t); drawEmissive("repair", t); }
+    else if (phase === "boot") { setDiffuse(0); drawEmissive("boot", t); }
+    else { setDiffuse(0); drawEmissive("on", t); lastMinute = fmtTime(); }
+    dirty = false;
+  };
+
+  /* ---------- enquadramento e animação ---------- */
+  const fit = () => {
+    const w = stage.clientWidth, h = stage.clientHeight;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    const k = 2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
+    const dist = Math.max((146.6 / 0.72) / k, (W * 1.9) / (k * camera.aspect));
+    camera.position.set(0, 0, dist); camera.lookAt(0, 0, 0); camera.updateProjectionMatrix();
+  };
+  fit(); new ResizeObserver(fit).observe(stage);
+
+  let tx = 0, ty = 0, cx = 0, cy = 0;
+  if (hero && matchMedia("(pointer: fine)").matches) {
+    hero.addEventListener("pointermove", (e) => { const r = stage.getBoundingClientRect(); tx = ((e.clientX - r.left) / r.width - .5); ty = ((e.clientY - r.top) / r.height - .5); });
+    hero.addEventListener("pointerleave", () => { tx = ty = 0; });
+  }
+
+  let visible = true, running = false, last = performance.now(), spin = -0.5, nextFlash = performance.now() + 4000;
+  const frame = (now) => {
+    if (!visible || document.hidden) { running = false; return; }
+    const dt = Math.min(0.05, (now - last) / 1000); last = now;
+    const s = now / 1000;
+    cx += (tx - cx) * Math.min(1, dt * 4); cy += (ty - cy) * Math.min(1, dt * 4);
+    spin += dt * (Math.PI * 2 / 14);
+    pivot.rotation.set(0.14 + Math.sin(s * .55) * .06 + cy * .35, cx * .5, Math.sin(s * .37) * .05 - .04);
+    phone.rotation.y = spin;
+    pivot.position.y = Math.sin(s * .9) * 2.4;
+    const since = now - phaseStart;
+    pivot.position.x = phase === "broken" && since < 420 ? Math.sin(since * .09) * (1 - since / 420) * 2.2 : 0;
+    if (now > nextFlash) { const f = now - nextFlash; flashMat.emissiveIntensity = f < 160 ? 4 * Math.sin(f / 160 * Math.PI) : 0; if (f > 160) nextFlash = now + 5200 + Math.random() * 3000; }
+    updateScreen(now);
+    renderer.render(scene, camera);
+    if (!canvas.classList.contains("ready")) canvas.classList.add("ready");
+    requestAnimationFrame(frame);
+  };
+  const start = () => { if (running || reduce) return; running = true; last = performance.now(); requestAnimationFrame(frame); };
+  new IntersectionObserver((en) => { visible = en[0].isIntersecting; if (visible) start(); }, { rootMargin: "80px" }).observe(stage);
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) start(); });
+
+  const go = () => {
+    if (reduce) { phone.rotation.y = -0.45; pivot.rotation.set(0.12, 0, -0.03); drawDiffuse(1); drawEmissive("off", 1); diffT.needsUpdate = bumpT.needsUpdate = true; renderer.render(scene, camera); canvas.classList.add("ready"); return; }
+    start();
+  };
+  if (/[?&]debug/.test(location.search)) window.__rr = { phone, pivot, render: () => renderer.render(scene, camera), stop: () => { visible = false; } };
+  (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(go, go);
+}
+try { main(); } catch (err) { console.error(err); document.getElementById("stage")?.classList.add("no-gl"); }
 </script>
 </body>
 </html>
