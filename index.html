@@ -211,22 +211,6 @@ ul.clean { list-style: none; margin: 0; padding: 0; }
 @media (max-width: 920px) { .floor { margin-top: 240px; } }
 @media (max-width: 480px) { .floor { margin-top: 196px; width: 200px; margin-left: -100px; } }
 
-/* ferramentas flutuando */
-.tool { position: absolute; z-index: 3; pointer-events: none; transition: transform 900ms var(--ease-cine), opacity 400ms var(--ease); }
-.tool svg { display: block; }
-.tool.driver { top: 16%; right: 12%; width: 120px; transform: translate(0, 0) rotate(-35deg); }
-.tool.driver svg { animation: drift 6s var(--ease) infinite; }
-[data-phase="repair"] .tool.driver { transform: translate(-60px, 120px) rotate(-55deg); }
-[data-phase="repair"] .tool.driver svg { animation: screw 400ms var(--ease) infinite; }
-@keyframes drift { 50% { transform: translateY(-10px) rotate(6deg); } }
-@keyframes screw { 50% { transform: rotate(-14deg); } }
-.tool.screw { width: 14px; height: 14px; }
-.tool.screw svg { animation: tumble 9s linear infinite; }
-.tool.screw.s1 { top: 22%; left: 16%; } .tool.screw.s2 { bottom: 24%; right: 18%; } .tool.screw.s3 { top: 62%; left: 10%; width: 10px; height: 10px; }
-.tool.screw.s2 svg { animation-duration: 12s; animation-direction: reverse; }
-@keyframes tumble { 0% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-16px) rotate(180deg); } 100% { transform: translateY(0) rotate(360deg); } }
-@media (max-width: 480px) { .tool.driver { width: 84px; right: 2%; top: 10%; } }
-
 /* etiquetas do palco */
 .tag { position: absolute; z-index: 5; display: grid; gap: 4px; padding: 12px var(--s2); background: rgba(17, 24, 22, .86); border: 1px solid var(--line-2); border-radius: 14px; box-shadow: 0 16px 40px -16px rgba(0,0,0,.8); animation: tagIn 800ms var(--ease-cine) both, bob 8s var(--ease) infinite; animation-delay: calc(1750ms + var(--d-in, 0ms)), calc(2600ms + var(--d-in, 0ms)); }
 .tag::before { content: ""; position: absolute; top: 50%; width: 32px; height: 1px; background: linear-gradient(90deg, rgba(var(--accent-rgb), .7), transparent); }
@@ -576,12 +560,6 @@ body.lock-d { overflow: hidden; }
         <div class="orbit o3"><div class="spin"><span class="node"></span></div></div>
         <div class="floor"></div>
         <div class="brackets"><i></i><i></i><i></i><i></i></div>
-        <div class="tool driver" aria-hidden="true"><svg viewBox="0 0 120 24" fill="none"><rect x="2" y="4" width="54" height="16" rx="7" fill="#1E2523"/><rect x="2" y="4" width="54" height="16" rx="7" fill="url(#knurl)"/><rect x="2" y="4" width="54" height="7" rx="3.5" fill="rgba(255,255,255,.08)"/><rect x="54" y="7" width="10" height="10" rx="2" fill="#5ED3AE"/><rect x="64" y="10" width="46" height="4" rx="1" fill="#B9C2BE"/><rect x="64" y="10" width="46" height="1.5" fill="#E8EEEB"/><path d="M110 10.5l7 1.5-7 1.5z" fill="#8E9A95"/><defs><pattern id="knurl" width="4" height="4" patternUnits="userSpaceOnUse"><path d="M0 4L4 0" stroke="rgba(255,255,255,.08)"/></pattern></defs></svg></div>
-        <div class="tool screw s1" aria-hidden="true"><svg viewBox="0 0 14 14"><circle cx="7" cy="7" r="6" fill="#9AA29F"/><circle cx="7" cy="7" r="6" fill="none" stroke="#5C6863"/><path d="M7 3.5v7M3.5 7h7" stroke="#2A302E" stroke-width="1.6" stroke-linecap="round"/></svg></div>
-        <div class="tool screw s2" aria-hidden="true"><svg viewBox="0 0 14 14"><circle cx="7" cy="7" r="6" fill="#9AA29F"/><path d="M7 3.5v7M3.5 7h7" stroke="#2A302E" stroke-width="1.6" stroke-linecap="round"/></svg></div>
-        <div class="tool screw s3" aria-hidden="true"><svg viewBox="0 0 14 14"><circle cx="7" cy="7" r="6" fill="#B9C2BE"/><path d="M4 7h6" stroke="#2A302E" stroke-width="1.6" stroke-linecap="round"/></svg></div>
-        
-
         <canvas id="phone3d" aria-hidden="true"></canvas>
 
         <div class="tag t1 l" style="--d-in:0ms"><small class="mono" data-scramble>Tela OLED 6,1″</small><strong>Troca em <b>~40 min</b></strong></div>
@@ -1099,24 +1077,6 @@ body.lock-d { overflow: hidden; }
   };
   if (reduce) setStep(4); else setInterval(function () { step = (step + 1) % 5; setStep(step); }, 1800);
 
-  /* ---- ciclo de conserto do aparelho ---- */
-  var stageEl = document.getElementById("stage"), phaseText = document.getElementById("phaseText");
-  var PH = [
-    ["broken", 3600, "Tela <b>trincada</b>"],
-    ["scan", 1800, "Diagnóstico <b>em curso</b>"],
-    ["repair", 1700, "Trocando <b>a tela</b>"],
-    ["boot", 1000, "Ligando <b>o aparelho</b>"],
-    ["on", 3800, "Reparo <b>concluído</b>"]
-  ];
-  var phaseIdx = 0;
-  var runPhase = function () {
-    var ph = PH[phaseIdx];
-    stageEl.setAttribute("data-phase", ph[0]);
-    phaseText.innerHTML = ph[2];
-    setTimeout(function () { phaseIdx = (phaseIdx + 1) % PH.length; runPhase(); }, ph[1]);
-  };
-  if (!reduce) setTimeout(function () { phaseIdx = 1; runPhase(); }, introMs + 3000);
-
   /* ---- orçamento → WhatsApp ---- */
   var form = document.getElementById("quoteForm"), bubble = document.getElementById("bubble"), send = document.getElementById("sendWa");
   var val = function (n) { var el = form.elements[n]; return el ? String(el.value || "").trim() : ""; };
@@ -1192,6 +1152,7 @@ function main() {
   const canvas = document.getElementById("phone3d");
   const stage = document.getElementById("stage");
   const hero = document.getElementById("hero");
+  const phaseText = document.getElementById("phaseText");
   if (!canvas || !stage) return;
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const small = innerWidth < 700;
@@ -1207,8 +1168,9 @@ function main() {
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(24, 1, 10, 3000);
-  const pmrem = new THREE.PMREMGenerator(renderer);
+
   // estúdio escuro com softboxes: reflexos de foto de produto
+  const pmrem = new THREE.PMREMGenerator(renderer);
   const env = new THREE.Scene();
   env.add(new THREE.Mesh(new THREE.BoxGeometry(120, 120, 120), new THREE.MeshBasicMaterial({ color: 0x0c0f0e, side: THREE.BackSide })));
   const panel = (w, h, x, y, z, k, col) => {
@@ -1225,7 +1187,7 @@ function main() {
   pmrem.dispose();
 
   const key = new THREE.DirectionalLight(0xffffff, 1.4); key.position.set(-220, 320, 420); scene.add(key);
-  const rim = new THREE.DirectionalLight(0x5ed3ae, 2.2); rim.position.set(320, 80, -300); scene.add(rim);
+  const rim = new THREE.DirectionalLight(0x5ed3ae, 2.0); rim.position.set(320, 80, -300); scene.add(rim);
   const warm = new THREE.DirectionalLight(0xe8a24e, 0.9); warm.position.set(-320, -220, -120); scene.add(warm);
 
   /* ---------- medidas (mm) ---------- */
@@ -1252,14 +1214,17 @@ function main() {
     uv.needsUpdate = true;
     return g;
   };
-  const tex = (c, srgb = true) => { const t = new THREE.CanvasTexture(c); if (srgb) t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; return t; };
+  const maxAniso = renderer.capabilities.getMaxAnisotropy();
+  const tex = (c, srgb = true) => { const t = new THREE.CanvasTexture(c); if (srgb) t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = Math.min(8, maxAniso); return t; };
+  let seed = 11; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
 
-  /* ---------- materiais ---------- */
+  /* ---------- materiais do corpo ---------- */
   const titanium = new THREE.MeshPhysicalMaterial({ color: 0x8f8b84, metalness: 1, roughness: 0.34, clearcoat: 0.25, clearcoatRoughness: 0.3, anisotropy: 0.6, anisotropyRotation: Math.PI / 2 });
   const polished = new THREE.MeshPhysicalMaterial({ color: 0x9a968f, metalness: 1, roughness: 0.16 });
   const ringMat = polished.clone(); ringMat.side = THREE.DoubleSide;
   const darkPart = new THREE.MeshStandardMaterial({ color: 0x0b0b0b, roughness: 0.7 });
   const antenna = new THREE.MeshStandardMaterial({ color: 0x55534f, roughness: 0.55, metalness: 0.2 });
+  const pureBlack = new THREE.MeshBasicMaterial({ color: 0x000000 });
 
   // traseira: vidro fosco com logotipo brilhante (mapa de rugosidade)
   const bw = 512, bh = Math.round(512 * (H - 1.7) / (W - 1.7));
@@ -1269,280 +1234,295 @@ function main() {
     const img = g.createImageData(bw, bh);
     for (let i = 0; i < img.data.length; i += 4) { const v = 150 + (Math.random() * 18 - 9); img.data[i] = img.data[i + 1] = img.data[i + 2] = v; img.data[i + 3] = 255; }
     g.putImageData(img, 0, 0);
-    // a traseira é vista espelhada: desenha o logotipo invertido na horizontal
-    g.save(); g.translate(bw / 2, bh * 0.44); g.scale(-1, 1);
+    g.save(); g.translate(bw / 2, bh * 0.46); g.scale(-1, 1);
     const k = bw / 68.9 * 0.62;
     g.strokeStyle = "rgb(24,24,24)"; g.lineWidth = 1.8 * k; g.lineCap = "round";
-    g.beginPath(); g.roundRect(-5.5 * k * 0.9, -11 * k * 0.9, 11 * k * 0.9, 22 * k * 0.9, 3.2 * k * 0.9); g.stroke();
+    g.beginPath(); g.roundRect(-5 * k, -10 * k, 10 * k, 20 * k, 2.9 * k); g.stroke();
     g.beginPath(); g.arc(1 * k, 4 * k, 12.5 * k, Math.PI * 1.02, Math.PI * 1.72); g.stroke();
     g.fillStyle = "rgb(24,24,24)"; g.beginPath(); g.arc(10.5 * k, -9.5 * k, 2.3 * k, 0, Math.PI * 2); g.fill();
     g.restore();
   }
-  const backRough = tex(backC, false);
-  const backGlass = new THREE.MeshPhysicalMaterial({ color: 0x8b877f, metalness: 0.05, roughness: 1, roughnessMap: backRough, clearcoat: 0.0 });
+  const backGlass = new THREE.MeshPhysicalMaterial({ color: 0x8b877f, metalness: 0.05, roughness: 1, roughnessMap: tex(backC, false) });
   const plateauGlass = new THREE.MeshPhysicalMaterial({ color: 0x86827b, metalness: 0.1, roughness: 0.08, clearcoat: 1, clearcoatRoughness: 0.04 });
 
-  // frente: vidro preto com camadas de trinca (difusa + relevo) e conteúdo luminoso
-  const CW = 600, CH = Math.round(600 * (H - 1.7) / (W - 1.7)), PX = CW / (W - 1.7);
-  const diffC = document.createElement("canvas"); diffC.width = CW; diffC.height = CH;
-  const emC = document.createElement("canvas"); emC.width = CW; emC.height = CH;
-  const dctx = diffC.getContext("2d"), ectx = emC.getContext("2d");
-  const diffT = tex(diffC), emT = tex(emC), bumpT = tex(diffC, false);
-  const screenGlass = new THREE.MeshPhysicalMaterial({
-    color: 0xffffff, map: diffT, bumpMap: bumpT, bumpScale: 0.5,
-    emissive: 0xffffff, emissiveMap: emT, emissiveIntensity: 1.2,
-    metalness: 0, roughness: 0.04, clearcoat: 1, clearcoatRoughness: 0.02, envMapIntensity: 1
+  /* ---------- tela trincada: fraturas finas e prateadas ---------- */
+  const CW = 1024, CH = Math.round(1024 * (H - 1.7) / (W - 1.7));
+  const crackC = document.createElement("canvas"); crackC.width = CW; crackC.height = CH;
+  const ix = CW * 0.64, iy = CH * 0.63;
+  {
+    const g = crackC.getContext("2d");
+    g.lineCap = "round"; g.lineJoin = "round";
+    const seg = (x1, y1, x2, y2, w, a) => { g.strokeStyle = `rgba(255,255,255,${a})`; g.lineWidth = w; g.beginPath(); g.moveTo(x1, y1); g.lineTo(x2, y2); g.stroke(); };
+    const walk = (x, y, ang, len, w0, a0, depth) => {
+      let d = 0;
+      while (d < len) {
+        const step = 4 + rnd() * 10;
+        ang += (rnd() - 0.5) * 0.32;
+        const nx = x + Math.cos(ang) * step, ny = y + Math.sin(ang) * step;
+        const f = 1 - d / len;
+        const ww = Math.max(0.55, w0 * (0.3 + 0.7 * f));
+        const aa = a0 * (0.4 + 0.6 * f) * (0.7 + rnd() * 0.3);
+        seg(x, y, nx, ny, ww * 3.2, aa * 0.06);
+        seg(x, y, nx, ny, ww, aa);
+        if (depth < 2 && rnd() < 0.05 * (3 - depth)) walk(nx, ny, ang + (rnd() < 0.5 ? -1 : 1) * (0.45 + rnd() * 0.75), len * (0.15 + rnd() * 0.3) * f, ww * 0.7, aa * 0.85, depth + 1);
+        x = nx; y = ny; d += step;
+        if (x < -10 || x > CW + 10 || y < -10 || y > CH + 10) break;
+      }
+    };
+    const N = 24, angs = [];
+    for (let i = 0; i < N; i++) angs.push(i * Math.PI * 2 / N + (rnd() - 0.5) * 0.22);
+    angs.forEach((a) => walk(ix + Math.cos(a) * 10, iy + Math.sin(a) * 10, a, 260 + rnd() * 1500, 1.9 + rnd() * 1.3, 0.9, 0));
+    // teia concêntrica, mais densa perto do impacto
+    [22, 40, 64, 96, 140, 200, 280].forEach((rad) => {
+      for (let i = 0; i < N; i++) {
+        if (rnd() < 0.2 + rad / 520) continue;
+        const a1 = angs[i], a2 = i === N - 1 ? angs[0] + Math.PI * 2 : angs[i + 1];
+        const steps = 3 + Math.floor(rnd() * 3);
+        let px = ix + Math.cos(a1) * rad, py = iy + Math.sin(a1) * rad;
+        for (let k = 1; k <= steps; k++) {
+          const a = a1 + (a2 - a1) * k / steps, r0 = rad * (0.9 + rnd() * 0.2);
+          const nx = ix + Math.cos(a) * r0, ny = iy + Math.sin(a) * r0;
+          seg(px, py, nx, ny, 1.1, 0.6 * (1 - rad / 420));
+          px = nx; py = ny;
+        }
+      }
+    });
+    // núcleo estilhaçado: lascas minúsculas
+    for (let i = 0; i < 260; i++) {
+      const a = rnd() * Math.PI * 2, d = Math.pow(rnd(), 1.7) * 76;
+      const x = ix + Math.cos(a) * d, y = iy + Math.sin(a) * d, s = 3 + rnd() * 10;
+      g.fillStyle = `rgba(255,255,255,${0.03 + rnd() * 0.16})`;
+      g.beginPath(); g.moveTo(x, y);
+      for (let k = 0; k < 3; k++) { const b = rnd() * Math.PI * 2; g.lineTo(x + Math.cos(b) * s, y + Math.sin(b) * s); }
+      g.closePath(); g.fill();
+      if (rnd() < 0.6) seg(x, y, x + Math.cos(a) * (5 + rnd() * 14), y + Math.sin(a) * (5 + rnd() * 14), 0.9, 0.65);
+    }
+    const gr = g.createRadialGradient(ix, iy, 0, ix, iy, 26);
+    gr.addColorStop(0, "rgba(255,255,255,.85)"); gr.addColorStop(0.45, "rgba(255,255,255,.25)"); gr.addColorStop(1, "rgba(255,255,255,0)");
+    g.fillStyle = gr; g.beginPath(); g.arc(ix, iy, 26, 0, Math.PI * 2); g.fill();
+    // segunda batida no canto superior
+    walk(CW * 0.05, CH * 0.03, 0.95, 420, 1.6, 0.75, 0);
+    walk(CW * 0.05, CH * 0.03, 1.35, 260, 1.2, 0.6, 0);
+  }
+  const crackDiffC = document.createElement("canvas"); crackDiffC.width = CW; crackDiffC.height = CH;
+  { const g = crackDiffC.getContext("2d"); g.fillStyle = "#000"; g.fillRect(0, 0, CW, CH); g.globalAlpha = 0.8; g.drawImage(crackC, 0, 0); }
+  const crackRoughC = document.createElement("canvas"); crackRoughC.width = CW; crackRoughC.height = CH;
+  { const g = crackRoughC.getContext("2d"); g.fillStyle = "rgb(9,9,9)"; g.fillRect(0, 0, CW, CH); g.drawImage(crackC, 0, 0); g.drawImage(crackC, 0, 0); }
+  const crackedMat = new THREE.MeshPhysicalMaterial({
+    color: 0xd9dedc, map: tex(crackDiffC), roughness: 1, roughnessMap: tex(crackRoughC, false),
+    bumpMap: tex(crackDiffC, false), bumpScale: 0.9, metalness: 0,
+    clearcoat: 1, clearcoatRoughness: 0.03, envMapIntensity: 1, transparent: true, opacity: 1
   });
+
+  /* ---------- tela nova: vidro liso com conteúdo luminoso ---------- */
+  const EW = 600, EH = Math.round(600 * (H - 1.7) / (W - 1.7)), PX = EW / (W - 1.7);
+  const emC = document.createElement("canvas"); emC.width = EW; emC.height = EH;
+  const ectx = emC.getContext("2d"); const emT = tex(emC);
+  const newMat = new THREE.MeshPhysicalMaterial({ color: 0x030303, roughness: 0.03, metalness: 0, clearcoat: 1, clearcoatRoughness: 0.02, emissive: 0xffffff, emissiveMap: emT, emissiveIntensity: 0, transparent: true, opacity: 1 });
+
+  const bez = 2.0 * PX, dr = 8.6 * PX;
+  const displayClip = () => { ectx.beginPath(); ectx.roundRect(bez, bez, EW - 2 * bez, EH - 2 * bez, dr); ectx.clip(); };
+  const wall = document.createElement("canvas"); wall.width = EW; wall.height = EH;
+  {
+    const g = wall.getContext("2d");
+    g.fillStyle = "#04070a"; g.fillRect(0, 0, EW, EH);
+    const blob = (x, y, r, col) => { const gr = g.createRadialGradient(x, y, 0, x, y, r); gr.addColorStop(0, col); gr.addColorStop(1, "rgba(0,0,0,0)"); g.fillStyle = gr; g.fillRect(0, 0, EW, EH); };
+    blob(EW * .15, EH * .92, EW * 1.0, "rgba(46,170,135,.85)");
+    blob(EW * .95, EH * .62, EW * .8, "rgba(214,140,60,.6)");
+    blob(EW * .45, EH * .05, EW * .9, "rgba(40,80,120,.7)");
+    blob(EW * .6, EH * .4, EW * .5, "rgba(10,20,30,.6)");
+  }
+  const fmtTime = () => new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+  const fmtDate = () => { const s = new Date().toLocaleDateString("pt-BR", { weekday: "long", day: "numeric", month: "long" }); return s.charAt(0).toUpperCase() + s.slice(1); };
+  const ACC = "94,211,174";
+  const drawScreen = (mode, t) => {
+    ectx.save();
+    ectx.fillStyle = "#000"; ectx.fillRect(0, 0, EW, EH);
+    if (mode === "boot") {
+      const a = Math.sin(Math.min(1, t) * Math.PI);
+      ectx.translate(EW / 2, EH / 2); ectx.scale(.9 + .1 * t, .9 + .1 * t);
+      ectx.strokeStyle = `rgba(245,248,247,${a})`; ectx.lineWidth = 9; ectx.lineCap = "round";
+      ectx.beginPath(); ectx.roundRect(-30, -60, 60, 120, 17); ectx.stroke();
+      ectx.beginPath(); ectx.arc(5, 22, 68, Math.PI * 1.02, Math.PI * 1.72); ectx.stroke();
+    } else if (mode === "on") {
+      displayClip();
+      ectx.drawImage(wall, 0, 0);
+      ectx.textAlign = "center"; ectx.fillStyle = "rgba(240,244,242,.9)";
+      ectx.font = '500 30px "Geist", sans-serif'; ectx.fillText(fmtDate(), EW / 2, 170);
+      ectx.fillStyle = "#f4f7f5"; ectx.font = '600 196px "Bricolage Grotesque", sans-serif'; ectx.fillText(fmtTime(), EW / 2, 350);
+      const py = EH - 300, pw = 360;
+      ectx.fillStyle = "rgba(5,10,8,.55)"; ectx.beginPath(); ectx.roundRect(EW / 2 - pw / 2, py, pw, 64, 32); ectx.fill();
+      ectx.strokeStyle = `rgba(${ACC},.6)`; ectx.lineWidth = 2; ectx.stroke();
+      ectx.fillStyle = `rgb(${ACC})`; ectx.beginPath(); ectx.arc(EW / 2 - pw / 2 + 38, py + 32, 13, 0, Math.PI * 2); ectx.fill();
+      ectx.strokeStyle = "#04120d"; ectx.lineWidth = 3.5; ectx.beginPath(); ectx.moveTo(EW / 2 - pw / 2 + 32, py + 32); ectx.lineTo(EW / 2 - pw / 2 + 37, py + 37); ectx.lineTo(EW / 2 - pw / 2 + 45, py + 27); ectx.stroke();
+      ectx.fillStyle = "#eef3f1"; ectx.font = '500 26px "Geist", sans-serif'; ectx.textAlign = "left"; ectx.fillText("Tela nova instalada", EW / 2 - pw / 2 + 64, py + 41);
+      ectx.textAlign = "center"; ectx.fillStyle = "rgba(232,238,235,.65)"; ectx.font = '500 18px "Geist Mono", monospace'; ectx.fillText("GARANTIA ATIVA · 90 DIAS", EW / 2, py + 112);
+      ectx.fillStyle = "rgba(240,244,242,.8)"; ectx.beginPath(); ectx.roundRect(EW / 2 - 70, EH - bez - 36, 140, 9, 5); ectx.fill();
+      ectx.fillStyle = "#000"; ectx.beginPath(); ectx.roundRect(EW / 2 - 9.5 * PX, bez + 2.2 * PX, 19 * PX, 5.6 * PX, 2.8 * PX); ectx.fill();
+    }
+    ectx.restore();
+    emT.needsUpdate = true;
+  };
+
+  /* ---------- interior visto com a tela aberta ---------- */
+  const inC = document.createElement("canvas"); inC.width = 512; inC.height = Math.round(512 * (H - 3.2) / (W - 3.2));
+  {
+    const g = inC.getContext("2d"), w = inC.width, h = inC.height;
+    g.fillStyle = "#2a2d2f"; g.fillRect(0, 0, w, h);
+    const metal = (x, y, ww, hh, r, c1, c2) => { const gr = g.createLinearGradient(x, y, x + ww, y + hh); gr.addColorStop(0, c1); gr.addColorStop(1, c2); g.fillStyle = gr; g.beginPath(); g.roundRect(x, y, ww, hh, r); g.fill(); };
+    metal(w * .07, h * .3, w * .86, h * .6, 18, "#3a3e40", "#24272a");
+    g.fillStyle = "rgba(255,255,255,.08)"; g.fillRect(w * .14, h * .36, w * .5, 6); g.fillRect(w * .14, h * .385, w * .34, 6);
+    metal(w * .06, h * .03, w * .88, h * .24, 12, "#14201b", "#0c1411");
+    metal(w * .12, h * .06, w * .3, h * .12, 6, "#8d9296", "#5d6266");
+    metal(w * .5, h * .07, w * .2, h * .08, 4, "#1b1d1f", "#101213");
+    metal(w * .74, h * .08, w * .14, h * .14, 4, "#7e8387", "#55595d");
+    g.fillStyle = "#b07a3a"; g.fillRect(w * .86, h * .26, w * .07, h * .14); g.fillRect(w * .86, h * .5, w * .07, h * .08);
+    g.fillStyle = "#1a1a1a"; g.fillRect(w * .87, h * .27, w * .05, h * .04); g.fillRect(w * .87, h * .51, w * .05, h * .03);
+    g.fillStyle = "#9aa0a4";
+    [[.05, .02], [.95, .02], [.05, .97], [.95, .97], [.5, .28], [.08, .5], [.92, .7]].forEach(([x, y]) => { g.beginPath(); g.arc(w * x, h * y, 6, 0, Math.PI * 2); g.fill(); });
+    g.fillStyle = "#151515"; g.beginPath(); g.roundRect(w * .42, h * .005, w * .16, h * .02, 6); g.fill();
+  }
+  const innerMat = new THREE.MeshStandardMaterial({ map: tex(inC), metalness: 0.45, roughness: 0.55 });
 
   /* ---------- montagem ---------- */
   const phone = new THREE.Group();
-  const body = new THREE.Mesh(slab(W, H, R, D - 2.2, 1.1, 10), titanium); phone.add(body);
+  phone.add(new THREE.Mesh(slab(W, H, R, D - 2.2, 1.1, 10), titanium));
+
+  const inner = new THREE.Mesh(remapUV(new THREE.ShapeGeometry(rr(W - 3.2, H - 3.2, R - 1.6), 32)), innerMat);
+  inner.position.z = D / 2 + 0.03; phone.add(inner);
 
   const frontG = remapUV(slab(W - 2.4 + 0.7, H - 2.4 + 0.7, R - 0.85, 0.15, 0.35, 5));
-  const front = new THREE.Mesh(frontG, screenGlass); front.position.z = D / 2 - 0.12; phone.add(front);
+  const hingeX = (W - 1.7) / 2;
+  const makePanel = (mat) => {
+    const hinge = new THREE.Group(); hinge.position.set(hingeX, 0, D / 2 - 0.12);
+    const m = new THREE.Mesh(frontG, mat); m.position.x = -hingeX; hinge.add(m);
+    phone.add(hinge); return hinge;
+  };
+  const crackedPanel = makePanel(crackedMat);
+  const newPanel = makePanel(newMat); newPanel.visible = false;
 
-  const backG = remapUV(slab(W - 2.4 + 0.5, H - 2.4 + 0.5, R - 0.95, 0.1, 0.25, 4));
-  const back = new THREE.Mesh(backG, backGlass); back.position.z = -D / 2 + 0.08; phone.add(back);
+  const back = new THREE.Mesh(remapUV(slab(W - 2.4 + 0.5, H - 2.4 + 0.5, R - 0.95, 0.1, 0.25, 4)), backGlass);
+  back.position.z = -D / 2 + 0.08; phone.add(back);
 
-  // auto-falante superior
   const ear = new THREE.Mesh(new THREE.CapsuleGeometry(0.32, 9, 4, 12), darkPart);
   ear.rotation.z = Math.PI / 2; ear.position.set(0, H / 2 - 0.5, D / 2 - 0.3); phone.add(ear);
 
   // módulo de câmera
   const cam = new THREE.Group();
-  const pcx = 12.6, pcy = 50.6, backTop = -D / 2 - 0.27;
+  const pcx = 12.6, pcy = 50.6, backTop = -D / 2 - 0.27, pTop = backTop - 1.8;
   const plateau = new THREE.Mesh(slab(37.5, 37.5, 9.2, 0.5, 0.65, 6), plateauGlass);
-  const pTop = backTop - 1.8; plateau.position.set(pcx, pcy, backTop - 0.9); cam.add(plateau);
-
-  const lensC = document.createElement("canvas"); lensC.width = lensC.height = 256;
-  {
-    const g = lensC.getContext("2d"), c = 128;
-    const rad = g.createRadialGradient(c, c, 0, c, c, 128);
-    rad.addColorStop(0, "#000"); rad.addColorStop(0.14, "#020305"); rad.addColorStop(0.18, "#2c3f52"); rad.addColorStop(0.3, "#16263a"); rad.addColorStop(0.44, "#0b1320");
-    rad.addColorStop(0.56, "#30283f"); rad.addColorStop(0.64, "#06080b"); rad.addColorStop(0.78, "#23282b"); rad.addColorStop(0.86, "#08090a"); rad.addColorStop(1, "#33383b");
-    g.fillStyle = rad; g.fillRect(0, 0, 256, 256);
-    g.strokeStyle = "rgba(150,170,195,.45)"; g.lineWidth = 2;
-    [30, 44, 58, 70, 84, 96, 110].forEach((r) => { g.beginPath(); g.arc(c, c, r, 0, Math.PI * 2); g.stroke(); });
-  }
-  const lensMat = new THREE.MeshPhysicalMaterial({ map: tex(lensC), metalness: 0.4, roughness: 0.12, clearcoat: 1, clearcoatRoughness: 0, iridescence: 1, iridescenceIOR: 1.8, iridescenceThicknessRange: [180, 520] });
-  const coverMat = new THREE.MeshPhysicalMaterial({ color: 0x000000, metalness: 0, roughness: 0, clearcoat: 1, transparent: true, opacity: 0.12, envMapIntensity: 2.4, depthWrite: false });
-  const domeG = new THREE.SphereGeometry(17, 64, 12, 0, Math.PI * 2, 0, 0.38);
-  const domeMat = new THREE.MeshPhysicalMaterial({ color: 0x0c1220, metalness: 0, roughness: 0.04, clearcoat: 1, iridescence: 1, iridescenceIOR: 2.0, iridescenceThicknessRange: [260, 680], transparent: true, opacity: 0.62, envMapIntensity: 2.6, depthWrite: false });
-
+  plateau.position.set(pcx, pcy, backTop - 0.9); cam.add(plateau);
+  const lensDisk = new THREE.CircleGeometry(7.0, 72);
   const addLens = (x, y) => {
     const ring = new THREE.Mesh(new THREE.CylinderGeometry(7.5, 7.75, 2.4, 72, 1, true), ringMat);
     ring.rotation.x = Math.PI / 2; ring.position.set(x, y, pTop - 0.6); cam.add(ring);
     const lip = new THREE.Mesh(new THREE.TorusGeometry(6.95, 0.55, 16, 72), polished);
     lip.position.set(x, y, pTop - 1.95); cam.add(lip);
-    const inner = new THREE.Mesh(new THREE.CircleGeometry(6.6, 72), lensMat);
-    inner.rotation.y = Math.PI; inner.position.set(x, y, pTop - 0.25); cam.add(inner);
-    const dome = new THREE.Mesh(domeG, domeMat);
-    dome.rotation.x = -Math.PI / 2; dome.position.set(x, y, pTop - 0.45 + 17 * Math.cos(0.38)); dome.renderOrder = 1; cam.add(dome);
-    const cover = new THREE.Mesh(new THREE.CircleGeometry(6.7, 72), coverMat);
-    cover.rotation.y = Math.PI; cover.position.set(x, y, pTop - 1.85); cover.renderOrder = 2; cam.add(cover);
+    const glass = new THREE.Mesh(lensDisk, pureBlack);
+    glass.rotation.y = Math.PI; glass.position.set(x, y, pTop - 1.75); cam.add(glass);
   };
   addLens(pcx + 8.7, pcy + 8.7); addLens(pcx + 8.7, pcy - 8.7); addLens(pcx - 8.4, pcy);
-
   const flashMat = new THREE.MeshStandardMaterial({ color: 0xefe6cc, roughness: 0.3, emissive: 0xfff3d6, emissiveIntensity: 0 });
   const flash = new THREE.Mesh(new THREE.CylinderGeometry(2.7, 2.7, 0.6, 40), flashMat);
   flash.rotation.x = Math.PI / 2; flash.position.set(pcx - 8.4, pcy + 12.5, pTop - 0.2); cam.add(flash);
-  const lidar = new THREE.Mesh(new THREE.CylinderGeometry(2.7, 2.7, 0.6, 40), new THREE.MeshPhysicalMaterial({ color: 0x050505, roughness: 0.05, clearcoat: 1 }));
+  const lidar = new THREE.Mesh(new THREE.CylinderGeometry(2.7, 2.7, 0.6, 40), pureBlack);
   lidar.rotation.x = Math.PI / 2; lidar.position.set(pcx - 8.4, pcy - 12.5, pTop - 0.2); cam.add(lidar);
   const mic = new THREE.Mesh(new THREE.CircleGeometry(0.6, 20), darkPart);
   mic.rotation.y = Math.PI; mic.position.set(pcx - 1.2, pcy + 15.5, pTop - 0.02); cam.add(mic);
   phone.add(cam);
 
-  // botões laterais
   const button = (x, y, len) => {
     const b = new THREE.Mesh(new THREE.CapsuleGeometry(1.45, len, 6, 20), polished);
     b.scale.set(0.5, 1, 1); b.position.set(x, y, 0); phone.add(b);
   };
   button(-W / 2 - 0.15, 42, 4.5); button(-W / 2 - 0.15, 29, 9); button(-W / 2 - 0.15, 16, 9); button(W / 2 + 0.15, 22, 15);
-
-  // faixas de antena
   [[W / 2, 52], [W / 2, -50], [-W / 2, -46], [-W / 2, 56]].forEach(([x, y]) => {
-    const a = new THREE.Mesh(new THREE.BoxGeometry(0.5, 1.1, D - 2.6), antenna);
-    a.position.set(x - Math.sign(x) * 0.18, y, 0); phone.add(a);
+    const a = new THREE.Mesh(new THREE.BoxGeometry(0.5, 1.1, D - 2.6), antenna); a.position.set(x - Math.sign(x) * 0.18, y, 0); phone.add(a);
   });
   [[-18, H / 2], [18, -H / 2]].forEach(([x, y]) => {
-    const a = new THREE.Mesh(new THREE.BoxGeometry(1.1, 0.5, D - 2.6), antenna);
-    a.position.set(x, y - Math.sign(y) * 0.18, 0); phone.add(a);
+    const a = new THREE.Mesh(new THREE.BoxGeometry(1.1, 0.5, D - 2.6), antenna); a.position.set(x, y - Math.sign(y) * 0.18, 0); phone.add(a);
   });
-
-  // porta USB-C e furos de alto-falante
   const port = new THREE.Mesh(new THREE.CapsuleGeometry(1.3, 6.2, 6, 16), darkPart);
   port.rotation.z = Math.PI / 2; port.position.set(0, -H / 2 + 1.15, 0); phone.add(port);
   const holeG = new THREE.CylinderGeometry(0.42, 0.42, 1, 12);
-  for (let i = 0; i < 6; i++) {
-    [1, -1].forEach((sd) => { const h = new THREE.Mesh(holeG, darkPart); h.position.set(sd * (9 + i * 1.7), -H / 2 + 0.35, 0); phone.add(h); });
-  }
+  for (let i = 0; i < 6; i++) [1, -1].forEach((sd) => { const h = new THREE.Mesh(holeG, darkPart); h.position.set(sd * (9 + i * 1.7), -H / 2 + 0.35, 0); phone.add(h); });
 
   const pivot = new THREE.Group(); pivot.add(phone); scene.add(pivot);
 
-  /* ---------- trincas ---------- */
-  let seed = 7; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
-  const ix = CW * 0.68, iy = CH * 0.58;
-  const cracks = [];
-  const mkPath = (pts, w, a, delay) => {
-    const lens = [0]; for (let i = 1; i < pts.length; i++) lens.push(lens[i - 1] + Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]));
-    cracks.push({ pts, lens, total: lens[lens.length - 1], w, a, delay });
+  /* ---------- roteiro do conserto ---------- */
+  const SPEED = Math.PI * 2 / 14, FRONT = -0.42, TAU = Math.PI * 2;
+  const LABEL = {
+    broken: "Tela <b>trincada</b>", align: "Posicionando <b>na bancada</b>", open: "Abrindo <b>a tela</b>",
+    inspect: "Conferindo <b>conectores</b>", install: "Instalando <b>tela nova</b>", boot: "Ligando <b>o aparelho</b>", on: "Reparo <b>concluído</b>"
   };
-  const radials = [];
-  for (let n = 0; n < 15; n++) {
-    let ang = n * (Math.PI * 2 / 15) + (rnd() - .5) * .4, r = 0;
-    const L = 220 + rnd() * 700, pts = [[ix, iy]];
-    while (r < L) {
-      r += 22 + rnd() * 38; ang += (rnd() - .5) * .24;
-      let x = ix + Math.cos(ang) * r, y = iy + Math.sin(ang) * r;
-      const out = x < 0 || x > CW || y < 0 || y > CH;
-      pts.push([Math.min(Math.max(x, 0), CW), Math.min(Math.max(y, 0), CH)]);
-      if (out) break;
-    }
-    radials.push(pts); mkPath(pts, 1.6 + rnd() * .8, .8, n * .012);
-    if (pts.length > 4 && rnd() < .85) {
-      const k = 2 + Math.floor(rnd() * (pts.length - 3)); let [bx, by] = pts[k]; let ba = ang + (rnd() < .5 ? -1 : 1) * (.5 + rnd() * .5);
-      const bp = [[bx, by]]; const m = 2 + Math.floor(rnd() * 4);
-      for (let j = 0; j < m; j++) { bx += Math.cos(ba) * (18 + rnd() * 30); by += Math.sin(ba) * (18 + rnd() * 30); ba += (rnd() - .5) * .4; bp.push([bx, by]); }
-      mkPath(bp, .9, .55, .1 + rnd() * .1);
-    }
-  }
-  [22, 48, 84, 130].forEach((rr0, ri) => {
-    for (let n = 0; n < radials.length; n++) {
-      if (rnd() < .3 + ri * .1) continue;
-      const at = (p) => { for (const q of p) if (Math.hypot(q[0] - ix, q[1] - iy) >= rr0) return q; return p[p.length - 1]; };
-      const a1 = at(radials[n]), a2 = at(radials[(n + 1) % radials.length]);
-      mkPath([a1, [(a1[0] + a2[0]) / 2 + (rnd() - .5) * 6, (a1[1] + a2[1]) / 2 + (rnd() - .5) * 6], a2], .8, .5, .15 + ri * .05);
-    }
-  });
-
-  const strokeCrack = (ctx, c, prog) => {
-    const len = c.total * prog; if (len <= 0) return;
-    ctx.beginPath(); ctx.moveTo(c.pts[0][0], c.pts[0][1]);
-    for (let i = 1; i < c.pts.length; i++) {
-      if (c.lens[i] <= len) ctx.lineTo(c.pts[i][0], c.pts[i][1]);
-      else { const f = (len - c.lens[i - 1]) / (c.lens[i] - c.lens[i - 1]); ctx.lineTo(c.pts[i - 1][0] + (c.pts[i][0] - c.pts[i - 1][0]) * f, c.pts[i - 1][1] + (c.pts[i][1] - c.pts[i - 1][1]) * f); break; }
-    }
-    ctx.stroke();
+  const DUR = { open: 1700, inspect: 900, install: 1700, boot: 1100 };
+  let phase = "broken", phaseStart = performance.now();
+  let spin = -1.6, vel = SPEED, mode = "spin", alignFrom = 0, alignTo = 0, alignDur = 1;
+  const setPhase = (p, now) => {
+    phase = p; phaseStart = now; stage.setAttribute("data-phase", p);
+    if (phaseText) phaseText.innerHTML = LABEL[p];
   };
-  const crackProg = (c, p) => Math.max(0, Math.min(1, (p - c.delay) / (1 - Math.min(.5, c.delay))));
+  const ease = (t) => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  const easeOut = (t) => 1 - Math.pow(1 - t, 3);
+  const easeIn = (t) => t * t * t;
 
-  const drawDiffuse = (p) => {
-    dctx.fillStyle = "#000"; dctx.fillRect(0, 0, CW, CH);
-    if (p <= 0) return;
-    dctx.lineCap = "round"; dctx.lineJoin = "round";
-    // estilhaços: leve névoa clara perto do impacto
-    const fog = dctx.createRadialGradient(ix, iy, 0, ix, iy, 120 * p);
-    fog.addColorStop(0, `rgba(255,255,255,${.12 * p})`); fog.addColorStop(1, "rgba(255,255,255,0)");
-    dctx.fillStyle = fog; dctx.beginPath(); dctx.arc(ix, iy, 120, 0, Math.PI * 2); dctx.fill();
-    for (const c of cracks) {
-      const cp = crackProg(c, p); if (cp <= 0) continue;
-      dctx.strokeStyle = `rgba(255,255,255,${c.a * .1})`; dctx.lineWidth = c.w * 2.6; strokeCrack(dctx, c, cp);
-      dctx.strokeStyle = `rgba(225,232,230,${c.a * .78})`; dctx.lineWidth = c.w * .7; strokeCrack(dctx, c, cp);
-    }
+  const resetPanels = () => {
+    crackedPanel.visible = true; crackedPanel.rotation.set(0, 0, 0); crackedPanel.position.set(hingeX, 0, D / 2 - 0.12); crackedMat.opacity = 1;
+    newPanel.visible = false; newMat.emissiveIntensity = 0;
   };
 
-  // área do display (com borda preta)
-  const bez = 2.0 * PX, dr = 8.6 * PX;
-  const displayPath = (ctx) => { ctx.beginPath(); ctx.roundRect(bez, bez, CW - 2 * bez, CH - 2 * bez, dr); };
-  const island = (ctx) => { ctx.fillStyle = "#000"; ctx.beginPath(); ctx.roundRect(CW / 2 - 9.5 * PX, bez + 2.2 * PX, 19 * PX, 5.6 * PX, 2.8 * PX); ctx.fill(); };
-
-  const wall = document.createElement("canvas"); wall.width = CW; wall.height = CH;
-  {
-    const g = wall.getContext("2d");
-    g.fillStyle = "#04070a"; g.fillRect(0, 0, CW, CH);
-    const blob = (x, y, r, col) => { const gr = g.createRadialGradient(x, y, 0, x, y, r); gr.addColorStop(0, col); gr.addColorStop(1, "rgba(0,0,0,0)"); g.fillStyle = gr; g.fillRect(0, 0, CW, CH); };
-    blob(CW * .15, CH * .92, CW * 1.0, "rgba(46,170,135,.85)");
-    blob(CW * .95, CH * .62, CW * .8, "rgba(214,140,60,.6)");
-    blob(CW * .45, CH * .05, CW * .9, "rgba(40,80,120,.7)");
-    blob(CW * .6, CH * .4, CW * .5, "rgba(10,20,30,.6)");
-  }
-  const fmtTime = () => new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
-  const fmtDate = () => { const s = new Date().toLocaleDateString("pt-BR", { weekday: "long", day: "numeric", month: "long" }); return s.charAt(0).toUpperCase() + s.slice(1); };
-  const ACC = "94,211,174";
-
-  const drawEmissive = (phase, t) => {
-    ectx.fillStyle = "#000"; ectx.fillRect(0, 0, CW, CH);
-    if (phase === "scan") {
-      ectx.save(); displayPath(ectx); ectx.clip();
-      ectx.fillStyle = `rgba(${ACC},.10)`;
-      for (let y = bez + 20; y < CH - bez; y += 26) for (let x = bez + 20; x < CW - bez; x += 26) ectx.fillRect(x, y, 2, 2);
-      ectx.lineCap = "round"; ectx.lineJoin = "round";
-      for (const c of cracks) { ectx.strokeStyle = `rgba(${ACC},${.55 + .35 * Math.sin(t * 12 + c.delay * 40)})`; ectx.lineWidth = c.w * 1.4; strokeCrack(ectx, c, 1); }
-      const ly = bez + (CH - 2 * bez) * (t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
-      const lg = ectx.createLinearGradient(0, ly - 60, 0, ly + 4); lg.addColorStop(0, `rgba(${ACC},0)`); lg.addColorStop(1, `rgba(${ACC},.45)`);
-      ectx.fillStyle = lg; ectx.fillRect(0, ly - 60, CW, 64);
-      ectx.fillStyle = "rgba(220,255,240,.95)"; ectx.fillRect(0, ly, CW, 3);
-      ectx.textAlign = "center"; ectx.fillStyle = `rgba(${ACC},1)`; ectx.font = '500 22px "Geist Mono", monospace';
-      ectx.fillText("DIAGNÓSTICO", CW / 2, 200);
-      ectx.fillStyle = "#e8eeeb"; ectx.font = '600 76px "Bricolage Grotesque", sans-serif';
-      ectx.fillText(Math.round(t * 100) + "%", CW / 2, 286);
-      ectx.restore();
-    } else if (phase === "repair") {
-      ectx.save(); displayPath(ectx); ectx.clip();
-      ectx.lineCap = "round"; ectx.lineJoin = "round";
-      const p = 1 - t;
-      for (const c of cracks) { ectx.strokeStyle = `rgba(${ACC},.9)`; ectx.lineWidth = c.w * 1.6; strokeCrack(ectx, c, crackProg(c, p)); }
-      for (let i = 0; i < 22; i++) {
-        const a = i * 2.4 + 1, d = 30 + t * (120 + (i % 5) * 60), al = Math.max(0, 1 - t * 1.2);
-        ectx.fillStyle = `rgba(200,255,235,${al})`; ectx.beginPath(); ectx.arc(ix + Math.cos(a) * d, iy + Math.sin(a) * d, 3.5 - t * 2, 0, Math.PI * 2); ectx.fill();
+  const director = (now) => {
+    const e = now - phaseStart;
+    if (phase === "broken") {
+      if (e > 4200) {
+        const to = FRONT + TAU * Math.ceil((spin - FRONT + 0.7) / TAU);
+        const dist = to - spin;
+        if (dist < 1.1) { mode = "align"; alignFrom = spin; alignTo = to; alignDur = 2 * dist / SPEED * 1000; setPhase("align", now); }
       }
-      const halo = ectx.createRadialGradient(ix, iy, 0, ix, iy, 200); halo.addColorStop(0, `rgba(${ACC},${.5 * (1 - t)})`); halo.addColorStop(1, `rgba(${ACC},0)`);
-      ectx.fillStyle = halo; ectx.fillRect(0, 0, CW, CH);
-      ectx.textAlign = "center"; ectx.fillStyle = `rgba(${ACC},1)`; ectx.font = '500 22px "Geist Mono", monospace'; ectx.fillText("TROCANDO A TELA", CW / 2, 200);
-      ectx.restore();
+    } else if (phase === "align") {
+      if (mode === "hold") setPhase("open", now);
+    } else if (phase === "open") {
+      const t = Math.min(1, e / DUR.open);
+      // a tela gira na dobradiça da direita (como num reparo real) e sai de cena
+      const a = easeOut(Math.min(1, t / 0.6));
+      crackedPanel.rotation.y = a * 1.95;
+      crackedPanel.position.z = D / 2 - 0.12 + a * 1.2;
+      const out = Math.max(0, (t - 0.55) / 0.45);
+      crackedPanel.position.x = hingeX + easeIn(out) * 70;
+      crackedMat.opacity = 1 - out;
+      if (t >= 1) { crackedPanel.visible = false; setPhase("inspect", now); }
+    } else if (phase === "inspect") {
+      if (e >= DUR.inspect) { newPanel.visible = true; newMat.opacity = 0; setPhase("install", now); }
+    } else if (phase === "install") {
+      const t = Math.min(1, e / DUR.install);
+      const inn = Math.min(1, t / 0.4);
+      newPanel.position.set(hingeX + (1 - easeOut(inn)) * 70, 0, D / 2 - 0.12 + 1.2);
+      newMat.opacity = easeOut(inn);
+      const c = ease(Math.max(0, (t - 0.35) / 0.65));
+      newPanel.rotation.y = 1.95 * (1 - c);
+      newPanel.position.z = D / 2 - 0.12 + 1.2 * (1 - c) - Math.sin(Math.min(1, Math.max(0, (t - 0.9) / 0.1)) * Math.PI) * 0.15;
+      if (t >= 1) { newPanel.rotation.y = 0; newPanel.position.set(hingeX, 0, D / 2 - 0.12); newMat.opacity = 1; setPhase("boot", now); }
     } else if (phase === "boot") {
-      const a = Math.sin(Math.min(1, t) * Math.PI);
-      ectx.save(); ectx.translate(CW / 2, CH / 2); ectx.scale(.85 + .15 * t, .85 + .15 * t);
-      ectx.strokeStyle = `rgba(240,245,243,${a})`; ectx.lineWidth = 9; ectx.lineCap = "round";
-      ectx.shadowColor = `rgba(${ACC},${a})`; ectx.shadowBlur = 40;
-      ectx.beginPath(); ectx.roundRect(-30, -60, 60, 120, 17); ectx.stroke();
-      ectx.beginPath(); ectx.arc(5, 22, 68, Math.PI * 1.02, Math.PI * 1.72); ectx.stroke();
-      ectx.restore();
+      const t = Math.min(1, e / DUR.boot);
+      newMat.emissiveIntensity = 1.1; drawScreen("boot", t);
+      if (t >= 1) { drawScreen("on", 0); setPhase("on", now); }
     } else if (phase === "on") {
-      const a = Math.min(1, t * 3);
-      ectx.save(); ectx.globalAlpha = a; displayPath(ectx); ectx.clip();
-      ectx.drawImage(wall, 0, 0);
-      ectx.textAlign = "center"; ectx.fillStyle = "rgba(240,244,242,.88)";
-      ectx.font = '500 30px "Geist", sans-serif'; ectx.fillText(fmtDate(), CW / 2, 170);
-      ectx.fillStyle = "#f4f7f5"; ectx.font = '600 196px "Bricolage Grotesque", sans-serif'; ectx.fillText(fmtTime(), CW / 2, 350);
-      const py = CH - 300, pw = 360;
-      ectx.fillStyle = "rgba(5,10,8,.55)"; ectx.beginPath(); ectx.roundRect(CW / 2 - pw / 2, py, pw, 64, 32); ectx.fill();
-      ectx.strokeStyle = `rgba(${ACC},.6)`; ectx.lineWidth = 2; ectx.stroke();
-      ectx.fillStyle = `rgb(${ACC})`; ectx.beginPath(); ectx.arc(CW / 2 - pw / 2 + 38, py + 32, 13, 0, Math.PI * 2); ectx.fill();
-      ectx.strokeStyle = "#04120d"; ectx.lineWidth = 3.5; ectx.beginPath(); ectx.moveTo(CW / 2 - pw / 2 + 32, py + 32); ectx.lineTo(CW / 2 - pw / 2 + 37, py + 37); ectx.lineTo(CW / 2 - pw / 2 + 45, py + 27); ectx.stroke();
-      ectx.fillStyle = "#eef3f1"; ectx.font = '500 26px "Geist", sans-serif'; ectx.textAlign = "left"; ectx.fillText("Tela nova instalada", CW / 2 - pw / 2 + 64, py + 41);
-      ectx.textAlign = "center"; ectx.fillStyle = "rgba(232,238,235,.65)"; ectx.font = '500 18px "Geist Mono", monospace'; ectx.fillText("GARANTIA ATIVA · 90 DIAS", CW / 2, py + 112);
-      ectx.fillStyle = "rgba(240,244,242,.8)"; ectx.beginPath(); ectx.roundRect(CW / 2 - 70, CH - bez - 36, 140, 9, 5); ectx.fill();
-      island(ectx);
-      ectx.restore();
+      newMat.emissiveIntensity = Math.min(1.15, e / 500 * 1.15);
+      if (e > 1400 && mode === "hold") { mode = "spin"; vel = 0; }
+      if (e > 60000 / 60 && fmtTime() !== lastMinute) { lastMinute = fmtTime(); drawScreen("on", 1); }
+      // volta ao início quando a frente estiver de costas para a câmera
+      if (e > 6500 && Math.cos(spin) < -0.6) { resetPanels(); setPhase("broken", now); }
     }
-    emT.needsUpdate = true;
   };
+  let lastMinute = fmtTime();
 
-  /* ---------- fases (lidas do atributo data-phase) ---------- */
-  let phase = stage.getAttribute("data-phase") || "broken", phaseStart = performance.now();
-  const DUR = { broken: 450, scan: 1700, repair: 1450, boot: 900, on: 600 };
-  new MutationObserver(() => { phase = stage.getAttribute("data-phase"); phaseStart = performance.now(); dirty = true; }).observe(stage, { attributes: true, attributeFilter: ["data-phase"] });
-  let dirty = true, lastMinute = "", diffP = -1;
-  const setDiffuse = (p) => { if (Math.abs(p - diffP) < 0.002) return; diffP = p; drawDiffuse(p); diffT.needsUpdate = bumpT.needsUpdate = true; };
-  const updateScreen = (now) => {
-    const t = Math.min(1, (now - phaseStart) / DUR[phase]);
-    if (!dirty && t >= 1 && !(phase === "on" && fmtTime() !== lastMinute)) return;
-    if (phase === "broken") { setDiffuse(reduce ? 1 : t); drawEmissive("off", t); }
-    else if (phase === "scan") { setDiffuse(1); drawEmissive("scan", t); }
-    else if (phase === "repair") { setDiffuse(1 - t); drawEmissive("repair", t); }
-    else if (phase === "boot") { setDiffuse(0); drawEmissive("boot", t); }
-    else { setDiffuse(0); drawEmissive("on", t); lastMinute = fmtTime(); }
-    dirty = false;
-  };
-
-  /* ---------- enquadramento e animação ---------- */
+  /* ---------- enquadramento ---------- */
   const fit = () => {
     const w = stage.clientWidth, h = stage.clientHeight;
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
     const k = 2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
-    const dist = Math.max((146.6 / 0.72) / k, (W * 1.9) / (k * camera.aspect));
+    const dist = Math.max((146.6 / 0.72) / k, (W * 2.4) / (k * camera.aspect));
     camera.position.set(0, 0, dist); camera.lookAt(0, 0, 0); camera.updateProjectionMatrix();
   };
   fit(); new ResizeObserver(fit).observe(stage);
@@ -1553,20 +1533,20 @@ function main() {
     hero.addEventListener("pointerleave", () => { tx = ty = 0; });
   }
 
-  let visible = true, running = false, last = performance.now(), spin = -0.5, nextFlash = performance.now() + 4000;
+  let visible = true, running = false, last = performance.now(), nextFlash = performance.now() + 4000;
   const frame = (now) => {
     if (!visible || document.hidden) { running = false; return; }
     const dt = Math.min(0.05, (now - last) / 1000); last = now;
     const s = now / 1000;
+    if (mode === "spin") { vel += (SPEED - vel) * Math.min(1, dt * 1.2); spin += vel * dt; }
+    else if (mode === "align") { const t = Math.min(1, (now - phaseStart) / alignDur); spin = alignFrom + (alignTo - alignFrom) * (1 - (1 - t) * (1 - t)); if (t >= 1) mode = "hold"; }
+    director(now);
     cx += (tx - cx) * Math.min(1, dt * 4); cy += (ty - cy) * Math.min(1, dt * 4);
-    spin += dt * (Math.PI * 2 / 14);
-    pivot.rotation.set(0.14 + Math.sin(s * .55) * .06 + cy * .35, cx * .5, Math.sin(s * .37) * .05 - .04);
+    const calm = mode === "spin" ? 1 : 0.35;
+    pivot.rotation.set(0.14 + Math.sin(s * .55) * .06 * calm + cy * .3, cx * .45, (Math.sin(s * .37) * .05 - .04) * calm);
     phone.rotation.y = spin;
-    pivot.position.y = Math.sin(s * .9) * 2.4;
-    const since = now - phaseStart;
-    pivot.position.x = phase === "broken" && since < 420 ? Math.sin(since * .09) * (1 - since / 420) * 2.2 : 0;
+    pivot.position.y = Math.sin(s * .9) * 2.4 * calm;
     if (now > nextFlash) { const f = now - nextFlash; flashMat.emissiveIntensity = f < 160 ? 4 * Math.sin(f / 160 * Math.PI) : 0; if (f > 160) nextFlash = now + 5200 + Math.random() * 3000; }
-    updateScreen(now);
     renderer.render(scene, camera);
     if (!canvas.classList.contains("ready")) canvas.classList.add("ready");
     requestAnimationFrame(frame);
@@ -1575,11 +1555,12 @@ function main() {
   new IntersectionObserver((en) => { visible = en[0].isIntersecting; if (visible) start(); }, { rootMargin: "80px" }).observe(stage);
   document.addEventListener("visibilitychange", () => { if (!document.hidden) start(); });
 
+  if (/[?&]debug/.test(location.search)) window.__rr = { phone, pivot, crackedPanel, newPanel, newMat, drawScreen, render: () => renderer.render(scene, camera), stop: () => { visible = false; }, get phase() { return phase; } };
   const go = () => {
-    if (reduce) { phone.rotation.y = -0.45; pivot.rotation.set(0.12, 0, -0.03); drawDiffuse(1); drawEmissive("off", 1); diffT.needsUpdate = bumpT.needsUpdate = true; renderer.render(scene, camera); canvas.classList.add("ready"); return; }
+    setPhase("broken", performance.now());
+    if (reduce) { phone.rotation.y = FRONT; pivot.rotation.set(0.12, 0, -0.03); renderer.render(scene, camera); canvas.classList.add("ready"); return; }
     start();
   };
-  if (/[?&]debug/.test(location.search)) window.__rr = { phone, pivot, render: () => renderer.render(scene, camera), stop: () => { visible = false; } };
   (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(go, go);
 }
 try { main(); } catch (err) { console.error(err); document.getElementById("stage")?.classList.add("no-gl"); }
