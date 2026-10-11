@@ -215,67 +215,108 @@ ul.clean { list-style: none; margin: 0; padding: 0; }
 .phone-spin { transform-style: preserve-3d; animation: spin 16s linear infinite; }
 @keyframes spin { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
 
-.phone { --w: 248px; --h: 508px; --r: 44px; --depth: 14px; position: relative; width: var(--w); height: var(--h); transform-style: preserve-3d; }
-.phone > * { position: absolute; inset: 0; border-radius: var(--r); }
-.slice { background: linear-gradient(90deg, var(--frame-c), var(--frame-b) 16%, var(--frame-a) 50%, var(--frame-b) 84%, var(--frame-c)); transform: translateZ(calc((var(--i) - 5.5) * 1.15px)); }
+.phone { --w: 248px; --h: 508px; --r: 44px; --depth: 16px; position: relative; width: var(--w); height: var(--h); transform-style: preserve-3d; }
+.phone > .slice, .phone > .face, .phone > .back-group { position: absolute; inset: 0; border-radius: var(--r); }
+.slice { background: linear-gradient(90deg, var(--frame-c), var(--frame-b) 14%, var(--frame-a) 50%, var(--frame-b) 86%, var(--frame-c)); transform: translateZ(calc((var(--i) - 6.5) * 1.15px)); }
 .face { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
-.front { transform: translateZ(calc(var(--depth) / 2)); background: #050707; padding: 8px; box-shadow: inset 0 0 0 1.5px var(--frame-c); }
-.back { transform: rotateY(180deg) translateZ(calc(var(--depth) / 2)); background: radial-gradient(120% 80% at 20% 0%, rgba(255,255,255,.18), transparent 55%), linear-gradient(160deg, #3A4340, #222927 55%, #161B19); box-shadow: inset 0 0 0 1.5px var(--frame-c); overflow: hidden; }
+.front { transform: translateZ(calc(var(--depth) / 2)); background: #050707; padding: 8px; box-shadow: inset 0 0 0 1.5px var(--frame-c), inset 0 0 0 3px #0B0E0D; }
+
+/* botões laterais em relevo */
+.btn3d { position: absolute; top: var(--top); height: var(--bh); width: 0; transform-style: preserve-3d; }
+.btn3d.r { left: var(--w); } .btn3d.l { left: 0; }
+.btn3d i { position: absolute; top: 0; height: 100%; width: 7px; margin-left: -3.5px; border-radius: 3px; background: linear-gradient(180deg, var(--frame-c), var(--frame-a) 30%, var(--frame-b)); }
+.btn3d.r i { transform: translateX(calc(var(--k) * .9px + .4px)) rotateY(90deg); }
+.btn3d.l i { transform: translateX(calc(var(--k) * -.9px - .4px)) rotateY(90deg); }
+
+/* traseira + módulo de câmera em relevo */
+.back-group { transform: rotateY(180deg) translateZ(calc(var(--depth) / 2)); transform-style: preserve-3d; }
+.back { background: radial-gradient(120% 80% at 20% 0%, rgba(255,255,255,.16), transparent 55%), linear-gradient(160deg, #3A4340, #222927 55%, #161B19); box-shadow: inset 0 0 0 1.5px var(--frame-c); overflow: hidden; }
 .back::after { content: ""; position: absolute; inset: 0; background: linear-gradient(105deg, transparent 35%, rgba(255,255,255,.12) 50%, transparent 65%); background-size: 300% 100%; animation: glass 5s var(--ease) infinite; }
+.back-mark { position: absolute; left: 50%; top: 52%; width: 56px; height: 56px; margin: -28px 0 0 -28px; color: rgba(255,255,255,.22); }
+.back-txt { position: absolute; left: 0; right: 0; bottom: 32px; text-align: center; font: 500 9px/1 var(--font-mono); letter-spacing: .2em; color: rgba(255,255,255,.3); text-transform: uppercase; }
+.cam3d { position: absolute; top: 16px; left: 16px; width: 112px; height: 112px; transform-style: preserve-3d; }
+.cam-slice { position: absolute; inset: 0; border-radius: 32px; background: linear-gradient(90deg, #5A6360, #2A302E 40%, #3A423F); transform: translateZ(calc(var(--k) * .8px + .4px)); }
+.cam-top { position: absolute; inset: 0; border-radius: 32px; transform: translateZ(5.4px); background: radial-gradient(100% 80% at 25% 10%, rgba(255,255,255,.2), transparent 60%), linear-gradient(150deg, #4C5552, #252B29); box-shadow: inset 0 0 0 1px rgba(255,255,255,.16), inset 0 -6px 12px rgba(0,0,0,.35); backface-visibility: hidden; }
+.lens3d { position: absolute; width: 44px; height: 44px; transform-style: preserve-3d; }
+.lens3d.l1 { top: 8px; left: 8px; } .lens3d.l2 { bottom: 8px; left: 8px; } .lens3d.l3 { top: 34px; right: 8px; }
+.lens3d i { position: absolute; inset: 0; border-radius: 50%; background: linear-gradient(90deg, #8A928F, #3B4240 45%, #6B7370); transform: translateZ(calc(5.6px + var(--k) * .9px)); }
+.lens3d b { position: absolute; inset: 0; border-radius: 50%; transform: translateZ(9.6px); backface-visibility: hidden; background: radial-gradient(circle at 36% 30%, rgba(255,255,255,.75) 0 4%, transparent 9%), radial-gradient(circle at 50% 50%, #3E6272 0 9%, #0E1A22 20%, #05080A 40%, #121718 56%, #2A302E 58% 66%, #9AA29F 68%, #4A514F 74%); box-shadow: inset 0 0 0 1px rgba(255,255,255,.2); }
+.lens3d b::after { content: ""; position: absolute; inset: 22%; border-radius: 50%; background: conic-gradient(from 200deg, transparent, rgba(110,190,220,.25), transparent 30%, rgba(200,120,220,.18), transparent 60%); animation: iris 6s linear infinite; }
+@keyframes iris { to { transform: rotate(360deg); } }
+.cam-extra { position: absolute; transform: translateZ(5.6px); border-radius: 50%; backface-visibility: hidden; }
+.cam-extra.flash { right: 14px; top: 12px; width: 12px; height: 12px; background: radial-gradient(circle, #FFF6DD, #CFC6AE 60%, #8D8676); animation: flash 6s var(--ease) infinite; }
+.cam-extra.lidar { right: 16px; bottom: 16px; width: 10px; height: 10px; background: radial-gradient(circle, #222, #000); box-shadow: inset 0 0 0 1px rgba(255,255,255,.15); }
+.cam-extra.mic { right: 50px; top: 10px; width: 4px; height: 4px; background: #0A0C0B; }
+@keyframes flash { 0%, 90%, 100% { box-shadow: none; } 93% { box-shadow: 0 0 22px 8px rgba(255,248,230,.85); } }
 
-/* tela */
-.screen { position: relative; width: 100%; height: 100%; border-radius: 36px; background: radial-gradient(140% 60% at 50% 0%, rgba(var(--accent-rgb), .14), transparent 60%), var(--scr-bg); color: var(--ink); overflow: hidden; padding: 16px; display: flex; flex-direction: column; gap: 12px; font-family: var(--font-body); }
-.screen::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(105deg, transparent 35%, rgba(255,255,255,.14) 50%, transparent 65%); background-size: 300% 100%; animation: glass 5s var(--ease) infinite; }
+/* tela desligada e trincada */
+.screen { position: relative; width: 100%; height: 100%; border-radius: 36px; background: radial-gradient(120% 70% at 80% 0%, rgba(255,255,255,.05), transparent 55%), linear-gradient(170deg, #070909, #020303 60%, #050606); color: var(--ink); overflow: hidden; font-family: var(--font-body); }
+.screen::after { content: ""; position: absolute; inset: 0; z-index: 6; pointer-events: none; background: linear-gradient(105deg, transparent 35%, rgba(255,255,255,.13) 50%, transparent 65%); background-size: 300% 100%; animation: glass 5s var(--ease) infinite; }
 @keyframes glass { 0% { background-position: 120% 0; } 60%, 100% { background-position: -40% 0; } }
-.island { position: absolute; top: 10px; left: 50%; width: 76px; height: 22px; margin-left: -38px; background: #000; border-radius: 999px; z-index: 2; }
-.sbar { display: flex; justify-content: space-between; align-items: center; height: 22px; padding: 0 8px; font: 600 11px/1 var(--font-body); }
-.sbar .ic { display: flex; gap: 3px; align-items: flex-end; }
-.sbar .ic b { width: 3px; border-radius: 1px; background: var(--ink); display: block; }
-.sbar .ic i { display: block; width: 16px; height: 8px; border-radius: 2px; border: 1px solid var(--ink); position: relative; margin-left: 3px; }
-.sbar .ic i::after { content: ""; position: absolute; inset: 1px 3px 1px 1px; background: var(--accent); border-radius: 1px; }
-.app-head { display: flex; justify-content: space-between; align-items: center; padding-top: 4px; }
-.app-head .nm { display: flex; gap: 6px; align-items: center; font: 600 13px/1 var(--font-display); }
-.app-head .nm svg { width: 18px; height: 18px; color: var(--accent); }
-.app-head .os { font: 500 9px/1 var(--font-mono); letter-spacing: .08em; color: var(--muted); }
-.eta { display: flex; justify-content: space-between; align-items: flex-end; }
-.eta small { display: block; font: 500 9px/1.2 var(--font-mono); letter-spacing: .1em; color: var(--muted); text-transform: uppercase; margin-bottom: 4px; }
-.eta strong { font: 600 36px/1 var(--font-display); letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
-.eta strong span { font-size: 15px; color: var(--muted); font-weight: 500; margin-left: 4px; letter-spacing: 0; }
-.ring { width: 44px; height: 44px; }
-.ring circle:last-child { stroke-dasharray: 113; stroke-dashoffset: 113; animation: ringFill 4s var(--ease) infinite; }
-@keyframes ringFill { 50%, 100% { stroke-dashoffset: 28; } }
-.map { position: relative; width: 200px; height: 96px; border-radius: 14px; background: var(--scr-card); overflow: hidden; }
-.map svg { position: absolute; inset: 0; width: 200px; height: 96px; }
-.map .dash { stroke-dasharray: 3 5; animation: dash 1.2s linear infinite; }
-@keyframes dash { to { stroke-dashoffset: -16; } }
-.map .car { position: absolute; left: 0; top: 0; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px rgba(var(--accent-rgb), .25), 0 0 12px var(--accent); offset-path: path("M14 78 C 46 78, 44 30, 84 34 S 128 70, 150 52 S 176 22, 186 18"); offset-rotate: 0deg; animation: drive 6s var(--ease) infinite alternate; }
-@keyframes drive { from { offset-distance: 4%; } to { offset-distance: 96%; } }
-.pin { transform-box: fill-box; transform-origin: center; animation: pinPulse 2s var(--ease) infinite; }
-@keyframes pinPulse { 50% { transform: scale(1.6); opacity: .2; } }
-.steps-mini { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
-.steps-mini li { display: flex; align-items: center; gap: 8px; font-size: 11.5px; color: var(--muted); }
-.steps-mini li i { width: 14px; height: 14px; border-radius: 50%; border: 1.5px solid #34403C; flex: none; display: grid; place-items: center; }
-.steps-mini li.done { color: var(--ink); }
-.steps-mini li.done i { background: var(--accent); border-color: var(--accent); }
-.steps-mini li.done i::after { content: ""; width: 5px; height: 3px; border: solid var(--accent-ink); border-width: 0 0 1.5px 1.5px; transform: rotate(-45deg) translate(1px, -1px); }
-.steps-mini li.now { color: var(--ink); }
-.steps-mini li.now i { border-color: var(--accent); }
-.steps-mini li.now i::after { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: blink 1.6s var(--ease) infinite; }
-.steps-mini li em { margin-left: auto; font: 500 9px/1 var(--font-mono); font-style: normal; color: var(--muted); }
-@keyframes blink { 50% { opacity: .2; } }
-.bars { display: flex; align-items: flex-end; gap: 3px; height: 28px; }
-.bars span { flex: 1; border-radius: 2px; background: rgba(var(--accent-rgb), .35); height: 30%; animation: eq 1.4s var(--ease) infinite; animation-delay: calc(var(--i) * -120ms); }
-@keyframes eq { 50% { height: 100%; background: var(--accent); } }
-.scr-btn { margin-top: auto; height: 40px; border-radius: 12px; background: var(--accent); color: var(--accent-ink); display: grid; place-items: center; font: 600 12px/1 var(--font-body); }
+.island { position: absolute; top: 10px; left: 50%; width: 76px; height: 22px; margin-left: -38px; background: #000; border-radius: 999px; z-index: 7; box-shadow: inset 0 0 0 1px rgba(255,255,255,.04); }
+.cracks { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 4; pointer-events: none; }
+.cracks .ck { stroke: rgba(225, 235, 232, .62); stroke-width: .9; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 0; filter: drop-shadow(0 0 1px rgba(255,255,255,.35)); transition: stroke-dashoffset 420ms var(--ease) calc(var(--i) * 12ms), stroke 300ms var(--ease); }
+.cracks .ck.thin { stroke-width: .55; stroke: rgba(225, 235, 232, .42); }
+.cracks .shard { fill: rgba(255,255,255,.035); stroke: none; transition: opacity 600ms var(--ease); }
+.cracks .impact { fill: rgba(255,255,255,.75); filter: blur(1.5px); transform-box: fill-box; transform-origin: center; transition: opacity 400ms var(--ease), transform 400ms var(--ease); }
+[data-phase="scan"] .cracks .ck { stroke: rgba(var(--accent-rgb), .95); filter: drop-shadow(0 0 3px rgba(var(--accent-rgb), .9)); }
+[data-phase="repair"] .cracks .ck, [data-phase="boot"] .cracks .ck, [data-phase="on"] .cracks .ck { stroke: var(--accent); stroke-dashoffset: 1; transition: stroke-dashoffset 1300ms var(--ease-cine) calc(var(--i) * 18ms), stroke 300ms var(--ease); }
+[data-phase="repair"] .cracks .shard, [data-phase="boot"] .cracks .shard, [data-phase="on"] .cracks .shard { opacity: 0; }
+[data-phase="repair"] .cracks .impact, [data-phase="boot"] .cracks .impact, [data-phase="on"] .cracks .impact { opacity: 0; transform: scale(3); }
+.hit .cracks .impact { animation: impact 500ms var(--ease); }
+@keyframes impact { 0% { transform: scale(4); fill: #fff; } 100% { transform: scale(1); } }
 
-/* traseira */
-.cam { position: absolute; top: 18px; left: 18px; width: 104px; height: 104px; border-radius: 30px; background: linear-gradient(150deg, #48514E, #262C2A); box-shadow: inset 0 0 0 1px rgba(255,255,255,.14), 0 2px 8px rgba(0,0,0,.5); z-index: 1; }
-.lens { position: absolute; width: 40px; height: 40px; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #4A6A78 0 10%, #0B0F12 28% 58%, #1E2322 60% 100%); box-shadow: 0 0 0 3px #161A19, 0 0 0 4px rgba(255,255,255,.12); }
-.lens.l1 { top: 10px; left: 10px; } .lens.l2 { bottom: 10px; left: 10px; } .lens.l3 { top: 32px; right: 10px; }
-.flash { position: absolute; right: 18px; top: 12px; width: 10px; height: 10px; border-radius: 50%; background: #E2DCCB; animation: flash 6s var(--ease) infinite; }
-@keyframes flash { 0%, 92%, 100% { box-shadow: none; } 95% { box-shadow: 0 0 18px 6px rgba(255,248,230,.8); } }
-.back-mark { position: absolute; left: 50%; top: 50%; width: 56px; height: 56px; margin: -28px 0 0 -28px; color: rgba(255,255,255,.24); z-index: 1; }
-.back-txt { position: absolute; left: 0; right: 0; bottom: 32px; text-align: center; font: 500 9px/1 var(--font-mono); letter-spacing: .2em; color: rgba(255,255,255,.3); text-transform: uppercase; z-index: 1; }
+.scan-grid { position: absolute; inset: 0; z-index: 3; opacity: 0; background-image: radial-gradient(rgba(var(--accent-rgb), .35) .8px, transparent 1px); background-size: 12px 12px; transition: opacity 300ms var(--ease); }
+.laser { position: absolute; left: 0; right: 0; top: 0; height: 2px; z-index: 5; opacity: 0; background: linear-gradient(90deg, transparent, var(--accent), transparent); box-shadow: 0 0 18px 4px rgba(var(--accent-rgb), .55); }
+[data-phase="scan"] .scan-grid { opacity: 1; }
+[data-phase="scan"] .laser { animation: laser 1800ms var(--ease) both; }
+@keyframes laser { 0% { opacity: 0; transform: translateY(20px); } 10% { opacity: 1; } 50% { transform: translateY(470px); } 90% { opacity: 1; } 100% { opacity: 0; transform: translateY(20px); } }
+.scr-label { position: absolute; left: 0; right: 0; top: 44px; z-index: 5; text-align: center; font: 500 9px/1 var(--font-mono); letter-spacing: .2em; text-transform: uppercase; color: var(--accent); opacity: 0; transition: opacity 300ms var(--ease); }
+[data-phase="scan"] .scr-label.s1, [data-phase="repair"] .scr-label.s2 { opacity: 1; }
+.scr-label b { display: block; margin-top: 8px; font: 600 22px/1 var(--font-display); letter-spacing: -.02em; color: var(--ink); font-variant-numeric: tabular-nums; }
+
+.sparks { position: absolute; left: 156px; top: 292px; z-index: 5; }
+.sparks i { position: absolute; width: 3px; height: 3px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 6px 1px var(--accent); opacity: 0; }
+[data-phase="repair"] .sparks i { animation: spark 1100ms var(--ease) both; animation-delay: calc(var(--n) * 70ms); }
+@keyframes spark { 0% { opacity: 1; transform: translate(0, 0) scale(1.4); } 100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(.4); } }
+
+.boot { position: absolute; inset: 0; z-index: 2; display: grid; place-items: center; opacity: 0; transition: opacity 300ms var(--ease); }
+.boot svg { width: 56px; height: 56px; color: var(--ink); filter: drop-shadow(0 0 14px rgba(var(--accent-rgb), .8)); }
+[data-phase="boot"] .boot { opacity: 1; }
+[data-phase="boot"] .boot svg { animation: bootPulse 1000ms var(--ease) both; }
+@keyframes bootPulse { from { transform: scale(.7); opacity: 0; } 60% { transform: scale(1.05); opacity: 1; } to { transform: scale(1); } }
+
+.on-ui { position: absolute; inset: 0; z-index: 1; display: flex; flex-direction: column; align-items: center; padding: 64px 20px 24px; opacity: 0; transform: scale(1.06); transition: opacity 600ms var(--ease), transform 900ms var(--ease-cine);
+  background: radial-gradient(80% 50% at 20% 90%, rgba(var(--accent-rgb), .45), transparent 70%), radial-gradient(70% 45% at 90% 60%, rgba(232,162,78,.35), transparent 70%), radial-gradient(90% 60% at 50% 0%, rgba(70,110,140,.4), transparent 70%), #050808; }
+[data-phase="on"] .on-ui { opacity: 1; transform: scale(1); }
+.on-ui small { font: 500 12px/1 var(--font-body); color: rgba(232,238,235,.8); }
+.on-ui .clock { font: 600 72px/1 var(--font-display); letter-spacing: -.04em; margin-top: 8px; font-variant-numeric: tabular-nums; }
+.on-ui .ok { margin-top: auto; display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 999px; background: rgba(5,8,7,.55); border: 1px solid rgba(var(--accent-rgb), .4); backdrop-filter: blur(8px); font: 500 11px/1 var(--font-body); }
+.on-ui .ok i { width: 14px; height: 14px; border-radius: 50%; background: var(--accent); display: grid; place-items: center; }
+.on-ui .ok i::after { content: ""; width: 5px; height: 3px; border: solid var(--accent-ink); border-width: 0 0 1.5px 1.5px; transform: rotate(-45deg) translate(1px, -1px); }
+.on-ui .meta { margin-top: 12px; font: 500 9px/1 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: rgba(232,238,235,.6); }
+.on-ui .home { margin-top: 16px; width: 96px; height: 4px; border-radius: 4px; background: rgba(232,238,235,.7); }
+
+/* tremida do impacto */
+.phone-shake { transform-style: preserve-3d; }
+.hit .phone-shake { animation: shake 420ms var(--ease); }
+@keyframes shake { 20% { transform: translate3d(-5px, 2px, 0) rotateZ(-1.5deg); } 40% { transform: translate3d(4px, -2px, 0) rotateZ(1deg); } 60% { transform: translate3d(-3px, 1px, 0); } 80% { transform: translate3d(2px, 0, 0); } }
+
+/* ferramentas flutuando */
+.tool { position: absolute; z-index: 3; pointer-events: none; transition: transform 900ms var(--ease-cine), opacity 400ms var(--ease); }
+.tool svg { display: block; filter: drop-shadow(0 12px 18px rgba(0,0,0,.6)); }
+.tool.driver { top: 16%; right: 12%; width: 120px; transform: translate(0, 0) rotate(-35deg); }
+.tool.driver svg { animation: drift 6s var(--ease) infinite; }
+[data-phase="repair"] .tool.driver { transform: translate(-60px, 120px) rotate(-55deg); }
+[data-phase="repair"] .tool.driver svg { animation: screw 400ms var(--ease) infinite; }
+@keyframes drift { 50% { transform: translateY(-10px) rotate(6deg); } }
+@keyframes screw { 50% { transform: rotate(-14deg); } }
+.tool.screw { width: 14px; height: 14px; }
+.tool.screw svg { animation: tumble 9s linear infinite; }
+.tool.screw.s1 { top: 22%; left: 16%; } .tool.screw.s2 { bottom: 24%; right: 18%; } .tool.screw.s3 { top: 62%; left: 10%; width: 10px; height: 10px; }
+.tool.screw.s2 svg { animation-duration: 12s; animation-direction: reverse; }
+@keyframes tumble { 0% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-16px) rotate(180deg); } 100% { transform: translateY(0) rotate(360deg); } }
+@media (max-width: 480px) { .tool.driver { width: 84px; right: 2%; top: 10%; } }
 
 /* etiquetas do palco */
 .tag { position: absolute; z-index: 5; display: grid; gap: 4px; padding: 12px var(--s2); background: rgba(17, 24, 22, .66); border: 1px solid var(--line-2); border-radius: 14px; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); box-shadow: 0 16px 40px -16px rgba(0,0,0,.8); animation: tagIn 800ms var(--ease-cine) both, bob 8s var(--ease) infinite; animation-delay: calc(2900ms + var(--d-in, 0ms)), calc(3700ms + var(--d-in, 0ms)); }
@@ -287,7 +328,7 @@ ul.clean { list-style: none; margin: 0; padding: 0; }
 .tag.t1 { top: 14%; left: 0; } .tag.t2 { top: 30%; right: 0; } .tag.t3 { bottom: 20%; left: 2%; } .tag.t4 { bottom: 10%; right: 4%; }
 @keyframes tagIn { from { opacity: 0; transform: translateY(16px) scale(.94); filter: blur(6px); } }
 @keyframes bob { 50% { translate: 0 -8px; } }
-@media (max-width: 480px) { .tag.t3, .tag.t4 { display: none; } .tag.t1 { top: 4%; } .tag.t2 { top: auto; bottom: 6%; } .tag::before { display: none; } }
+@media (max-width: 480px) { .tag.t2, .tag.t3 { display: none; } .tag.t1 { top: 4%; } .tag.t4 { bottom: 6%; right: 0; } .tag::before { display: none; } }
 
 /* ---------- faixa ---------- */
 .strip { position: relative; border-block: 1px solid var(--line); overflow: hidden; padding-block: 20px; background: var(--bg-2); -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); }
@@ -474,15 +515,64 @@ footer { padding-block: var(--s4) var(--s6); border-top: 1px solid var(--line); 
 footer .wrap { display: flex; justify-content: space-between; gap: var(--s2); flex-wrap: wrap; align-items: center; }
 
 /* botão flutuante */
-.fab { position: fixed; right: var(--s3); bottom: calc(var(--s3) + env(safe-area-inset-bottom, 0px)); z-index: 60; width: 60px; height: 60px; border-radius: 50%; display: grid; place-items: center; background: var(--accent); color: var(--accent-ink); box-shadow: 0 12px 40px -8px rgba(var(--accent-rgb), .8); transition: transform var(--d) var(--ease), box-shadow var(--d) var(--ease); animation: enter 800ms var(--ease-cine) 3300ms both; }
-.fab svg { width: 28px; height: 28px; }
-.fab:hover { transform: translateY(-3px) scale(1.05); }
-.fab::after { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 1px solid var(--accent); animation: ring 2.4s var(--ease) infinite; }
-@keyframes ring { from { transform: scale(1); opacity: .8; } to { transform: scale(1.7); opacity: 0; } }
-@media (max-width: 480px) { .fab { right: var(--s2); bottom: calc(var(--s2) + env(safe-area-inset-bottom, 0px)); width: 56px; height: 56px; } }
+.fab { position: fixed; right: var(--s3); bottom: calc(var(--s3) + env(safe-area-inset-bottom, 0px)); z-index: 60; height: 56px; padding: 0 var(--s3) 0 var(--s2); border: 0; border-radius: 999px; display: inline-flex; align-items: center; gap: var(--s1); background: var(--accent); color: var(--accent-ink); font: 600 var(--t-md)/1 var(--font-body); cursor: pointer; box-shadow: 0 12px 40px -8px rgba(var(--accent-rgb), .8); transition: transform var(--d) var(--ease), box-shadow var(--d) var(--ease); animation: enter 800ms var(--ease-cine) 3300ms both; }
+.fab svg { width: 24px; height: 24px; }
+.fab:hover { transform: translateY(-3px); box-shadow: 0 18px 48px -8px rgba(var(--accent-rgb), .95); }
+.fab::after { content: ""; position: absolute; inset: 0; border-radius: inherit; border: 1px solid var(--accent); animation: ring 2.4s var(--ease) infinite; pointer-events: none; }
+@keyframes ring { from { transform: scale(1); opacity: .8; } to { transform: scale(1.25, 1.5); opacity: 0; } }
+@media (max-width: 480px) { .fab { right: var(--s2); bottom: calc(var(--s2) + env(safe-area-inset-bottom, 0px)); } }
+.drawer-open .fab { opacity: 0; pointer-events: none; transform: translateY(16px); }
+
+/* acesso rápido no herói */
+.quick { display: grid; gap: 12px; padding-top: var(--s1); }
+.quick .mono { color: var(--dim); }
+.quick-chips { display: flex; flex-wrap: wrap; gap: var(--s1); }
+.qchip { min-height: 40px; padding: 0 var(--s2); border-radius: 999px; border: 1px solid var(--line-2); background: rgba(232,238,235,.03); color: var(--muted); font: 500 var(--t-sm)/1 var(--font-body); cursor: pointer; transition: color var(--d) var(--ease), border-color var(--d) var(--ease), background-color var(--d) var(--ease), transform var(--d-fast) var(--ease), box-shadow var(--d) var(--ease); }
+.qchip:hover { color: var(--ink); border-color: rgba(var(--accent-rgb), .55); background: var(--accent-soft); box-shadow: 0 0 20px -6px rgba(var(--accent-rgb), .6); transform: translateY(-2px); }
+.qchip:active { transform: scale(.96); }
+
+/* faixa de orçamento */
+.quote-band { display: grid; grid-template-columns: 1.3fr 1fr; gap: var(--s6); align-items: center; padding: var(--s8) var(--s6); border-radius: 32px; overflow: hidden; }
+.qb-copy { display: grid; gap: var(--s2); }
+.qb-copy h2 { font-size: clamp(34px, 4.4vw, 56px); letter-spacing: -.035em; }
+.qb-copy p { color: var(--muted); font-size: var(--t-lg); max-width: 44ch; }
+.qb-actions { display: grid; gap: var(--s3); }
+.qb-actions .btn { width: 100%; min-height: 60px; font-size: var(--t-lg); }
+@media (max-width: 860px) { .quote-band { grid-template-columns: 1fr; padding: var(--s5) var(--s3); gap: var(--s4); } }
+
+/* gaveta de orçamento */
+.drawer-foot { display: grid; gap: 12px; justify-items: center; padding: var(--s2) var(--s4) calc(var(--s2) + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--line); background: rgba(11, 16, 15, .92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+.drawer-foot .btn { width: 100%; min-height: 56px; }
+.drawer-foot .mono { color: var(--dim); font-size: 10px; }
+#dr-title:focus { outline: none; }
+@media (max-width: 640px) { .drawer-foot { padding-inline: var(--s3); } }
+body.lock-d { overflow: hidden; }
+.drawer { position: fixed; inset: 0; z-index: 80; }
+.drawer-scrim { position: absolute; inset: 0; background: rgba(3, 5, 4, .6); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); opacity: 0; transition: opacity var(--d-slow) var(--ease); }
+.drawer-panel { position: absolute; top: 0; right: 0; bottom: 0; width: min(560px, 100%); display: flex; flex-direction: column; background: linear-gradient(180deg, #111816, #0B100F); border-left: 1px solid var(--line-2); box-shadow: -40px 0 80px -20px rgba(0,0,0,.7); transform: translateX(100%); transition: transform var(--d-slow) var(--ease); padding-top: env(safe-area-inset-top, 0px); }
+.drawer.open .drawer-scrim { opacity: 1; }
+.drawer.open .drawer-panel { transform: none; }
+.drawer-head { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--s2); padding: var(--s3) var(--s4); border-bottom: 1px solid var(--line); }
+.drawer-head h2 { font-size: var(--t-2xl); margin-top: var(--s1); }
+.drawer-x { width: 44px; height: 44px; flex: none; border-radius: 50%; border: 1px solid var(--line-2); background: transparent; color: var(--ink); display: grid; place-items: center; cursor: pointer; transition: background-color var(--d) var(--ease), transform var(--d-slow) var(--ease), border-color var(--d) var(--ease); }
+.drawer-x svg { width: 20px; height: 20px; }
+.drawer-x:hover { background: rgba(232,238,235,.06); border-color: rgba(var(--accent-rgb), .5); transform: rotate(90deg); }
+.drawer-body { flex: 1; overflow-y: auto; overscroll-behavior: contain; padding: var(--s3) var(--s4) calc(var(--s4) + env(safe-area-inset-bottom, 0px)); display: grid; gap: var(--s3); align-content: start; }
+.drawer .form { padding: 0; border: 0; background: none; }
+.drawer .preview { padding: var(--s3); gap: var(--s2); grid-template-rows: auto auto auto; }
+.drawer .drawer-body > * { opacity: 0; transform: translateY(16px); transition: opacity var(--d-slow) var(--ease), transform var(--d-slow) var(--ease); }
+.drawer.open .drawer-body > * { opacity: 1; transform: none; transition-delay: 120ms; }
+.drawer.open .drawer-body > *:nth-child(2) { transition-delay: 200ms; }
+@media (max-width: 640px) {
+  .drawer-panel { top: auto; left: 0; width: 100%; max-height: 92%; border-left: 0; border-top: 1px solid var(--line-2); border-radius: 28px 28px 0 0; transform: translateY(100%); padding-top: 0; }
+  .drawer-panel::before { content: ""; display: block; width: 40px; height: 4px; border-radius: 4px; background: var(--line-2); margin: 12px auto 0; }
+  .drawer-head { padding: var(--s2) var(--s3); }
+  .drawer-body { padding: var(--s3) var(--s3) calc(var(--s3) + env(safe-area-inset-bottom, 0px)); }
+  .drawer .row2 { grid-template-columns: 1fr; }
+}
 
 @media (prefers-reduced-motion: reduce) {
-  .intro, .grain, .scanline { display: none; }
+  .intro, .grain, .scanline, .laser, .sparks { display: none; }
   *, *::before, *::after { animation-duration: 1ms !important; animation-delay: 0ms !important; animation-iteration-count: 1 !important; transition-duration: 1ms !important; scroll-behavior: auto !important; }
   .phone-spin { transform: rotateY(-24deg); }
   .pre { opacity: 1; transform: none; filter: none; }
@@ -528,7 +618,7 @@ footer .wrap { display: flex; justify-content: space-between; gap: var(--s2); fl
       <a href="#servicos">Serviços</a>
       <a href="#garantia">Garantia</a>
       <a href="#duvidas">Dúvidas</a>
-      <a class="btn btn-primary wa-link" href="https://wa.me/5511951399929" target="_blank" rel="noopener">Orçamento</a>
+      <a class="btn btn-primary open-quote" href="#orcamento">Orçamento</a>
     </nav>
   </div>
 </header>
@@ -553,26 +643,35 @@ footer .wrap { display: flex; justify-content: space-between; gap: var(--s2); fl
         </h1>
         <p class="lede enter" style="--d-in:300ms">Buscamos, consertamos e devolvemos. Ou levamos a oficina até você: o reparo acontece no carro, na sua porta, enquanto você espera.</p>
         <div class="hero-ctas enter" style="--d-in:420ms">
-          <a class="btn btn-primary magnetic wa-link" href="https://wa.me/5511951399929" target="_blank" rel="noopener">
-            Pedir orçamento no WhatsApp
+          <a class="btn btn-primary magnetic open-quote" href="#orcamento">
+            Fazer orçamento grátis
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
-          <a class="btn btn-ghost magnetic" href="#como-funciona">Ver como funciona</a>
+          <a class="btn btn-ghost magnetic wa-link" href="https://wa.me/5511951399929" target="_blank" rel="noopener">WhatsApp direto</a>
         </div>
-        <ul class="hero-facts clean enter" style="--d-in:540ms">
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Orçamento sem compromisso</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Reparo na sua frente</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Garantia de 90 dias</li>
-        </ul>
+        <div class="quick enter" style="--d-in:540ms">
+          <span class="mono">O que aconteceu com o seu?</span>
+          <div class="quick-chips">
+            <button type="button" class="qchip open-quote" data-problem="p-tela">Tela quebrada</button>
+            <button type="button" class="qchip open-quote" data-problem="p-bat">Bateria</button>
+            <button type="button" class="qchip open-quote" data-problem="p-carga">Não carrega</button>
+            <button type="button" class="qchip open-quote" data-problem="p-agua">Caiu na água</button>
+            <button type="button" class="qchip open-quote" data-problem="p-outro">Outro</button>
+          </div>
+        </div>
       </div>
 
-      <div class="stage enter" id="stage" style="--d-in:0ms" aria-hidden="true">
+      <div class="stage enter" id="stage" data-phase="broken" style="--d-in:0ms" aria-hidden="true">
         <div class="halo"></div>
         <div class="orbit o2"><div class="spin"><span class="node n2"></span></div></div>
         <div class="orbit o1"><div class="spin"><span class="node"></span><span class="node n2"></span></div></div>
         <div class="orbit o3"><div class="spin"><span class="node"></span></div></div>
         <div class="floor"></div>
         <div class="brackets"><i></i><i></i><i></i><i></i></div>
+        <div class="tool driver" aria-hidden="true"><svg viewBox="0 0 120 24" fill="none"><rect x="2" y="4" width="54" height="16" rx="7" fill="#1E2523"/><rect x="2" y="4" width="54" height="16" rx="7" fill="url(#knurl)"/><rect x="2" y="4" width="54" height="7" rx="3.5" fill="rgba(255,255,255,.08)"/><rect x="54" y="7" width="10" height="10" rx="2" fill="#5ED3AE"/><rect x="64" y="10" width="46" height="4" rx="1" fill="#B9C2BE"/><rect x="64" y="10" width="46" height="1.5" fill="#E8EEEB"/><path d="M110 10.5l7 1.5-7 1.5z" fill="#8E9A95"/><defs><pattern id="knurl" width="4" height="4" patternUnits="userSpaceOnUse"><path d="M0 4L4 0" stroke="rgba(255,255,255,.08)"/></pattern></defs></svg></div>
+        <div class="tool screw s1" aria-hidden="true"><svg viewBox="0 0 14 14"><circle cx="7" cy="7" r="6" fill="#9AA29F"/><circle cx="7" cy="7" r="6" fill="none" stroke="#5C6863"/><path d="M7 3.5v7M3.5 7h7" stroke="#2A302E" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+        <div class="tool screw s2" aria-hidden="true"><svg viewBox="0 0 14 14"><circle cx="7" cy="7" r="6" fill="#9AA29F"/><path d="M7 3.5v7M3.5 7h7" stroke="#2A302E" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+        <div class="tool screw s3" aria-hidden="true"><svg viewBox="0 0 14 14"><circle cx="7" cy="7" r="6" fill="#B9C2BE"/><path d="M4 7h6" stroke="#2A302E" stroke-width="1.6" stroke-linecap="round"/></svg></div>
         <div class="scanline"></div>
 
         <div class="stage-scale">
@@ -580,50 +679,37 @@ footer .wrap { display: flex; justify-content: space-between; gap: var(--s2); fl
             <div class="phone-tilt" id="tilt">
               <div class="phone-wobble">
                 <div class="phone-spin">
-                  <div class="phone">
-                    <div class="slice" style="--i:0"></div><div class="slice" style="--i:1"></div><div class="slice" style="--i:2"></div><div class="slice" style="--i:3"></div>
-                    <div class="slice" style="--i:4"></div><div class="slice" style="--i:5"></div><div class="slice" style="--i:6"></div><div class="slice" style="--i:7"></div>
-                    <div class="slice" style="--i:8"></div><div class="slice" style="--i:9"></div><div class="slice" style="--i:10"></div><div class="slice" style="--i:11"></div>
+                  <div class="phone-shake"><div class="phone">
+                    <div class="slice" style="--i:0"></div><div class="slice" style="--i:1"></div><div class="slice" style="--i:2"></div><div class="slice" style="--i:3"></div><div class="slice" style="--i:4"></div><div class="slice" style="--i:5"></div><div class="slice" style="--i:6"></div><div class="slice" style="--i:7"></div><div class="slice" style="--i:8"></div><div class="slice" style="--i:9"></div><div class="slice" style="--i:10"></div><div class="slice" style="--i:11"></div><div class="slice" style="--i:12"></div><div class="slice" style="--i:13"></div>
+                    <div class="btn3d r" style="--top:150px;--bh:72px"><i style="--k:0"></i><i style="--k:1"></i><i style="--k:2"></i></div><div class="btn3d l" style="--top:96px;--bh:28px"><i style="--k:0"></i><i style="--k:1"></i><i style="--k:2"></i></div><div class="btn3d l" style="--top:146px;--bh:48px"><i style="--k:0"></i><i style="--k:1"></i><i style="--k:2"></i></div><div class="btn3d l" style="--top:206px;--bh:48px"><i style="--k:0"></i><i style="--k:1"></i><i style="--k:2"></i></div>
 
                     <div class="face front">
                       <div class="screen">
                         <span class="island"></span>
-                        <div class="sbar"><span>9:41</span><span class="ic"><b style="height:4px"></b><b style="height:6px"></b><b style="height:8px"></b><i></i></span></div>
-                        <div class="app-head">
-                          <span class="nm"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><rect x="11" y="5" width="11" height="22" rx="3.2"/><path d="M3.5 18.5A12.5 12.5 0 0 1 25 7.5"/></svg>Rota Reparo</span>
-                          <span class="os">OS #0427</span>
-                        </div>
-                        <div class="eta">
-                          <div><small>Técnico a caminho</small><strong>12<span>min</span></strong></div>
-                          <svg class="ring" viewBox="0 0 44 44" fill="none"><circle cx="22" cy="22" r="18" stroke="#1E2826" stroke-width="3"/><circle cx="22" cy="22" r="18" stroke="#5ED3AE" stroke-width="3" stroke-linecap="round" transform="rotate(-90 22 22)"/></svg>
-                        </div>
-                        <div class="map">
-                          <svg viewBox="0 0 200 96" fill="none">
-                            <path d="M0 24h200M0 60h200M40 0v96M118 0v96M168 0v96" stroke="#1A2321" stroke-width="6"/>
-                            <path d="M14 78 C 46 78, 44 30, 84 34 S 128 70, 150 52 S 176 22, 186 18" stroke="#22302C" stroke-width="3" stroke-linecap="round"/>
-                            <path class="dash" d="M14 78 C 46 78, 44 30, 84 34 S 128 70, 150 52 S 176 22, 186 18" stroke="#5ED3AE" stroke-width="2" stroke-linecap="round"/>
-                            <circle class="pin" cx="186" cy="18" r="6" fill="#E8A24E" opacity=".5"/>
-                            <circle cx="186" cy="18" r="5" fill="#E8A24E"/><circle cx="186" cy="18" r="2" fill="#070A09"/>
-                          </svg>
-                          <span class="car"></span>
-                        </div>
-                        <ul class="steps-mini">
-                          <li class="done"><i></i>Diagnóstico pelo WhatsApp<em>OK</em></li>
-                          <li class="done"><i></i>Peça separada<em>OK</em></li>
-                          <li class="now"><i></i>Reparo no carro<em>~40 min</em></li>
-                          <li><i></i>Teste e entrega</li>
-                        </ul>
-                        <div class="bars"><span style="--i:0"></span><span style="--i:1"></span><span style="--i:2"></span><span style="--i:3"></span><span style="--i:4"></span><span style="--i:5"></span><span style="--i:6"></span><span style="--i:7"></span><span style="--i:8"></span><span style="--i:9"></span><span style="--i:10"></span><span style="--i:11"></span></div>
-                        <div class="scr-btn">Falar com o técnico</div>
+                        <div class="on-ui"><small id="scrDate">sábado, 11 de outubro</small><div class="clock" id="scrClock">9:41</div><span class="ok"><i></i>Tela nova instalada</span><span class="meta">Garantia ativa · 90 dias</span><span class="home"></span></div>
+                        <div class="boot"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="11" y="5" width="11" height="22" rx="3.2"/><path d="M3.5 18.5A12.5 12.5 0 0 1 25 7.5"/></svg></div>
+                        <div class="scan-grid"></div>
+                        <svg class="cracks" viewBox="0 0 232 492" fill="none" aria-hidden="true"><polygon class="shard" points="156,292 196.0,291.1 189.2,303.8"/><polygon class="shard" points="156,292 182.7,326.0 164.3,321.9"/><polygon class="shard" points="156,292 136.0,340.2 132.0,317.2"/><polygon class="shard" points="156,292 116.5,314.0 112.9,278.4"/><polygon class="shard" points="156,292 118.1,270.4 141.7,247.6"/><polygon class="shard" points="156,292 151.7,247.2 177.3,244.6"/><polygon class="shard" points="156,292 201.0,259.5 196.0,291.1"/><path class="ck" style="--i:0" d="M156.0 292.0 L171.8 289.9 L196.0 291.1 L219.2 289.0 L234.0 277.6" pathLength="1"/><path class="ck" style="--i:1" d="M156.0 292.0 L171.7 296.3 L189.2 303.8 L204.8 310.4 L228.2 316.8 L234.0 314.2" pathLength="1"/><path class="ck thin" style="--i:2" d="M189.2 303.8 L200.2 318.9 L206.1 332.8 L216.4 344.2" pathLength="1"/><path class="ck" style="--i:3" d="M156.0 292.0 L166.4 308.5 L182.7 326.0 L200.4 340.1 L206.8 360.1 L209.4 383.2 L215.7 397.1 L218.8 425.5 L232.5 440.4 L230.3 465.7 L234.0 470.8" pathLength="1"/><path class="ck thin" style="--i:4" d="M200.4 340.1 L219.1 347.8 L232.9 355.2 L243.5 363.9" pathLength="1"/><path class="ck" style="--i:5" d="M156.0 292.0 L159.1 306.6 L164.3 321.9 L165.3 342.4 L168.8 357.3 L165.1 380.9 L157.7 408.4 L160.7 426.8 L147.2 446.4 L160.9 475.9" pathLength="1"/><path class="ck thin" style="--i:6" d="M165.3 342.4 L174.2 354.4 L187.7 367.5 L198.2 381.5 L211.2 397.3" pathLength="1"/><path class="ck" style="--i:7" d="M156.0 292.0 L144.1 318.7 L136.0 340.2 L128.5 359.0 L127.2 380.3 L119.6 409.1 L111.7 423.1 L104.4 437.1 L79.3 451.1 L88.0 480.6 L88.2 494.0" pathLength="1"/><path class="ck thin" style="--i:8" d="M104.4 437.1 L86.2 450.8 L71.7 458.3" pathLength="1"/><path class="ck" style="--i:9" d="M156.0 292.0 L142.0 303.7 L132.0 317.2 L111.5 338.0 L99.5 349.2 L88.9 359.0 L60.6 372.0 L47.1 394.5 L42.3 417.6 L23.4 436.1 L12.3 461.6" pathLength="1"/><path class="ck thin" style="--i:10" d="M88.9 359.0 L87.4 373.4 L86.0 397.2 L82.8 411.3 L79.2 432.4" pathLength="1"/><path class="ck" style="--i:11" d="M156.0 292.0 L130.1 306.2 L116.5 314.0 L99.7 323.7 L72.6 336.1 L55.6 333.0 L36.0 336.3 L15.8 358.8 L-2.0 359.4" pathLength="1"/><path class="ck thin" style="--i:12" d="M99.7 323.7 L87.3 316.5 L71.1 308.3 L57.6 302.6" pathLength="1"/><path class="ck" style="--i:13" d="M156.0 292.0 L135.4 286.0 L112.9 278.4 L94.7 265.4 L80.0 257.9 L70.0 245.8 L42.3 244.2 L13.9 246.3 L-2.0 249.8" pathLength="1"/><path class="ck" style="--i:14" d="M156.0 292.0 L141.2 282.8 L118.1 270.4 L101.1 254.7 L91.5 242.5 L71.7 221.9 L51.2 204.2 L40.4 175.7" pathLength="1"/><path class="ck thin" style="--i:15" d="M101.1 254.7 L82.2 258.7 L69.2 265.0" pathLength="1"/><path class="ck" style="--i:16" d="M156.0 292.0 L146.8 268.9 L141.7 247.6 L125.6 223.7 L109.7 212.7 L100.8 199.9 L103.5 182.1 L91.9 171.1 L81.8 143.0" pathLength="1"/><path class="ck thin" style="--i:17" d="M109.7 212.7 L113.6 198.1 L118.6 175.6 L127.4 162.2" pathLength="1"/><path class="ck" style="--i:18" d="M156.0 292.0 L154.4 271.8 L151.7 247.2 L147.1 230.2 L150.0 213.9 L151.5 184.7 L143.2 165.4 L140.4 149.4 L121.3 126.2 L100.0 102.5 L79.1 83.5 L98.4 51.2" pathLength="1"/><path class="ck thin" style="--i:19" d="M121.3 126.2 L110.0 115.9 L100.9 105.5" pathLength="1"/><path class="ck" style="--i:20" d="M156.0 292.0 L163.7 271.2 L177.3 244.6 L182.1 214.8 L177.4 194.6 L176.2 167.4 L176.2 151.1 L193.1 125.2 L181.4 104.7 L188.9 76.8 L168.9 49.4 L181.3 35.4 L154.8 13.4 L164.6 -2.0" pathLength="1"/><path class="ck" style="--i:21" d="M156.0 292.0 L178.6 276.0 L201.0 259.5 L217.3 248.9 L234.0 227.7" pathLength="1"/><path class="ck thin" style="--i:22" d="M201.0 259.5 L204.4 245.6 L207.5 224.9 L209.5 210.9" pathLength="1"/><path class="ck thin" style="--i:23" d="M164.3 321.9 L154.5 318.4 L144.1 318.7" pathLength="1"/><path class="ck thin" style="--i:24" d="M144.1 318.7 L145.7 308.8 L142.0 303.7" pathLength="1"/><path class="ck thin" style="--i:25" d="M142.0 303.7 L135.6 304.9 L130.1 306.2" pathLength="1"/><path class="ck thin" style="--i:26" d="M130.1 306.2 L132.1 296.2 L135.4 286.0" pathLength="1"/><path class="ck thin" style="--i:27" d="M135.4 286.0 L141.2 283.5 L141.2 282.8" pathLength="1"/><path class="ck thin" style="--i:28" d="M141.2 282.8 L145.3 276.6 L146.8 268.9" pathLength="1"/><path class="ck thin" style="--i:29" d="M146.8 268.9 L149.7 267.6 L154.4 271.8" pathLength="1"/><path class="ck thin" style="--i:30" d="M178.6 276.0 L185.9 281.5 L196.0 291.1" pathLength="1"/><path class="ck thin" style="--i:31" d="M189.2 303.8 L188.2 315.9 L182.7 326.0" pathLength="1"/><path class="ck thin" style="--i:32" d="M132.0 317.2 L122.2 315.3 L116.5 314.0" pathLength="1"/><path class="ck thin" style="--i:33" d="M112.9 278.4 L118.3 274.7 L118.1 270.4" pathLength="1"/><path class="ck thin" style="--i:34" d="M141.7 247.6 L145.5 246.5 L151.7 247.2" pathLength="1"/><path class="ck thin" style="--i:35" d="M177.3 244.6 L189.0 252.1 L201.0 259.5" pathLength="1"/><path class="ck thin" style="--i:36" d="M219.2 289.0 L220.7 301.5 L228.2 316.8" pathLength="1"/><path class="ck thin" style="--i:37" d="M200.4 340.1 L181.8 345.8 L168.8 357.3" pathLength="1"/><path class="ck thin" style="--i:38" d="M111.5 338.0 L105.8 332.4 L99.7 323.7" pathLength="1"/><path class="ck thin" style="--i:39" d="M99.7 323.7 L98.5 296.8 L94.7 265.4" pathLength="1"/><path class="ck thin" style="--i:40" d="M94.7 265.4 L96.9 262.9 L101.1 254.7" pathLength="1"/><path class="ck thin" style="--i:41" d="M125.6 223.7 L137.2 224.2 L147.1 230.2" pathLength="1"/><path class="ck thin" style="--i:42" d="M147.1 230.2 L167.0 223.3 L182.1 214.8" pathLength="1"/><path class="ck thin" style="--i:43" d="M182.1 214.8 L201.6 229.7 L217.3 248.9" pathLength="1"/><path class="ck thin" style="--i:44" d="M217.3 248.9 L218.3 271.0 L219.2 289.0" pathLength="1"/><circle class="impact" cx="156" cy="292" r="5"/></svg>
+                        <div class="laser"></div>
+                        <div class="scr-label s1">Diagnóstico<b id="scanPct">0%</b></div>
+                        <div class="scr-label s2">Trocando a tela<b>Display OLED</b></div>
+                        <div class="sparks"><i style="--n:0;--dx:40px;--dy:0px"></i><i style="--n:1;--dx:34px;--dy:29px"></i><i style="--n:2;--dx:8px;--dy:49px"></i><i style="--n:3;--dx:-28px;--dy:47px"></i><i style="--n:0;--dx:-57px;--dy:20px"></i><i style="--n:1;--dx:-61px;--dy:-23px"></i><i style="--n:2;--dx:-34px;--dy:-61px"></i><i style="--n:3;--dx:14px;--dy:-74px"></i><i style="--n:0;--dx:62px;--dy:-51px"></i><i style="--n:1;--dx:85px;--dy:1px"></i><i style="--n:2;--dx:68px;--dy:59px"></i><i style="--n:3;--dx:15px;--dy:94px"></i></div>
                       </div>
                     </div>
 
-                    <div class="face back">
-                      <div class="cam"><span class="lens l1"></span><span class="lens l2"></span><span class="lens l3"></span><span class="flash"></span></div>
-                      <svg class="back-mark" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="11" y="5" width="11" height="22" rx="3.2"/><path d="M3.5 18.5A12.5 12.5 0 0 1 25 7.5"/></svg>
-                      <span class="back-txt">Reparado na rota</span>
+                    <div class="back-group">
+                      <div class="face back">
+                        <svg class="back-mark" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="11" y="5" width="11" height="22" rx="3.2"/><path d="M3.5 18.5A12.5 12.5 0 0 1 25 7.5"/></svg>
+                        <span class="back-txt">Reparado na rota</span>
+                      </div>
+                      <div class="cam3d">
+                        <div class="cam-slice" style="--k:0"></div><div class="cam-slice" style="--k:1"></div><div class="cam-slice" style="--k:2"></div><div class="cam-slice" style="--k:3"></div><div class="cam-slice" style="--k:4"></div><div class="cam-slice" style="--k:5"></div><div class="cam-slice" style="--k:6"></div>
+                        <div class="cam-top"></div>
+                        <div class="lens3d l1"><i style="--k:0"></i><i style="--k:1"></i><i style="--k:2"></i><i style="--k:3"></i><i style="--k:4"></i><b></b></div><div class="lens3d l2"><i style="--k:0"></i><i style="--k:1"></i><i style="--k:2"></i><i style="--k:3"></i><i style="--k:4"></i><b></b></div><div class="lens3d l3"><i style="--k:0"></i><i style="--k:1"></i><i style="--k:2"></i><i style="--k:3"></i><i style="--k:4"></i><b></b></div>
+                        <span class="cam-extra flash"></span><span class="cam-extra lidar"></span><span class="cam-extra mic"></span>
+                      </div>
                     </div>
-                  </div>
+                  </div></div>
                 </div>
               </div>
             </div>
@@ -633,7 +719,7 @@ footer .wrap { display: flex; justify-content: space-between; gap: var(--s2); fl
         <div class="tag t1 l" style="--d-in:0ms"><small class="mono" data-scramble>Tela OLED 6,1″</small><strong>Troca em <b>~40 min</b></strong></div>
         <div class="tag t2 r" style="--d-in:150ms"><small class="mono" data-scramble>Bateria</small><strong>Saúde <b>100%</b> após a troca</strong></div>
         <div class="tag t3 l" style="--d-in:300ms"><small class="mono" data-scramble>Ferramenta</small><strong>Pentalobe P2 · 0,8 mm</strong></div>
-        <div class="tag t4 r" style="--d-in:450ms"><small class="mono" data-scramble>Status</small><strong>Teste final <b>aprovado</b></strong></div>
+        <div class="tag t4 r" style="--d-in:450ms"><small class="mono">Status ao vivo</small><strong id="phaseText">Tela <b>trincada</b></strong></div>
       </div>
     </div>
     <div class="scroll-hint mono enter" style="--d-in:800ms" aria-hidden="true"><span>Role</span><i></i></div>
@@ -680,7 +766,7 @@ footer .wrap { display: flex; justify-content: space-between; gap: var(--s2); fl
           </ol>
           <div class="mode-foot">
             <div><div class="k mono">Tempo médio</div><div class="v">30 a 90 min</div></div>
-            <a class="link-arrow wa-link" data-mode="Oficina móvel" href="https://wa.me/5511951399929" target="_blank" rel="noopener">Agendar visita<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+            <a class="link-arrow open-quote" data-mode="m-movel" href="#orcamento">Agendar visita<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
           </div>
         </article>
 
@@ -699,7 +785,7 @@ footer .wrap { display: flex; justify-content: space-between; gap: var(--s2); fl
           </ol>
           <div class="mode-foot">
             <div><div class="k mono">Prazo</div><div class="v">Combinado no orçamento</div></div>
-            <a class="link-arrow wa-link" data-mode="Leva e traz" href="https://wa.me/5511951399929" target="_blank" rel="noopener">Pedir retirada<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+            <a class="link-arrow open-quote" data-mode="m-leva" href="#orcamento">Pedir retirada<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
           </div>
         </article>
       </div>
@@ -815,67 +901,21 @@ footer .wrap { display: flex; justify-content: space-between; gap: var(--s2); fl
   <!-- orçamento -->
   <section class="sec" id="orcamento" aria-labelledby="oc-title">
     <div class="wrap">
-      <div class="sec-head reveal">
-        <span class="eyebrow mono" data-scramble>Orçamento</span>
-        <h2 id="oc-title">Monte seu pedido em <span class="accent">30 segundos.</span></h2>
-        <p>Preencha o que souber. A mensagem fica pronta ao lado e vai direto para o nosso WhatsApp.</p>
-      </div>
-
-      <div class="quote">
-        <form class="form spot reveal" id="quoteForm" novalidate>
-          <div class="row2">
-            <div class="field">
-              <label for="f-nome">Seu nome</label>
-              <input type="text" id="f-nome" name="nome" placeholder="Ex.: Ana" autocomplete="given-name">
-            </div>
-            <div class="field">
-              <label for="f-modelo">Modelo do celular</label>
-              <input type="text" id="f-modelo" name="modelo" placeholder="Ex.: iPhone 13, Galaxy S23">
-            </div>
-          </div>
-          <fieldset class="field">
-            <legend>Qual é o problema?</legend>
-            <div class="chips">
-              <label class="chip"><input type="radio" name="problema" id="p-tela" value="Tela quebrada" checked><span>Tela quebrada</span></label>
-              <label class="chip"><input type="radio" name="problema" id="p-bat" value="Bateria"><span>Bateria</span></label>
-              <label class="chip"><input type="radio" name="problema" id="p-carga" value="Não carrega"><span>Não carrega</span></label>
-              <label class="chip"><input type="radio" name="problema" id="p-cam" value="Câmera"><span>Câmera</span></label>
-              <label class="chip"><input type="radio" name="problema" id="p-agua" value="Caiu na água"><span>Caiu na água</span></label>
-              <label class="chip"><input type="radio" name="problema" id="p-outro" value="Outro problema"><span>Outro</span></label>
-            </div>
-          </fieldset>
-          <fieldset class="field">
-            <legend>Como prefere o atendimento?</legend>
-            <div class="chips">
-              <label class="chip"><input type="radio" name="modo" id="m-movel" value="Oficina móvel (reparo no carro, na minha porta)" checked><span>Oficina móvel</span></label>
-              <label class="chip"><input type="radio" name="modo" id="m-leva" value="Leva e traz (retirada e devolução)"><span>Leva e traz</span></label>
-              <label class="chip"><input type="radio" name="modo" id="m-nsei" value="Ainda não sei, quero ajuda para escolher"><span>Não sei ainda</span></label>
-            </div>
-          </fieldset>
-          <div class="field">
-            <label for="f-bairro">Bairro ou CEP</label>
-            <input type="text" id="f-bairro" name="bairro" placeholder="Ex.: Moema, 04077-000" autocomplete="postal-code">
-          </div>
-          <div class="field">
-            <label for="f-obs">Algo mais? <span style="color:var(--dim);font-weight:400">(opcional)</span></label>
-            <textarea id="f-obs" name="obs" placeholder="Ex.: caiu ontem, o touch funciona só na metade de baixo."></textarea>
-          </div>
-        </form>
-
-        <aside class="preview reveal" aria-live="polite">
-          <span class="mono"><span>Prévia da mensagem</span><span class="typing" aria-hidden="true"><i></i><i></i><i></i></span></span>
-          <div class="bubble" id="bubble"></div>
-          <div style="display:grid;gap:var(--s3)">
-            <a class="btn btn-primary magnetic" id="sendWa" href="https://wa.me/5511951399929" target="_blank" rel="noopener">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.6-1.2A9 9 0 1 0 12 3z"/><path d="M9 8.5c0 3.6 2.9 6.5 6.5 6.5l1-1.6-2-1-1 .8a4.5 4.5 0 0 1-2.2-2.2l.8-1-1-2L9.5 8"/></svg>
-              Enviar no WhatsApp
-            </a>
-            <div class="num">
+      <div class="quote-band spot reveal">
+        <div class="qb-copy">
+          <span class="eyebrow mono" data-scramble>Orçamento</span>
+          <h2 id="oc-title">Monte seu pedido em <span class="accent">30 segundos.</span></h2>
+          <p>Escolha o problema e o tipo de atendimento. A mensagem fica pronta e vai direto para o nosso WhatsApp.</p>
+        </div>
+        <div class="qb-actions">
+          <button type="button" class="btn btn-primary magnetic open-quote">Abrir orçamento
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+          <div class="num">
               <div><div class="mono" style="margin-bottom:4px;color:var(--muted)">Ou chame direto</div><strong id="waNum">(11) 95139-9929</strong></div>
               <button type="button" class="copy" id="copyBtn">Copiar número</button>
             </div>
-          </div>
-        </aside>
+        </div>
       </div>
     </div>
   </section>
@@ -920,8 +960,8 @@ footer .wrap { display: flex; justify-content: space-between; gap: var(--s2); fl
     <div class="wrap reveal">
       <span class="eyebrow mono" data-scramble>Pronto para começar</span>
       <h2 id="fn-title">A assistência técnica <span class="grad">vem até você.</span></h2>
-      <a class="btn btn-primary magnetic wa-link" href="https://wa.me/5511951399929" target="_blank" rel="noopener">
-        Chamar no WhatsApp
+      <a class="btn btn-primary magnetic open-quote" href="#orcamento">
+        Fazer orçamento grátis
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </a>
     </div>
@@ -935,9 +975,74 @@ footer .wrap { display: flex; justify-content: space-between; gap: var(--s2); fl
   </div>
 </footer>
 
-<a class="fab wa-link" href="https://wa.me/5511951399929" target="_blank" rel="noopener" aria-label="Chamar no WhatsApp">
+
+<div class="drawer" id="drawer" hidden>
+  <div class="drawer-scrim" data-close></div>
+  <div class="drawer-panel" role="dialog" aria-modal="true" aria-labelledby="dr-title">
+    <div class="drawer-head">
+      <div><span class="mono" style="color:var(--muted)">Orçamento grátis</span><h2 id="dr-title">Conte o que aconteceu</h2></div>
+      <button type="button" class="drawer-x" data-close aria-label="Fechar orçamento"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+    <div class="drawer-body">
+      <form class="form" id="quoteForm" novalidate>
+          <div class="row2">
+            <div class="field">
+              <label for="f-nome">Seu nome</label>
+              <input type="text" id="f-nome" name="nome" placeholder="Ex.: Ana" autocomplete="given-name">
+            </div>
+            <div class="field">
+              <label for="f-modelo">Modelo do celular</label>
+              <input type="text" id="f-modelo" name="modelo" placeholder="Ex.: iPhone 13, Galaxy S23">
+            </div>
+          </div>
+          <fieldset class="field">
+            <legend>Qual é o problema?</legend>
+            <div class="chips">
+              <label class="chip"><input type="radio" name="problema" id="p-tela" value="Tela quebrada" checked><span>Tela quebrada</span></label>
+              <label class="chip"><input type="radio" name="problema" id="p-bat" value="Bateria"><span>Bateria</span></label>
+              <label class="chip"><input type="radio" name="problema" id="p-carga" value="Não carrega"><span>Não carrega</span></label>
+              <label class="chip"><input type="radio" name="problema" id="p-cam" value="Câmera"><span>Câmera</span></label>
+              <label class="chip"><input type="radio" name="problema" id="p-agua" value="Caiu na água"><span>Caiu na água</span></label>
+              <label class="chip"><input type="radio" name="problema" id="p-outro" value="Outro problema"><span>Outro</span></label>
+            </div>
+          </fieldset>
+          <fieldset class="field">
+            <legend>Como prefere o atendimento?</legend>
+            <div class="chips">
+              <label class="chip"><input type="radio" name="modo" id="m-movel" value="Oficina móvel (reparo no carro, na minha porta)" checked><span>Oficina móvel</span></label>
+              <label class="chip"><input type="radio" name="modo" id="m-leva" value="Leva e traz (retirada e devolução)"><span>Leva e traz</span></label>
+              <label class="chip"><input type="radio" name="modo" id="m-nsei" value="Ainda não sei, quero ajuda para escolher"><span>Não sei ainda</span></label>
+            </div>
+          </fieldset>
+          <div class="field">
+            <label for="f-bairro">Bairro ou CEP</label>
+            <input type="text" id="f-bairro" name="bairro" placeholder="Ex.: Moema, 04077-000" autocomplete="postal-code">
+          </div>
+          <div class="field">
+            <label for="f-obs">Algo mais? <span style="color:var(--dim);font-weight:400">(opcional)</span></label>
+            <textarea id="f-obs" name="obs" placeholder="Ex.: caiu ontem, o touch funciona só na metade de baixo."></textarea>
+          </div>
+        </form>
+      <aside class="preview" aria-live="polite">
+          <span class="mono"><span>Prévia da mensagem</span><span class="typing" aria-hidden="true"><i></i><i></i><i></i></span></span>
+          <div class="bubble" id="bubble"></div>
+          
+        </aside>
+    </div>
+    <div class="drawer-foot">
+      <a class="btn btn-primary" id="sendWa" href="https://wa.me/5511951399929" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.6-1.2A9 9 0 1 0 12 3z"/><path d="M9 8.5c0 3.6 2.9 6.5 6.5 6.5l1-1.6-2-1-1 .8a4.5 4.5 0 0 1-2.2-2.2l.8-1-1-2L9.5 8"/></svg>
+              Enviar no WhatsApp
+            </a>
+      <span class="mono">Abre o WhatsApp com a mensagem pronta</span>
+    </div>
+  </div>
+</div>
+
+<button type="button" class="fab open-quote" aria-label="Fazer orçamento">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.6-1.2A9 9 0 1 0 12 3z"/><path d="M9 8.5c0 3.6 2.9 6.5 6.5 6.5l1-1.6-2-1-1 .8a4.5 4.5 0 0 1-2.2-2.2l.8-1-1-2L9.5 8"/></svg>
-</a>
+  <span>Orçamento</span>
+</button>
 
 <script>
 (function () {
@@ -1124,6 +1229,35 @@ footer .wrap { display: flex; justify-content: space-between; gap: var(--s2); fl
   };
   if (reduce) setStep(4); else setInterval(function () { step = (step + 1) % 5; setStep(step); }, 1800);
 
+  /* ---- ciclo de conserto do aparelho ---- */
+  var stageEl = document.getElementById("stage"), phaseText = document.getElementById("phaseText"), scanPct = document.getElementById("scanPct");
+  var clock = document.getElementById("scrClock"), date = document.getElementById("scrDate");
+  try {
+    var now = new Date();
+    clock.textContent = now.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+    date.textContent = now.toLocaleDateString("pt-BR", { weekday: "long", day: "numeric", month: "long" });
+  } catch (err) {}
+  var PH = [
+    ["broken", 3600, "Tela <b>trincada</b>"],
+    ["scan", 1800, "Diagnóstico <b>em curso</b>"],
+    ["repair", 1700, "Trocando <b>a tela</b>"],
+    ["boot", 1000, "Ligando <b>o aparelho</b>"],
+    ["on", 3800, "Reparo <b>concluído</b>"]
+  ];
+  var phaseIdx = 0;
+  var runPhase = function () {
+    var ph = PH[phaseIdx];
+    stageEl.setAttribute("data-phase", ph[0]);
+    phaseText.innerHTML = ph[2];
+    if (ph[0] === "broken") { stageEl.classList.remove("hit"); void stageEl.offsetWidth; stageEl.classList.add("hit"); }
+    if (ph[0] === "scan") {
+      var st = performance.now();
+      (function pct(t) { var q = Math.min(1, (t - st) / 1700); scanPct.textContent = Math.round(easeIO(q) * 100) + "%"; if (q < 1) requestAnimationFrame(pct); })(st);
+    }
+    setTimeout(function () { phaseIdx = (phaseIdx + 1) % PH.length; runPhase(); }, ph[1]);
+  };
+  if (!reduce) setTimeout(runPhase, introMs + 400);
+
   /* ---- orçamento → WhatsApp ---- */
   var form = document.getElementById("quoteForm"), bubble = document.getElementById("bubble"), send = document.getElementById("sendWa");
   var val = function (n) { var el = form.elements[n]; return el ? String(el.value || "").trim() : ""; };
@@ -1145,6 +1279,42 @@ footer .wrap { display: flex; justify-content: space-between; gap: var(--s2); fl
   form.addEventListener("input", render); form.addEventListener("change", render);
   form.addEventListener("submit", function (e) { e.preventDefault(); send.click(); });
   render();
+
+  /* ---- gaveta de orçamento ---- */
+  var drawer = document.getElementById("drawer"), panel = drawer.querySelector(".drawer-panel"), lastFocus = null, closeT;
+  var openQuote = function (opts) {
+    clearTimeout(closeT);
+    lastFocus = document.activeElement;
+    if (opts.problem) { var pr = document.getElementById(opts.problem); if (pr) pr.checked = true; }
+    if (opts.mode) { var md = document.getElementById(opts.mode); if (md) md.checked = true; }
+    render();
+    drawer.hidden = false;
+    document.body.classList.add("lock-d");
+    document.documentElement.classList.add("drawer-open");
+    requestAnimationFrame(function () { requestAnimationFrame(function () { drawer.classList.add("open"); }); });
+    setTimeout(function () { var f = document.getElementById(fine ? "f-modelo" : "dr-title"); if (f) { if (!fine) f.setAttribute("tabindex", "-1"); f.focus({ preventScroll: true }); } }, 320);
+  };
+  var closeQuote = function () {
+    drawer.classList.remove("open");
+    document.body.classList.remove("lock-d");
+    document.documentElement.classList.remove("drawer-open");
+    closeT = setTimeout(function () { drawer.hidden = true; }, 300);
+    if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
+  };
+  document.querySelectorAll(".open-quote").forEach(function (el) {
+    el.addEventListener("click", function (e) { e.preventDefault(); openQuote({ problem: el.dataset.problem, mode: el.dataset.mode }); });
+  });
+  drawer.querySelectorAll("[data-close]").forEach(function (el) { el.addEventListener("click", closeQuote); });
+  document.addEventListener("keydown", function (e) {
+    if (drawer.hidden) return;
+    if (e.key === "Escape") { closeQuote(); return; }
+    if (e.key === "Tab") {
+      var f = [].slice.call(panel.querySelectorAll("a[href], button, input, textarea")).filter(function (n) { return !n.disabled && n.offsetParent !== null; });
+      if (!f.length) return;
+      if (e.shiftKey && document.activeElement === f[0]) { e.preventDefault(); f[f.length - 1].focus(); }
+      else if (!e.shiftKey && document.activeElement === f[f.length - 1]) { e.preventDefault(); f[0].focus(); }
+    }
+  });
 
   var copyBtn = document.getElementById("copyBtn"), num = document.getElementById("waNum");
   copyBtn.addEventListener("click", function () {
