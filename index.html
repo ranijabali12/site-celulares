@@ -176,7 +176,10 @@ ul.clean { list-style: none; margin: 0; padding: 0; }
 .stage { position: relative; height: 640px; display: grid; place-items: center; perspective: 1600px; }
 #phone3d { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2; opacity: 0; transform: scale(.94); transition: opacity 700ms var(--ease), transform 900ms var(--ease-cine); }
 #phone3d.ready { opacity: 1; transform: none; }
-.no-gl .floor { display: none; }
+.phone-poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; z-index: 1; pointer-events: none; transition: opacity 600ms var(--ease); }
+#phone3d.ready + .phone-poster { opacity: 0; }
+.no-gl #phone3d { display: none; }
+.no-gl .phone-poster { opacity: 1 !important; }
 @media (max-width: 920px) { .stage { height: 560px; } }
 @media (max-width: 480px) { .stage { height: 470px; } }
 
@@ -560,7 +563,7 @@ body.lock-d { overflow: hidden; }
         <div class="orbit o3"><div class="spin"><span class="node"></span></div></div>
         <div class="floor"></div>
         <div class="brackets"><i></i><i></i><i></i><i></i></div>
-        <canvas id="phone3d" aria-hidden="true"></canvas>
+        <canvas id="phone3d" aria-hidden="true"></canvas><img class="phone-poster" src="phone-poster.webp" alt="" width="738" height="832" fetchpriority="high" decoding="async">
 
         <div class="tag t1 l" style="--d-in:0ms"><small class="mono" data-scramble>Tela OLED 6,1″</small><strong>Troca em <b>~40 min</b></strong></div>
         <div class="tag t2 r" style="--d-in:150ms"><small class="mono" data-scramble>Bateria</small><strong>Saúde <b>100%</b> após a troca</strong></div>
@@ -1156,12 +1159,17 @@ function main() {
   if (!canvas || !stage) return;
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const small = innerWidth < 700;
+  // aparelhos mais fracos (celulares) recebem texturas menores e materiais mais simples
+  const lite = small || (navigator.hardwareConcurrency || 8) <= 4 || (navigator.deviceMemory || 8) <= 4;
 
   let renderer;
   try {
-    renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: "high-performance" });
+    renderer = new THREE.WebGLRenderer({ canvas, antialias: !lite, alpha: true, powerPreference: lite ? "default" : "high-performance" });
   } catch (err) { stage.classList.add("no-gl"); return; }
-  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, small ? 1.5 : 1.75));
+  if (!renderer.getContext()) { stage.classList.add("no-gl"); return; }
+  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, lite ? 1.3 : 1.75));
+  let dead = false;
+  canvas.addEventListener("webglcontextlost", (e) => { e.preventDefault(); dead = true; canvas.classList.remove("ready"); stage.classList.add("no-gl"); }, false);
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.05;
   renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -1219,15 +1227,17 @@ function main() {
   let seed = 11; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
 
   /* ---------- materiais do corpo ---------- */
-  const titanium = new THREE.MeshPhysicalMaterial({ color: 0x8f8b84, metalness: 1, roughness: 0.34, clearcoat: 0.25, clearcoatRoughness: 0.3, anisotropy: 0.6, anisotropyRotation: Math.PI / 2 });
-  const polished = new THREE.MeshPhysicalMaterial({ color: 0x9a968f, metalness: 1, roughness: 0.16 });
+  const titanium = lite
+    ? new THREE.MeshStandardMaterial({ color: 0x8f8b84, metalness: 1, roughness: 0.32 })
+    : new THREE.MeshPhysicalMaterial({ color: 0x8f8b84, metalness: 1, roughness: 0.34, clearcoat: 0.25, clearcoatRoughness: 0.3, anisotropy: 0.6, anisotropyRotation: Math.PI / 2 });
+  const polished = new THREE.MeshStandardMaterial({ color: 0x9a968f, metalness: 1, roughness: 0.16 });
   const ringMat = polished.clone(); ringMat.side = THREE.DoubleSide;
   const darkPart = new THREE.MeshStandardMaterial({ color: 0x0b0b0b, roughness: 0.7 });
   const antenna = new THREE.MeshStandardMaterial({ color: 0x55534f, roughness: 0.55, metalness: 0.2 });
   const pureBlack = new THREE.MeshBasicMaterial({ color: 0x000000 });
 
   // traseira: vidro fosco com logotipo brilhante (mapa de rugosidade)
-  const bw = 512, bh = Math.round(512 * (H - 1.7) / (W - 1.7));
+  const bw = lite ? 256 : 512, bh = Math.round(512 * (H - 1.7) / (W - 1.7));
   const backC = document.createElement("canvas"); backC.width = bw; backC.height = bh;
   {
     const g = backC.getContext("2d");
@@ -1242,15 +1252,17 @@ function main() {
     g.fillStyle = "rgb(24,24,24)"; g.beginPath(); g.arc(10.5 * k, -9.5 * k, 2.3 * k, 0, Math.PI * 2); g.fill();
     g.restore();
   }
-  const backGlass = new THREE.MeshPhysicalMaterial({ color: 0x8b877f, metalness: 0.05, roughness: 1, roughnessMap: tex(backC, false) });
-  const plateauGlass = new THREE.MeshPhysicalMaterial({ color: 0x86827b, metalness: 0.1, roughness: 0.08, clearcoat: 1, clearcoatRoughness: 0.04 });
+  const backGlass = new THREE.MeshStandardMaterial({ color: 0x8b877f, metalness: 0.05, roughness: 1, roughnessMap: tex(backC, false) });
+  const plateauGlass = new THREE.MeshStandardMaterial({ color: 0x86827b, metalness: 0.1, roughness: 0.1 });
 
   /* ---------- tela trincada: fraturas finas e prateadas ---------- */
-  const CW = 1024, CH = Math.round(1024 * (H - 1.7) / (W - 1.7));
+  const CW = lite ? 640 : 1024, CH = Math.round(CW * (H - 1.7) / (W - 1.7)), CS = CW / 1024;
   const crackC = document.createElement("canvas"); crackC.width = CW; crackC.height = CH;
-  const ix = CW * 0.64, iy = CH * 0.63;
+  const ix0 = 1024 * 0.64, iy0 = (CH / CS) * 0.63, ix = CW * 0.64, iy = CH * 0.63;
   {
     const g = crackC.getContext("2d");
+    g.scale(CS, CS);
+    const ix = ix0, iy = iy0, CW = 1024, CH = crackC.height / CS;
     g.lineCap = "round"; g.lineJoin = "round";
     const seg = (x1, y1, x2, y2, w, a) => { g.strokeStyle = `rgba(255,255,255,${a})`; g.lineWidth = w; g.beginPath(); g.moveTo(x1, y1); g.lineTo(x2, y2); g.stroke(); };
     const walk = (x, y, ang, len, w0, a0, depth) => {
@@ -1308,17 +1320,19 @@ function main() {
   { const g = crackDiffC.getContext("2d"); g.fillStyle = "#000"; g.fillRect(0, 0, CW, CH); g.globalAlpha = 0.8; g.drawImage(crackC, 0, 0); }
   const crackRoughC = document.createElement("canvas"); crackRoughC.width = CW; crackRoughC.height = CH;
   { const g = crackRoughC.getContext("2d"); g.fillStyle = "rgb(9,9,9)"; g.fillRect(0, 0, CW, CH); g.drawImage(crackC, 0, 0); g.drawImage(crackC, 0, 0); }
-  const crackedMat = new THREE.MeshPhysicalMaterial({
-    color: 0xd9dedc, map: tex(crackDiffC), roughness: 1, roughnessMap: tex(crackRoughC, false),
-    bumpMap: tex(crackDiffC, false), bumpScale: 0.9, metalness: 0,
-    clearcoat: 1, clearcoatRoughness: 0.03, envMapIntensity: 1, transparent: true, opacity: 1
-  });
+  const crackedMat = lite
+    ? new THREE.MeshStandardMaterial({ color: 0xd9dedc, map: tex(crackDiffC), roughness: 1, roughnessMap: tex(crackRoughC, false), metalness: 0, transparent: true, opacity: 1 })
+    : new THREE.MeshPhysicalMaterial({
+      color: 0xd9dedc, map: tex(crackDiffC), roughness: 1, roughnessMap: tex(crackRoughC, false),
+      bumpMap: tex(crackDiffC, false), bumpScale: 0.9, metalness: 0,
+      clearcoat: 1, clearcoatRoughness: 0.03, envMapIntensity: 1, transparent: true, opacity: 1
+    });
 
   /* ---------- tela nova: vidro liso com conteúdo luminoso ---------- */
-  const EW = 600, EH = Math.round(600 * (H - 1.7) / (W - 1.7)), PX = EW / (W - 1.7);
+  const EW = lite ? 420 : 600, EH = Math.round(600 * (H - 1.7) / (W - 1.7)), PX = EW / (W - 1.7);
   const emC = document.createElement("canvas"); emC.width = EW; emC.height = EH;
   const ectx = emC.getContext("2d"); const emT = tex(emC);
-  const newMat = new THREE.MeshPhysicalMaterial({ color: 0x030303, roughness: 0.03, metalness: 0, clearcoat: 1, clearcoatRoughness: 0.02, emissive: 0xffffff, emissiveMap: emT, emissiveIntensity: 0, transparent: true, opacity: 1 });
+  const newMat = new THREE.MeshStandardMaterial({ color: 0x030303, roughness: 0.03, metalness: 0, emissive: 0xffffff, emissiveMap: emT, emissiveIntensity: 0, transparent: true, opacity: 1 });
 
   const bez = 2.0 * PX, dr = 8.6 * PX;
   const displayClip = () => { ectx.beginPath(); ectx.roundRect(bez, bez, EW - 2 * bez, EH - 2 * bez, dr); ectx.clip(); };
@@ -1365,7 +1379,7 @@ function main() {
   };
 
   /* ---------- interior visto com a tela aberta ---------- */
-  const inC = document.createElement("canvas"); inC.width = 512; inC.height = Math.round(512 * (H - 3.2) / (W - 3.2));
+  const inC = document.createElement("canvas"); inC.width = lite ? 320 : 512; inC.height = Math.round(inC.width * (H - 3.2) / (W - 3.2));
   {
     const g = inC.getContext("2d"), w = inC.width, h = inC.height;
     g.fillStyle = "#2a2d2f"; g.fillRect(0, 0, w, h);
@@ -1535,7 +1549,7 @@ function main() {
 
   let visible = true, running = false, last = performance.now(), nextFlash = performance.now() + 4000;
   const frame = (now) => {
-    if (!visible || document.hidden) { running = false; return; }
+    if (dead || !visible || document.hidden) { running = false; return; }
     const dt = Math.min(0.05, (now - last) / 1000); last = now;
     const s = now / 1000;
     if (mode === "spin") { vel += (SPEED - vel) * Math.min(1, dt * 1.2); spin += vel * dt; }
@@ -1551,17 +1565,19 @@ function main() {
     if (!canvas.classList.contains("ready")) canvas.classList.add("ready");
     requestAnimationFrame(frame);
   };
-  const start = () => { if (running || reduce) return; running = true; last = performance.now(); requestAnimationFrame(frame); };
+  const start = () => { if (running || reduce || dead) return; running = true; last = performance.now(); requestAnimationFrame(frame); };
   new IntersectionObserver((en) => { visible = en[0].isIntersecting; if (visible) start(); }, { rootMargin: "80px" }).observe(stage);
   document.addEventListener("visibilitychange", () => { if (!document.hidden) start(); });
 
-  if (/[?&]debug/.test(location.search)) window.__rr = { phone, pivot, crackedPanel, newPanel, newMat, drawScreen, render: () => renderer.render(scene, camera), stop: () => { visible = false; }, get phase() { return phase; } };
+  if (/[?&]debug/.test(location.search)) window.__rr = { snap: () => { renderer.render(scene, camera); return canvas.toDataURL('image/png'); }, phone, pivot, crackedPanel, newPanel, newMat, drawScreen, render: () => renderer.render(scene, camera), stop: () => { visible = false; }, get phase() { return phase; } };
   const go = () => {
     setPhase("broken", performance.now());
     if (reduce) { phone.rotation.y = FRONT; pivot.rotation.set(0.12, 0, -0.03); renderer.render(scene, camera); canvas.classList.add("ready"); return; }
     start();
   };
-  (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(go, go);
+  const later = () => (window.requestIdleCallback ? requestIdleCallback(go, { timeout: 1200 }) : setTimeout(go, 300));
+  const ready = () => (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(later, later);
+  if (document.readyState === "complete") ready(); else addEventListener("load", ready, { once: true });
 }
 try { main(); } catch (err) { console.error(err); document.getElementById("stage")?.classList.add("no-gl"); }
 </script>
