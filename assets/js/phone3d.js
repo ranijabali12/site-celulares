@@ -13,10 +13,10 @@ function main() {
 
   let renderer;
   try {
-    renderer = new THREE.WebGLRenderer({ canvas, antialias: !lite, alpha: true, powerPreference: lite ? "default" : "high-performance" });
+    renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: lite ? "default" : "high-performance" });
   } catch (err) { stage.classList.add("no-gl"); return; }
   if (!renderer.getContext()) { stage.classList.add("no-gl"); return; }
-  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, lite ? 1.3 : 1.75));
+  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
   let dead = false;
   canvas.addEventListener("webglcontextlost", (e) => { e.preventDefault(); dead = true; canvas.classList.remove("ready"); stage.classList.add("no-gl"); }, false);
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -86,7 +86,7 @@ function main() {
   const pureBlack = new THREE.MeshBasicMaterial({ color: 0x000000 });
 
   // traseira: vidro fosco com logotipo brilhante (mapa de rugosidade)
-  const bw = lite ? 256 : 512, bh = Math.round(512 * (H - 1.7) / (W - 1.7));
+  const bw = lite ? 384 : 512, bh = Math.round(bw * (H - 2.3) / (W - 2.3));
   const backC = document.createElement("canvas"); backC.width = bw; backC.height = bh;
   {
     const g = backC.getContext("2d");
@@ -94,7 +94,7 @@ function main() {
     for (let i = 0; i < img.data.length; i += 4) { const v = 150 + (Math.random() * 18 - 9); img.data[i] = img.data[i + 1] = img.data[i + 2] = v; img.data[i + 3] = 255; }
     g.putImageData(img, 0, 0);
     g.save(); g.translate(bw / 2, bh * 0.46); g.scale(-1, 1);
-    const k = bw / 68.9 * 0.62;
+    const k = bw / (W - 2.3) * 0.62;
     g.strokeStyle = "rgb(24,24,24)"; g.lineWidth = 1.8 * k; g.lineCap = "round";
     g.beginPath(); g.roundRect(-5 * k, -10 * k, 10 * k, 20 * k, 2.9 * k); g.stroke();
     g.beginPath(); g.arc(1 * k, 4 * k, 12.5 * k, Math.PI * 1.02, Math.PI * 1.72); g.stroke();
@@ -105,7 +105,7 @@ function main() {
   const plateauGlass = new THREE.MeshStandardMaterial({ color: 0x86827b, metalness: 0.1, roughness: 0.1 });
 
   /* ---------- tela trincada: fraturas finas e prateadas ---------- */
-  const CW = lite ? 640 : 1024, CH = Math.round(CW * (H - 1.7) / (W - 1.7)), CS = CW / 1024;
+  const CW = lite ? 800 : 1024, CH = Math.round(CW * (H - 2.3) / (W - 2.3)), CS = CW / 1024;
   const crackC = document.createElement("canvas"); crackC.width = CW; crackC.height = CH;
   const ix0 = 1024 * 0.64, iy0 = (CH / CS) * 0.63, ix = CW * 0.64, iy = CH * 0.63;
   {
@@ -178,7 +178,7 @@ function main() {
     });
 
   /* ---------- tela nova: vidro liso com conteúdo luminoso ---------- */
-  const EW = lite ? 420 : 600, EH = Math.round(600 * (H - 1.7) / (W - 1.7)), PX = EW / (W - 1.7);
+  const EW = 600, EH = Math.round(EW * (H - 2.3) / (W - 2.3)), PX = EW / (W - 2.3);
   const emC = document.createElement("canvas"); emC.width = EW; emC.height = EH;
   const ectx = emC.getContext("2d"); const emT = tex(emC);
   const newMat = new THREE.MeshStandardMaterial({ color: 0x030303, roughness: 0.03, metalness: 0, emissive: 0xffffff, emissiveMap: emT, emissiveIntensity: 0, transparent: true, opacity: 1 });
@@ -228,7 +228,7 @@ function main() {
   };
 
   /* ---------- interior visto com a tela aberta ---------- */
-  const inC = document.createElement("canvas"); inC.width = lite ? 320 : 512; inC.height = Math.round(inC.width * (H - 3.2) / (W - 3.2));
+  const inC = document.createElement("canvas"); inC.width = lite ? 384 : 512; inC.height = Math.round(inC.width * (H - 3.2) / (W - 3.2));
   {
     const g = inC.getContext("2d"), w = inC.width, h = inC.height;
     g.fillStyle = "#2a2d2f"; g.fillRect(0, 0, w, h);
@@ -254,8 +254,8 @@ function main() {
   const inner = new THREE.Mesh(remapUV(new THREE.ShapeGeometry(rr(W - 3.2, H - 3.2, R - 1.6), 32)), innerMat);
   inner.position.z = D / 2 + 0.03; phone.add(inner);
 
-  const frontG = remapUV(slab(W - 2.4 + 0.7, H - 2.4 + 0.7, R - 0.85, 0.15, 0.35, 5));
-  const hingeX = (W - 1.7) / 2;
+  const frontG = remapUV(slab(W - 2.3, H - 2.3, R - 1.15, 0.15, 0.35, 6));
+  const hingeX = (W - 2.3) / 2;
   const makePanel = (mat) => {
     const hinge = new THREE.Group(); hinge.position.set(hingeX, 0, D / 2 - 0.12);
     const m = new THREE.Mesh(frontG, mat); m.position.x = -hingeX; hinge.add(m);
@@ -264,7 +264,7 @@ function main() {
   const crackedPanel = makePanel(crackedMat);
   const newPanel = makePanel(newMat); newPanel.visible = false;
 
-  const back = new THREE.Mesh(remapUV(slab(W - 2.4 + 0.5, H - 2.4 + 0.5, R - 0.95, 0.1, 0.25, 4)), backGlass);
+  const back = new THREE.Mesh(remapUV(slab(W - 2.3, H - 2.3, R - 1.15, 0.1, 0.25, 5)), backGlass);
   back.position.z = -D / 2 + 0.08; phone.add(back);
 
   const ear = new THREE.Mesh(new THREE.CapsuleGeometry(0.32, 9, 4, 12), darkPart);
