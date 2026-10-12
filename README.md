@@ -8,8 +8,10 @@ Site de uma página para assistência técnica de celular delivery (oficina móv
 - `assets/css/styles.css`: estilos e fontes
 - `assets/js/boot.js`: pula a abertura em visitas repetidas
 - `assets/js/app.js`: interações, orçamento e WhatsApp
-- `assets/js/phone3d.js`: celular 3D (WebGL)
-- `assets/vendor/three.module.min.js`: three.js 0.160.0 (licença MIT em `three.LICENSE.txt`)
+- `assets/js/phone3d.js`: carrega o celular 3D depois da abertura, sem disputar com a rolagem
+- `assets/js/phone3d.bundle.js`: celular 3D (WebGL) com three.js 0.160.0 já reduzido (licença MIT em `assets/js/three.LICENSE.txt`)
+- `src/phone3d.js`: código-fonte do celular 3D
+- `assets/img/cracks.webp`: textura das trincas da tela
 - `assets/fonts/`: Bricolage Grotesque e Geist (SIL Open Font License)
 - `assets/img/phone-poster.webp`: imagem exibida enquanto o 3D carrega
 - `assets/img/og-image.jpg`: prévia do link no WhatsApp e redes sociais
@@ -21,6 +23,15 @@ Site de uma página para assistência técnica de celular delivery (oficina móv
 - A política de segurança de conteúdo (CSP) só permite scripts do próprio domínio e bloqueia plugins, envio de formulários e troca da URL base.
 - Links externos usam `noopener noreferrer`.
 - O formulário não envia dados a nenhum servidor: ele só monta a mensagem e abre o WhatsApp.
+
+## Alterar o celular 3D
+
+Edite `src/phone3d.js` e gere o arquivo publicado com:
+
+```
+npm install
+npm run build
+```
 
 ## Publicação
 

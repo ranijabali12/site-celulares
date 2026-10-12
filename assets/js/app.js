@@ -288,8 +288,16 @@
 
   // o botão flutuante só aparece depois que os botões principais saem da tela
   var fab = document.querySelector(".fab"), ctas = document.querySelector(".hero-ctas");
-  if (fab && ctas && "IntersectionObserver" in window) {
-    new IntersectionObserver(function (en) { fab.classList.toggle("away", en[0].isIntersecting); fab.tabIndex = en[0].isIntersecting ? -1 : 0; }).observe(ctas);
+  if (fab && ctas) {
+    var fabPending = false;
+    var fabCheck = function () {
+      fabPending = false;
+      var away = ctas.getBoundingClientRect().bottom > 0;
+      if (fab.classList.contains("away") !== away) { fab.classList.toggle("away", away); fab.tabIndex = away ? -1 : 0; }
+    };
+    window.addEventListener("scroll", function () { if (!fabPending) { fabPending = true; requestAnimationFrame(fabCheck); } }, { passive: true });
+    window.addEventListener("resize", fabCheck, { passive: true });
+    fabCheck();
   }
 
   document.getElementById("year").textContent = new Date().getFullYear();

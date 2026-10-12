@@ -43,7 +43,7 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; background: var(--bg); }
-body { margin: 0; background: var(--bg); color: var(--ink); font: 400 var(--t-md)/1.6 var(--font-body); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 var(--t-md)/1.6 var(--font-body); -webkit-font-smoothing: antialiased; overflow-x: hidden; overflow-x: clip; }
 img, svg { max-width: 100%; }
 a { color: inherit; }
 h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.06; letter-spacing: -.025em; margin: 0; text-wrap: balance; }

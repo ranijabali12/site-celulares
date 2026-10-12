@@ -1,0 +1,12 @@
+{
+  "name": "rota-reparo",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "esbuild src/phone3d.js --bundle --format=esm --minify --legal-comments=eof --target=es2020 --outfile=assets/js/phone3d.bundle.js"
+  },
+  "devDependencies": {
+    "esbuild": "0.24.0",
+    "three": "0.160.0"
+  }
+}
