@@ -1,6 +1,4 @@
-import * as THREE from "../vendor/three.module.min.js";
-
-function main() {
+async function main(THREE) {
   const canvas = document.getElementById("phone3d");
   const stage = document.getElementById("stage");
   const hero = document.getElementById("hero");
@@ -319,11 +317,13 @@ function main() {
     inspect: "Conferindo <b>conectores</b>", install: "Instalando <b>tela nova</b>", boot: "Ligando <b>o aparelho</b>", on: "Reparo <b>concluído</b>"
   };
   const DUR = { open: 1700, inspect: 900, install: 1700, boot: 1100 };
-  let phase = "broken", phaseStart = performance.now();
-  let spin = -1.6, vel = SPEED, mode = "spin", alignFrom = 0, alignTo = 0, alignDur = 1;
+  // relógio próprio: só anda enquanto a animação está rodando (sem saltos ao voltar para a aba)
+  let clock = 0;
+  let phase = "broken", phaseStart = 0;
+  let spin = FRONT, vel = SPEED, mode = "spin", alignFrom = 0, alignTo = 0, alignDur = 1, calm = 1;
   const setPhase = (p, now) => {
     phase = p; phaseStart = now; stage.setAttribute("data-phase", p);
-    if (phaseText) phaseText.innerHTML = LABEL[p];
+    if (phaseText) { phaseText.innerHTML = LABEL[p]; phaseText.classList.remove("swap"); void phaseText.offsetWidth; phaseText.classList.add("swap"); }
   };
   const ease = (t) => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
   const easeOut = (t) => 1 - Math.pow(1 - t, 3);
@@ -385,7 +385,7 @@ function main() {
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
     const k = 2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
-    const dist = Math.max((146.6 / 0.72) / k, (W * 2.4) / (k * camera.aspect));
+    const dist = Math.max((146.6 / 0.72) / k, (W * 2.56) / (k * camera.aspect));
     camera.position.set(0, 0, dist); camera.lookAt(0, 0, 0); camera.updateProjectionMatrix();
   };
   fit(); new ResizeObserver(fit).observe(stage);
@@ -396,16 +396,17 @@ function main() {
     hero.addEventListener("pointerleave", () => { tx = ty = 0; });
   }
 
-  let visible = true, running = false, last = performance.now(), nextFlash = performance.now() + 4000;
-  const frame = (now) => {
+  let visible = true, running = false, last = 0, nextFlash = 4000;
+  const frame = (t) => {
     if (dead || !visible || document.hidden) { running = false; return; }
-    const dt = Math.min(0.05, (now - last) / 1000); last = now;
-    const s = now / 1000;
+    const dt = Math.min(0.05, (t - last) / 1000); last = t;
+    clock += dt * 1000;
+    const now = clock, s = now / 1000;
     if (mode === "spin") { vel += (SPEED - vel) * Math.min(1, dt * 1.2); spin += vel * dt; }
     else if (mode === "align") { const t = Math.min(1, (now - phaseStart) / alignDur); spin = alignFrom + (alignTo - alignFrom) * (1 - (1 - t) * (1 - t)); if (t >= 1) mode = "hold"; }
     director(now);
     cx += (tx - cx) * Math.min(1, dt * 4); cy += (ty - cy) * Math.min(1, dt * 4);
-    const calm = mode === "spin" ? 1 : 0.35;
+    calm += ((mode === "spin" ? 1 : 0.35) - calm) * Math.min(1, dt * 2.5);
     pivot.rotation.set(0.14 + Math.sin(s * .55) * .06 * calm + cy * .3, cx * .45, (Math.sin(s * .37) * .05 - .04) * calm);
     phone.rotation.y = spin;
     pivot.position.y = Math.sin(s * .9) * 2.4 * calm;
@@ -414,17 +415,28 @@ function main() {
     if (!canvas.classList.contains("ready")) canvas.classList.add("ready");
     requestAnimationFrame(frame);
   };
-  const start = () => { if (running || reduce || dead) return; running = true; last = performance.now(); requestAnimationFrame(frame); };
+  let armed = false;
+  const start = () => { if (!armed || running || reduce || dead) return; running = true; last = performance.now(); requestAnimationFrame(frame); };
   new IntersectionObserver((en) => { visible = en[0].isIntersecting; if (visible) start(); }, { rootMargin: "80px" }).observe(stage);
   document.addEventListener("visibilitychange", () => { if (!document.hidden) start(); });
 
-  const go = () => {
-    setPhase("broken", performance.now());
-    if (reduce) { phone.rotation.y = FRONT; pivot.rotation.set(0.12, 0, -0.03); renderer.render(scene, camera); canvas.classList.add("ready"); return; }
-    start();
-  };
-  const later = () => (window.requestIdleCallback ? requestIdleCallback(go, { timeout: 1200 }) : setTimeout(go, 300));
-  const ready = () => (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(later, later);
-  if (document.readyState === "complete") ready(); else addEventListener("load", ready, { once: true });
+  // prepara shaders e texturas antes do primeiro quadro (evita travadas na primeira volta)
+  newPanel.visible = true;
+  try { await renderer.compileAsync(scene, camera); } catch (err) { renderer.compile(scene, camera); }
+  newPanel.visible = false;
+  [crackedMat.map, crackedMat.roughnessMap, crackedMat.bumpMap, newMat.emissiveMap, innerMat.map, backGlass.roughnessMap].forEach((t) => { if (t) renderer.initTexture(t); });
+  if (document.fonts && document.fonts.ready) { try { await document.fonts.ready; } catch (err) {} }
+
+  setPhase("broken", 0);
+  armed = true;
+  if (reduce) { phone.rotation.y = FRONT; pivot.rotation.set(0.14, 0, -0.04); renderer.render(scene, camera); canvas.classList.add("ready"); return; }
+  start();
 }
-try { main(); } catch (err) { console.error(err); document.getElementById("stage")?.classList.add("no-gl"); }
+
+// three.js só é baixado depois que a página terminou de carregar, para não atrasar a abertura
+const fail = (err) => { console.error(err); document.getElementById("stage")?.classList.add("no-gl"); };
+const kick = () => {
+  const go = () => import("../vendor/three.module.min.js").then(main).catch(fail);
+  if (window.requestIdleCallback) requestIdleCallback(go, { timeout: 1500 }); else setTimeout(go, 200);
+};
+if (document.readyState === "complete") kick(); else addEventListener("load", kick, { once: true });

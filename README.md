@@ -6,11 +6,14 @@ Site de uma página para assistência técnica de celular delivery (oficina móv
 
 - `index.html`: conteúdo da página
 - `assets/css/styles.css`: estilos e fontes
+- `assets/js/boot.js`: pula a abertura em visitas repetidas
 - `assets/js/app.js`: interações, orçamento e WhatsApp
 - `assets/js/phone3d.js`: celular 3D (WebGL)
 - `assets/vendor/three.module.min.js`: three.js 0.160.0 (licença MIT em `three.LICENSE.txt`)
 - `assets/fonts/`: Bricolage Grotesque e Geist (SIL Open Font License)
 - `assets/img/phone-poster.webp`: imagem exibida enquanto o 3D carrega
+- `assets/img/og-image.jpg`: prévia do link no WhatsApp e redes sociais
+- `robots.txt`, `sitemap.xml`, `404.html`: busca no Google e página de erro
 
 ## Segurança
 
